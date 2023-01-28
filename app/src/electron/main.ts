@@ -6,20 +6,21 @@ const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1080,
-    height: 720,
+    width: 1600,
+    height: 900,
     webPreferences: {
       preload: join(__dirname, "./preload.js"),
     },
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(
-    isDev ? "http://localhost:3000" : join(__dirname, "../index.html")
-  );
   // Open the DevTools.
   if (isDev) {
+    // devの場合はローカルサーバーからページを取得
+    mainWindow.loadURL("http://localhost:3000");
     mainWindow.webContents.openDevTools();
+  } else {
+    // dev以外の場合はファイルからページを取得
+    mainWindow.loadFile(join(__dirname, "../index.html"));
   }
 }
 
