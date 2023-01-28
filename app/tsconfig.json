@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "useDefineForClassFields": true,
-    "module": "commonjs",
+    "module": "CommonJS", // esnextでは動かない
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
@@ -14,10 +14,6 @@
     "skipLibCheck": true,
     "outDir": "dist/electron"
   },
-  "include": ["src/electron/**/*"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["src/electron/**/*"], // vueやtsをincludeするとエラーになる
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

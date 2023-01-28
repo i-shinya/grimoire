@@ -1,5 +1,5 @@
 {
-  "name": "gurimoire",
+  "name": "grimoire",
   "private": true,
   "version": "0.0.1",
   "main": "dist/electron/main.js",
@@ -15,6 +15,7 @@
     "app:preview": "npm run vite:build && tsc && electron ."
   },
   "build": {
+    "productName": "grimoire",
     "appId": "YourAppID",
     "asar": true,
     "directories": {

@@ -6,7 +6,7 @@ const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1280,
+    width: 1080,
     height: 720,
     webPreferences: {
       preload: join(__dirname, "./preload.js"),
@@ -15,7 +15,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   mainWindow.loadURL(
-    isDev ? "http://localhost:5173" : join(__dirname, "../index.html")
+    isDev ? "http://localhost:3000" : join(__dirname, "../index.html")
   );
   // Open the DevTools.
   if (isDev) {
