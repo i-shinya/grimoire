@@ -1,4 +1,4 @@
-import { ipcRenderer } from "electron";
+import { ipcRenderer, contextBridge } from "electron";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// FIXME openDialogの型定義を上手く読み込めないのでanyにしているが修正したい
-(window as any).openDialog = (): Promise<string> => {
-  return ipcRenderer.invoke("open-direcroty-dialog");
-};
+// contextBridgeを使用してレンダラープロセスにAPIとして公開する
+contextBridge.exposeInMainWorld("direcrotyAPI", {
+  openDialog: () => ipcRenderer.invoke("open-direcroty-dialog"),
+});

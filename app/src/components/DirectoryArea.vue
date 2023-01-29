@@ -8,7 +8,8 @@ const baseDir = ref<string | null>(null);
 const directroyName = ref<string | null>(null);
 
 const openDirectory = async () => {
-  const path: string = await (window as any).openDialog();
+  // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
+  const path: string = await (window as any).direcrotyAPI.openDialog();
   if (!path) {
     return;
   }

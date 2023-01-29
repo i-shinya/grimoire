@@ -10,7 +10,6 @@ function createWindow() {
     width: 1600,
     height: 900,
     webPreferences: {
-      contextIsolation: false, // FIXME メインプロセスとレンダラープロセスは分離すべき
       preload: join(__dirname, "./preload.js"),
     },
   });
