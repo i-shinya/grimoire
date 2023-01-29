@@ -1,20 +1,28 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import SideMenu from "./components/SideMenu.vue";
+import Footer from "./layout/Footer.vue";
+import ImageViewer from "./components/ImageViewer.vue";
+import PropertyViewer from "./components/PropertyViewer.vue";
+import DirectoryArea from "./components/DirectoryArea.vue";
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="app-page">
+    <SideMenu></SideMenu>
+    <DirectoryArea></DirectoryArea>
+    <ImageViewer></ImageViewer>
+    <PropertyViewer></PropertyViewer>
+    <Footer class="footer"></Footer>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+#app-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

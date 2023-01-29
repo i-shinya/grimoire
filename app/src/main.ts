@@ -3,5 +3,22 @@ import "./style.css";
 // electron用のtsconfigの設定のせいで
 // @ts-ignore
 import App from "./App.vue";
+import { createVuestic } from "vuestic-ui";
+import "vuestic-ui/css";
+import "material-design-icons-iconfont/dist/material-design-icons.min.css";
 
-createApp(App).mount("#app");
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+  faUserSecret,
+  faFolderOpen,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+
+// 使用するfont-awesomeアイコンを読み込む
+library.add(faUserSecret, faFolderOpen, faMagnifyingGlass);
+
+createApp(App)
+  .component("font-awesome-icon", FontAwesomeIcon)
+  .use(createVuestic())
+  .mount("#app");
