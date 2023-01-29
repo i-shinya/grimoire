@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { ipcRenderer } from "electron";
-import path from "path";
 import { ref } from "vue";
+import { getDirectroyName, getBaseDirName } from "../core/path";
 
 // 選択しているディレクトリのベースパス
-const basedir = ref<string | null>(null);
+const baseDir = ref<string | null>(null);
 // 選択しているディレクトリ名
 const directroyName = ref<string | null>(null);
 
 const openDirectory = async () => {
-  const text = await ipcRenderer.invoke("open-direcroty-dialog");
-  if (text === "") {
+  const path: string = await (window as any).openDialog();
+  if (!path) {
     return;
   }
-  basedir.value = path.dirname(text);
-  directroyName.value = path.basename(text);
+  directroyName.value = getDirectroyName(path)!!;
+  baseDir.value = getBaseDirName(path)!!;
 };
 
 const nodes = [
@@ -51,7 +50,10 @@ const nodes = [
       >
     </div>
     <div class="tree-area" v-if="directroyName">
-      <p class="directory-name">{{ directroyName }}</p>
+      <div class="select-directory">
+        <p class="directory-name">{{ directroyName }}</p>
+        <p class="basedir-name">{{ baseDir }}</p>
+      </div>
       <va-tree-view :nodes="nodes" />
     </div>
   </div>
@@ -73,9 +75,19 @@ const nodes = [
     padding-top: 8px;
     color: rgb(221, 221, 221);
 
-    .directory-name {
-      padding-left: 8px;
-      font-weight: bold;
+    .select-directory {
+      display: flex;
+      align-items: center;
+      .directory-name {
+        padding-left: 8px;
+        font-weight: bold;
+      }
+
+      .basedir-name {
+        padding-left: 8px;
+        font-size: 12px;
+        color: rgb(161, 161, 161);
+      }
     }
   }
 }

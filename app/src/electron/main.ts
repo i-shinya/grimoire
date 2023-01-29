@@ -10,7 +10,6 @@ function createWindow() {
     width: 1600,
     height: 900,
     webPreferences: {
-      nodeIntegration: true, // FIXME レンダラープロセスでnode.jsを使えるようにするのは非推奨
       contextIsolation: false, // FIXME メインプロセスとレンダラープロセスは分離すべき
       preload: join(__dirname, "./preload.js"),
     },
@@ -29,7 +28,7 @@ function createWindow() {
   }
 
   // ダイアログを表示する
-  ipcMain.handle("open-direcroty-dialog", async (_e, _arg) => {
+  ipcMain.handle("open-direcroty-dialog", async (_e, _arg): Promise<string> => {
     return (
       dialog
         // ファイル選択ダイアログを表示する
@@ -67,12 +66,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-// ipcMain.handle("showDialog", async (event, data) => {
-//   const path = dialog.showOpenDialogSync({
-//     properties: ["openDirectory"],
-//     title: "Select a text file",
-//     defaultPath: ".",
-//     filters: [{ name: "text file", extensions: ["txt"] }],
-//   });
-// });
