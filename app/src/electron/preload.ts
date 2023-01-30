@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from "electron";
+import { DirectoryNode } from "../core/path";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -14,4 +15,9 @@ window.addEventListener("DOMContentLoaded", () => {
 // contextBridgeを使用してレンダラープロセスにAPIとして公開する
 contextBridge.exposeInMainWorld("direcrotyAPI", {
   openDialog: () => ipcRenderer.invoke("open-direcroty-dialog"),
+  showDirectories: (path: string): Promise<DirectoryNode[]> => {
+    // このへんもうちょい上手く書きたい
+    const res = ipcRenderer.invoke("get-direcroty-nodes", path);
+    return res as Promise<DirectoryNode[]>;
+  },
 });

@@ -1,5 +1,7 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { DirectoryNode } from "../core/path";
+import { getDirectroyNodes, openDirectoryDialog } from "./directory";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
@@ -27,22 +29,19 @@ function createWindow() {
   }
 
   // ダイアログを表示する
-  ipcMain.handle("open-direcroty-dialog", async (_e, _arg): Promise<string> => {
-    return (
-      dialog
-        // ファイル選択ダイアログを表示する
-        .showOpenDialog(mainWindow, {
-          properties: ["openDirectory"],
-        })
-        .then((result) => {
-          // キャンセルボタンが押されたとき
-          if (result.canceled) return "";
+  ipcMain.handle(
+    "open-direcroty-dialog",
+    async (_e: Electron.IpcMainInvokeEvent, _args: any): Promise<string> => {
+      return openDirectoryDialog(mainWindow);
+    }
+  );
 
-          // 選択されたファイルの絶対パスを返す
-          return result.filePaths[0];
-        })
-    );
-  });
+  ipcMain.handle(
+    "get-direcroty-nodes",
+    (_e: Electron.IpcMainInvokeEvent, path: string): DirectoryNode[] => {
+      return getDirectroyNodes(path);
+    }
+  );
 }
 
 // This method will be called when Electron has finished
