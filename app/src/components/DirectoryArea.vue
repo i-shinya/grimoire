@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { getDirectroyName, getBaseDirName } from "../core/path";
+import { getDirectroyName, getBaseDirName, DirectoryNode } from "../core/path";
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
 // 選択しているディレクトリ名
 const directroyName = ref<string | null>(null);
+// 選択しているディレクトリのフルパス
+const directroyFullPath = ref<string | null>(null);
+
+const directoryNodes = ref<DirectoryNode>();
 
 const openDirectory = async () => {
   // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
@@ -13,34 +17,15 @@ const openDirectory = async () => {
   if (!path) {
     return;
   }
+  directroyFullPath.value = path;
   directroyName.value = getDirectroyName(path)!!;
   baseDir.value = getBaseDirName(path)!!;
-};
 
-const nodes = [
-  {
-    id: 1,
-    label: "Action",
-    children: [
-      { id: 2, label: "Platform games" },
-      { id: 3, label: "Shooter games" },
-      { id: 4, label: "Fighting games" },
-    ],
-  },
-  {
-    id: 9,
-    label: "Puzzle",
-    children: [
-      { id: 10, label: "Breakout clone game" },
-      {
-        id: 11,
-        label: "Logical game",
-        children: [{ id: 12, label: "Physics game" }],
-      },
-    ],
-  },
-  { id: 13, label: "Simulation" },
-];
+  const res: DirectoryNode = await (window as any).direcrotyAPI.showDirectories(
+    path
+  );
+  directoryNodes.value = res;
+};
 </script>
 
 <template>
@@ -55,7 +40,9 @@ const nodes = [
         <p class="directory-name">{{ directroyName }}</p>
         <p class="basedir-name">{{ baseDir }}</p>
       </div>
-      <va-tree-view :nodes="nodes" />
+      <div class="directory-tree-ares">
+        <va-tree-view :nodes="directoryNodes" />
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +66,7 @@ const nodes = [
     .select-directory {
       display: flex;
       align-items: center;
+      font-size: 14px;
       .directory-name {
         padding-left: 8px;
         font-weight: bold;
@@ -89,6 +77,10 @@ const nodes = [
         font-size: 12px;
         color: rgb(161, 161, 161);
       }
+    }
+
+    .directory-tree-ares {
+      font-size: 14px;
     }
   }
 }
