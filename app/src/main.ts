@@ -13,10 +13,18 @@ import {
   faUserSecret,
   faFolderOpen,
   faMagnifyingGlass,
+  faAngleRight,
+  faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 // 使用するfont-awesomeアイコンを読み込む
-library.add(faUserSecret, faFolderOpen, faMagnifyingGlass);
+library.add(
+  faUserSecret,
+  faFolderOpen,
+  faMagnifyingGlass,
+  faAngleRight,
+  faAngleDown
+);
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
