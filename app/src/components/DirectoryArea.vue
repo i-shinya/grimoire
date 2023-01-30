@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { getDirectroyName, getBaseDirName, DirectoryNode } from "../core/path";
+import DirectoryTree from "./ui/DirectoryTrees.vue";
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
@@ -9,7 +10,7 @@ const directroyName = ref<string | null>(null);
 // 選択しているディレクトリのフルパス
 const directroyFullPath = ref<string | null>(null);
 
-const directoryNodes = ref<DirectoryNode>();
+const directoryNodes = ref<DirectoryNode[]>();
 
 const openDirectory = async () => {
   // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
@@ -21,9 +22,9 @@ const openDirectory = async () => {
   directroyName.value = getDirectroyName(path)!!;
   baseDir.value = getBaseDirName(path)!!;
 
-  const res: DirectoryNode = await (window as any).direcrotyAPI.showDirectories(
-    path
-  );
+  const res: DirectoryNode[] = await (
+    window as any
+  ).direcrotyAPI.showDirectories(path);
   directoryNodes.value = res;
 };
 </script>
@@ -40,8 +41,9 @@ const openDirectory = async () => {
         <p class="directory-name">{{ directroyName }}</p>
         <p class="basedir-name">{{ baseDir }}</p>
       </div>
-      <div class="directory-tree-ares">
-        <va-tree-view :nodes="directoryNodes" />
+      <div class="directory-tree-area">
+        <DirectoryTree :nodes="directoryNodes!!"></DirectoryTree>
+        <!-- <va-tree-view :nodes="directoryNodes" /> -->
       </div>
     </div>
   </div>
@@ -67,6 +69,8 @@ const openDirectory = async () => {
       display: flex;
       align-items: center;
       font-size: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgb(124, 124, 124);
       .directory-name {
         padding-left: 8px;
         font-weight: bold;
@@ -79,8 +83,10 @@ const openDirectory = async () => {
       }
     }
 
-    .directory-tree-ares {
+    .directory-tree-area {
+      padding-left: 16px;
       font-size: 14px;
+      padding-top: 8px;
     }
   }
 }
