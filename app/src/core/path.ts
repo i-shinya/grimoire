@@ -12,11 +12,28 @@ export const getBaseDirName = (pathName: string) => {
 };
 
 // ディレクトリの再帰モデル
-export type DirectoryNode = {
-  id: number; // 適当に採番してつけるかも
-  label: string; // ディレクトリ or ファイル名
-  fullPath: string;
-  isDirectory: boolean;
-  children?: DirectoryNodeArray;
-};
-export interface DirectoryNodeArray extends Array<DirectoryNode> {}
+export class DirectoryNode {
+  public id: number; // 適当に採番してつけるかも
+  public label: string; // ディレクトリ or ファイル名
+  public fullPath: string;
+  public isDirectory: boolean;
+  public children?: DirectoryNode[];
+
+  constructor(
+    id: number,
+    label: string,
+    fullPath: string,
+    isDirectory: boolean,
+    children?: DirectoryNode[]
+  ) {
+    this.id = id;
+    this.label = label;
+    this.fullPath = fullPath;
+    this.isDirectory = isDirectory;
+    this.children = children;
+  }
+
+  hasChildren(): boolean {
+    return !!this.children && this.children.length > 0;
+  }
+}

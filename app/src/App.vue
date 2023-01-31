@@ -20,6 +20,7 @@ import DirectoryArea from "./components/DirectoryArea.vue";
 #app-page {
   display: flex;
   height: 100vh;
+  max-height: 100vh;
   width: 100vw;
 }
 

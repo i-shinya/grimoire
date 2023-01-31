@@ -43,7 +43,6 @@ const openDirectory = async () => {
       </div>
       <div class="directory-tree-area">
         <DirectoryTree :nodes="directoryNodes!!"></DirectoryTree>
-        <!-- <va-tree-view :nodes="directoryNodes" /> -->
       </div>
     </div>
   </div>
@@ -56,6 +55,7 @@ const openDirectory = async () => {
   background-color: rgb(48, 48, 48);
 
   .directory-button-area {
+    height: 70px;
     padding-top: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid rgb(124, 124, 124);
@@ -66,6 +66,7 @@ const openDirectory = async () => {
     color: rgb(221, 221, 221);
 
     .select-directory {
+      height: 30px;
       display: flex;
       align-items: center;
       font-size: 14px;
@@ -85,8 +86,26 @@ const openDirectory = async () => {
 
     .directory-tree-area {
       padding-left: 16px;
+      height: calc(100vh - 20px - 30px - 70px);
       font-size: 14px;
       padding-top: 8px;
+      overflow: auto;
+
+      /* スクロール幅 */
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 10px;
+      }
+      /* スクロール背景 */
+      &::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background: rgba(110, 108, 108, 0.2);
+      }
+      /* ドラック部 */
+      &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: #c2c2c2;
+      }
     }
   }
 }

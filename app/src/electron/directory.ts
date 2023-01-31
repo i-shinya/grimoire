@@ -28,6 +28,7 @@ export const openDirectoryDialog = (
 
 /**
  * ディレクトリノードを取得する
+ * TODO パーミッションエラーの場合の処理必要かも
  * @param path
  * @returns
  */
@@ -37,23 +38,26 @@ export const getDirectroyNodes = (path: string): DirectoryNode[] => {
     .readdirSync(path, { withFileTypes: true })
     .map((dirent: fs.Dirent): DirectoryNode => {
       if (dirent.isDirectory()) {
-        const nodes = getDirectroyNodes(`${path}/${dirent.name}`);
-        return {
-          id: idCounter.next(),
-          label: dirent.name,
-          fullPath: `${path}/${dirent.name}`,
-          isDirectory: true,
-          children: nodes,
-        };
+        const nodes = getDirectroyNodes(`${path}/${dirent.name}`).sort((a, b) =>
+          a.hasChildren() > b.hasChildren() ? -1 : 1
+        );
+        return new DirectoryNode(
+          idCounter.next(),
+          dirent.name,
+          `${path}/${dirent.name}`,
+          true,
+          nodes
+        );
       } else {
-        return {
-          id: idCounter.next(),
-          label: dirent.name,
-          fullPath: `${path}/${dirent.name}`,
-          isDirectory: false,
-        };
+        return new DirectoryNode(
+          idCounter.next(),
+          dirent.name,
+          `${path}/${dirent.name}`,
+          true
+        );
       }
-    });
+    })
+    .sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1));
 };
 
 class FileIdCounter {
