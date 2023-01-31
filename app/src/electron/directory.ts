@@ -35,15 +35,8 @@ export const getDirectroyNodes = (path: string): DirectoryNode[] => {
   const idCounter = new FileIdCounter();
   return fs
     .readdirSync(path, { withFileTypes: true })
-    .map((dirent): DirectoryNode => {
-      if (dirent.isFile()) {
-        return {
-          id: idCounter.next(),
-          label: dirent.name,
-          fullPath: `${path}/${dirent.name}`,
-          isDirectory: false,
-        };
-      } else {
+    .map((dirent: fs.Dirent): DirectoryNode => {
+      if (dirent.isDirectory()) {
         const nodes = getDirectroyNodes(`${path}/${dirent.name}`);
         return {
           id: idCounter.next(),
@@ -51,6 +44,13 @@ export const getDirectroyNodes = (path: string): DirectoryNode[] => {
           fullPath: `${path}/${dirent.name}`,
           isDirectory: true,
           children: nodes,
+        };
+      } else {
+        return {
+          id: idCounter.next(),
+          label: dirent.name,
+          fullPath: `${path}/${dirent.name}`,
+          isDirectory: false,
         };
       }
     });
