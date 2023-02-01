@@ -1,6 +1,6 @@
 import { join } from "path";
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
-import { DirectoryNode } from "../core/path";
+import { app, BrowserWindow, ipcMain } from "electron";
+import { DirectoryNode } from "../core/type/directory";
 import { getDirectroyNodes, openDirectoryDialog } from "./directory";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;

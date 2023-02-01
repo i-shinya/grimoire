@@ -2,7 +2,7 @@
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
 import { ref } from "vue";
-import { DirectoryNode } from "../../core/path";
+import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTrees from "./DirectoryTrees.vue";
 
 defineProps<{

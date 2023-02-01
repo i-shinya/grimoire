@@ -1,4 +1,4 @@
-import { DirectoryNode } from "./src/core/path";
+import { DirectoryNode } from "./src/core/type/directory";
 interface Window {
   direcrotyAPI: DirecrotyAPI;
 }

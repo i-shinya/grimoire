@@ -5,7 +5,7 @@
 import fs from "fs";
 import { dialog, BrowserWindow } from "electron";
 
-import { DirectoryNode } from "../core/path";
+import { DirectoryNode } from "../core/type/directory";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow

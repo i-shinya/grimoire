@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { getDirectroyName, getBaseDirName, DirectoryNode } from "../core/path";
+import { getDirectroyName, getBaseDirName } from "../core/path";
+import { DirectoryNode } from "../core/type/directory";
 import DirectoryTree from "./ui/DirectoryTrees.vue";
 
 // 選択しているディレクトリのベースパス

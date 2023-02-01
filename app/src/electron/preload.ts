@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from "electron";
-import { DirectoryNode } from "../core/path";
+import { DirectoryNode } from "../core/type/directory";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
