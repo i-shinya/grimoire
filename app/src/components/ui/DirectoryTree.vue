@@ -1,9 +1,10 @@
 <!-- このUIのみ他UIから参照・他UIを参照しています。
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTrees from "./DirectoryTrees.vue";
+import DirectoryKey from "../../store/key";
 
 defineProps<{
   node: DirectoryNode;
@@ -18,6 +19,11 @@ const switchChildVisible = () => {
     showChild.value = true;
   }
 };
+
+const directory = inject(DirectoryKey);
+const selectDirectory = (path: string) => {
+  directory?.selectDirectory(path);
+};
 </script>
 
 <template>
@@ -27,7 +33,7 @@ const switchChildVisible = () => {
     >
       <!-- childrenが存在する場合はアローを表示 -->
       <div class="filename-area">
-        <span class="filename">
+        <div class="filename-row">
           <font-awesome-icon
             v-if="!showChild"
             class="arrow-icon"
@@ -40,11 +46,14 @@ const switchChildVisible = () => {
             icon="fa-solid fa-angle-down"
             @click="switchChildVisible()"
           />
-          <p @click="switchChildVisible()">{{ node.label }}</p>
-        </span>
+          <div class="filename" @click="selectDirectory(node.fullPath)">
+            <div>{{ node.label }}</div>
+          </div>
+        </div>
       </div>
       <template v-if="showChild">
         <div class="child-area">
+          <!-- 同じ幅インデントするために不可視の矢印を追加 -->
           <font-awesome-icon
             class="hidden-arrow-icon"
             icon="fa-solid fa-angle-right"
@@ -56,9 +65,9 @@ const switchChildVisible = () => {
     <template v-else>
       <!-- childrenが存在する場合はそのまま表示 -->
       <div class="filename-area">
-        <span class="filename">
-          <p>{{ node.label }}</p>
-        </span>
+        <div class="filename-row">
+          <div class="filename">{{ node.label }}</div>
+        </div>
       </div>
     </template>
   </div>
@@ -69,17 +78,24 @@ const switchChildVisible = () => {
   font-size: 15px;
   .filename-area {
     display: flex;
-    padding-top: 6px;
-    padding-bottom: 6px;
 
-    .filename {
+    .filename-row {
       display: flex;
       align-items: center;
       user-select: none;
+      flex-grow: 1;
 
       .arrow-icon {
         cursor: pointer;
+        flex-grow: 0;
         padding-right: 8px;
+      }
+
+      .filename {
+        cursor: pointer;
+        flex-grow: 1;
+        padding-top: 6px;
+        padding-bottom: 6px;
       }
     }
   }

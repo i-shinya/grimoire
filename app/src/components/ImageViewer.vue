@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed, inject, ref, watch } from "vue";
+import DirectoryKey from "../store/key";
+
 const list = [
   { id: 1, label: "name1", path: "" },
   { id: 2, label: "name2", path: "" },
@@ -9,6 +12,20 @@ const list = [
   { id: 7, label: "name7", path: "" },
   { id: 8, label: "name6", path: "" },
 ];
+
+const directory = inject(DirectoryKey);
+const selectPath = ref<string>("");
+
+watch(
+  () => directory!!.state,
+  (state, prevState) => {
+    console.log("watch");
+    selectPath.value = state.selectedDirectoryPath
+      ? state.selectedDirectoryPath
+      : "";
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -21,6 +38,7 @@ const list = [
         </div>
       </template>
     </div>
+    <p>{{ selectPath }}</p>
   </div>
 </template>
 
