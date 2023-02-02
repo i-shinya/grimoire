@@ -1,5 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "../core/type/directory";
+import { ImageDetail } from "../core/type/image";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -19,5 +20,9 @@ contextBridge.exposeInMainWorld("direcrotyAPI", {
     // このへんもうちょい上手く書きたい
     const res = ipcRenderer.invoke("get-direcroty-nodes", path);
     return res as Promise<DirectoryNode[]>;
+  },
+  getImages: (path: string): Promise<ImageDetail[]> => {
+    const res = ipcRenderer.invoke("get-images", path);
+    return res as Promise<ImageDetail[]>;
   },
 });

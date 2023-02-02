@@ -4,8 +4,10 @@
  */
 import fs from "fs";
 import { dialog, BrowserWindow } from "electron";
+import { ExifTool } from "exiftool-vendored";
 
 import { DirectoryNode } from "../core/type/directory";
+import { ImageDetail, Metadata } from "../core/type/image";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow
@@ -67,3 +69,52 @@ class FileIdCounter {
     return this.id;
   }
 }
+
+/**
+ * 画像データが取得できる
+ * @param path ディレクトリパス
+ * @returns
+ */
+export const getImages = async (path: string): Promise<ImageDetail[]> => {
+  const dirents = fs
+    .readdirSync(path, { withFileTypes: true })
+    .filter((dirent: fs.Dirent) => {
+      // TODO 拡張子チェックを追加する
+      return dirent.isFile;
+    });
+  return await Promise.all(
+    dirents.map(async (dirent: fs.Dirent) => {
+      const buffer = readImage(`${path}/${dirent.name}`);
+      const meta = await getImageMeta(`${path}/${dirent.name}`);
+      return {
+        buffer: buffer,
+        generateMeta: meta,
+      };
+    })
+  );
+};
+
+/**
+ * 画像の読み込み
+ * @param path
+ * @returns
+ */
+export const readImage = (path: string): Buffer => {
+  return fs.readFileSync(path);
+};
+
+/**
+ * 画像のメタデータを取得する
+ * @param path ファイルパス
+ * @returns
+ */
+export const getImageMeta = async (path: string): Promise<Metadata> => {
+  const exifTool = new ExifTool({ taskTimeoutMillis: 5000 });
+  return exifTool
+    .read(path)
+    .then((metadata) => {
+      const meta = Metadata.build(metadata);
+      return meta;
+    })
+    .finally(() => exifTool.end());
+};
