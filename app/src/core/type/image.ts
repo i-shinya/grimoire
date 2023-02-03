@@ -1,8 +1,11 @@
 import { Tags } from "exiftool-vendored";
 
 export interface ImageDetail {
+  id: number;
+  label: string; // ファイル名
   buffer: Buffer;
-  generateMeta: Metadata;
+  dataUrl: string;
+  meta: Metadata;
 }
 
 export class Metadata {

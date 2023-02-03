@@ -79,19 +79,31 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
   const dirents = fs
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent: fs.Dirent) => {
-      // TODO 拡張子チェックを追加する
-      return dirent.isFile;
+      return dirent.isFile() && isImage(dirent.name);
     });
   return await Promise.all(
-    dirents.map(async (dirent: fs.Dirent) => {
+    dirents.map(async (dirent: fs.Dirent, index: number) => {
       const buffer = readImage(`${path}/${dirent.name}`);
       const meta = await getImageMeta(`${path}/${dirent.name}`);
       return {
+        id: index,
+        label: dirent.name,
         buffer: buffer,
-        generateMeta: meta,
+        dataUrl: "data:image/png;base64," + buffer.toString("base64"),
+        meta: meta,
       };
     })
   );
+};
+
+/**
+ * 拡張子チェック
+ * @param filename
+ * @returns
+ */
+const isImage = (filename: string): boolean => {
+  const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
+  return !!filename.match(allowExtensions);
 };
 
 /**

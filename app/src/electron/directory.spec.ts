@@ -11,7 +11,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(1);
+      expect(res.length).toBe(2);
     });
   });
 

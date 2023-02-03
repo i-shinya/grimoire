@@ -5,7 +5,7 @@ import Footer from "./layout/Footer.vue";
 import ImageViewer from "./components/ImageViewer.vue";
 import PropertyViewer from "./components/PropertyViewer.vue";
 import DirectoryArea from "./components/DirectoryArea.vue";
-import directoryStore from "./store/index";
+import directoryStore from "./store/directory";
 import DirectoryKey from "./store/key";
 
 const dirStore = directoryStore();

@@ -20,6 +20,7 @@ const switchChildVisible = () => {
   }
 };
 
+// store経由でイベントを発火する
 const directory = inject(DirectoryKey);
 const selectDirectory = (path: string) => {
   directory?.selectDirectory(path);
