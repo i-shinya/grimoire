@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { provide } from "vue";
 import SideMenu from "./components/SideMenu.vue";
 import Footer from "./layout/Footer.vue";
 import ImageViewer from "./components/ImageViewer.vue";
 import PropertyViewer from "./components/PropertyViewer.vue";
 import DirectoryArea from "./components/DirectoryArea.vue";
+import directoryStore from "./store/directory";
+import DirectoryKey from "./store/key";
+
+const dirStore = directoryStore();
+provide(DirectoryKey, dirStore);
 </script>
 
 <template>

@@ -1,22 +1,31 @@
 <script setup lang="ts">
-const list = [
-  { id: 1, label: "name1", path: "" },
-  { id: 2, label: "name2", path: "" },
-  { id: 3, label: "name3", path: "" },
-  { id: 4, label: "name4", path: "" },
-  { id: 5, label: "name5", path: "" },
-  { id: 6, label: "name6", path: "" },
-  { id: 7, label: "name7", path: "" },
-  { id: 8, label: "name6", path: "" },
-];
+import { inject, ref, watch } from "vue";
+import DirectoryKey from "../store/key";
+import { ImageDetail } from "../core/type/image";
+
+const directory = inject(DirectoryKey);
+const selectPath = ref<string>("");
+const images = ref<ImageDetail[]>([]);
+
+watch(
+  () => directory!!.state,
+  (state, prevState) => {
+    selectPath.value = state.selectedDirectoryPath
+      ? state.selectedDirectoryPath
+      : "";
+    images.value = state.imageDetails ? state.imageDetails : [];
+  },
+  { deep: true }
+);
 </script>
 
 <template>
   <div id="image-viewer">
+    <p>{{ selectPath }}</p>
     <div class="image-viewer">
-      <template v-for="item of list" :key="item.id">
+      <template v-for="item of images" :key="item.id">
         <div class="image-area">
-          <va-image src="https://picsum.photos/1500/500" />
+          <va-image :src="item.dataUrl" />
           <p class="image-label">{{ item.label }}</p>
         </div>
       </template>

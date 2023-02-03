@@ -1,7 +1,8 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "../core/type/directory";
-import { getDirectroyNodes, openDirectoryDialog } from "./directory";
+import { ImageDetail } from "../core/type/image";
+import { getDirectroyNodes, getImages, openDirectoryDialog } from "./directory";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
@@ -35,11 +36,21 @@ function createWindow() {
       return openDirectoryDialog(mainWindow);
     }
   );
-
+  // ディレクトリノードを取得する
   ipcMain.handle(
     "get-direcroty-nodes",
     (_e: Electron.IpcMainInvokeEvent, path: string): DirectoryNode[] => {
       return getDirectroyNodes(path);
+    }
+  );
+  // ディレクトリ内のファイルを取得する
+  ipcMain.handle(
+    "get-images",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      path: string
+    ): Promise<ImageDetail[]> => {
+      return getImages(path);
     }
   );
 }
