@@ -9,5 +9,5 @@ AI イラストを管理するツール
 app/release 配下に win-unpacked が出力される
 
 ```shell
-docker compose up
+docker compose up --build
 ```
