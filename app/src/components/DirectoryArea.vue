@@ -52,13 +52,16 @@ const openDirectory = async () => {
 <style lang="scss" scoped>
 @use "../variables.scss" as var;
 
+$button-area-height: 70px;
+$select-directroy-area-height: 30px;
+
 .directroy-area {
   height: calc(100vh - var.$header-height - var.$footer-height);
   width: 240px;
   background-color: rgb(48, 48, 48);
 
   .directory-button-area {
-    height: 70px;
+    height: $button-area-height;
     padding-top: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid rgb(124, 124, 124);
@@ -69,7 +72,7 @@ const openDirectory = async () => {
     color: rgb(221, 221, 221);
 
     .select-directory {
-      height: 30px;
+      height: $select-directroy-area-height;
       display: flex;
       align-items: center;
       font-size: 14px;
@@ -89,7 +92,10 @@ const openDirectory = async () => {
 
     .directory-tree-area {
       padding-left: 16px;
-      height: calc(100vh - 20px - 30px - 70px);
+      height: calc(
+        100vh - var.$header-height - var.$footer-height -
+          $select-directroy-area-height - $button-area-height
+      );
       font-size: 14px;
       padding-top: 8px;
       overflow: auto;
