@@ -7,7 +7,13 @@ import {
   getImages,
   openDirectoryDialog,
 } from "./logic/directory";
-import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
+import {
+  closeWindow,
+  maximizeWindow,
+  minimizeWindow,
+  defaultHeight,
+  defaultWidth,
+} from "./logic/window";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
@@ -15,8 +21,8 @@ const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 900,
+    width: defaultWidth,
+    height: defaultHeight,
     // falseにするとフレームを全部消せる
     // ヘッダーとかをdraga可能にしないとウィンドウ移動できなくなるので注意
     frame: false,
