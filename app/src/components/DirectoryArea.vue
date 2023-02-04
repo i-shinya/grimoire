@@ -50,8 +50,10 @@ const openDirectory = async () => {
 </template>
 
 <style lang="scss" scoped>
+@use "../variables.scss" as var;
+
 .directroy-area {
-  height: calc(100vh - 20px);
+  height: calc(100vh - var.$header-height - var.$footer-height);
   width: 240px;
   background-color: rgb(48, 48, 48);
 

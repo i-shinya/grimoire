@@ -48,9 +48,11 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+@use "../variables.scss" as var;
+
 #property-viewer {
   width: calc(calc(100vw - 240px - 48px) / 2);
-  height: calc(100vh - 20px);
+  height: calc(100vh - var.$header-height - var.$footer-height);
   background-color: rgb(34, 34, 34);
   padding: 16px;
   overflow: auto;

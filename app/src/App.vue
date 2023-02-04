@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { provide } from "vue";
 import SideMenu from "./components/SideMenu.vue";
+import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
 import ImageViewer from "./components/ImageViewer.vue";
 import PropertyViewer from "./components/PropertyViewer.vue";
@@ -17,20 +18,27 @@ provide(ImageKey, imgStore);
 
 <template>
   <div id="app-page">
-    <SideMenu></SideMenu>
-    <DirectoryArea></DirectoryArea>
-    <ImageViewer></ImageViewer>
-    <PropertyViewer></PropertyViewer>
+    <Header class="header"></Header>
+    <SideMenu class="content-area"></SideMenu>
+    <DirectoryArea class="content-area"></DirectoryArea>
+    <ImageViewer class="content-area"></ImageViewer>
+    <PropertyViewer class="content-area"></PropertyViewer>
     <Footer class="footer"></Footer>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use "./variables.scss" as var;
+
 #app-page {
   display: flex;
   height: 100vh;
   max-height: 100vh;
   width: 100vw;
+
+  .content-area {
+    margin-top: var.$header-height;
+  }
 }
 
 .logo {

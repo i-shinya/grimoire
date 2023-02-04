@@ -2,7 +2,12 @@ import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "../core/type/directory";
 import { ImageDetail } from "../core/type/image";
-import { getDirectroyNodes, getImages, openDirectoryDialog } from "./directory";
+import {
+  getDirectroyNodes,
+  getImages,
+  openDirectoryDialog,
+} from "./logic/directory";
+import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
 const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
@@ -12,7 +17,9 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1600,
     height: 900,
-    frame: true, // falseにするとフレームを全部消せる（そのうちfalseにする）
+    // falseにするとフレームを全部消せる
+    // ヘッダーとかをdraga可能にしないとウィンドウ移動できなくなるので注意
+    frame: false,
     webPreferences: {
       preload: join(__dirname, "./preload.js"),
     },
@@ -52,6 +59,25 @@ function createWindow() {
       path: string
     ): Promise<ImageDetail[]> => {
       return getImages(path);
+    }
+  );
+
+  ipcMain.handle(
+    "close-window",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
+      closeWindow(mainWindow);
+    }
+  );
+  ipcMain.handle(
+    "resize-window",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
+      maximizeWindow(mainWindow);
+    }
+  );
+  ipcMain.handle(
+    "minimize-window",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
+      minimizeWindow(mainWindow);
     }
   );
 }
