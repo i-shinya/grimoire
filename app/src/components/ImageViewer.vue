@@ -1,30 +1,39 @@
 <script setup lang="ts">
 import { inject, ref, watch } from "vue";
-import DirectoryKey from "../store/key";
+import { DirectoryKey, ImageKey } from "../store/key";
 import { ImageDetail } from "../core/type/image";
+import BreadCrumbs, { Bread } from "./ui/BreadCrumbs.vue";
 
-const directory = inject(DirectoryKey);
+const directoryStore = inject(DirectoryKey);
+const imageStore = inject(ImageKey);
+
 const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);
+const breads = ref<Bread[]>([]);
 
 watch(
-  () => directory!!.state,
+  () => directoryStore!!.state,
   (state, prevState) => {
-    selectPath.value = state.selectedDirectoryPath
-      ? state.selectedDirectoryPath
-      : "";
-    images.value = state.imageDetails ? state.imageDetails : [];
+    selectPath.value = state.selectedDirectoryPath ?? "";
+    images.value = state.imageDetails ?? [];
+    breads.value = selectPath.value.split("/").map((val, index) => {
+      return { id: index, text: val };
+    });
   },
   { deep: true }
 );
+
+const selectImage = (image: ImageDetail) => {
+  imageStore!!.selectDirectory(selectPath.value, image);
+};
 </script>
 
 <template>
   <div id="image-viewer">
-    <p>{{ selectPath }}</p>
+    <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
-        <div class="image-area">
+        <div class="image-area" @click="selectImage(item)">
           <va-image :src="item.dataUrl" />
           <p class="image-label">{{ item.label }}</p>
         </div>
@@ -40,6 +49,7 @@ watch(
   border-right: 1px black solid;
   background-color: rgb(34, 34, 34);
   overflow: auto;
+  padding: 16px;
 
   /* スクロール幅 */
   &::-webkit-scrollbar {
@@ -57,8 +67,11 @@ watch(
     background: #c2c2c2;
   }
 
+  .breads {
+    margin-bottom: 20px;
+  }
+
   .image-viewer {
-    padding: 16px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -70,6 +83,7 @@ watch(
       min-width: 200px;
       max-height: 30%;
       padding: 8px;
+      cursor: pointer;
 
       .image-label {
         padding-top: 4px;

@@ -6,10 +6,13 @@ import ImageViewer from "./components/ImageViewer.vue";
 import PropertyViewer from "./components/PropertyViewer.vue";
 import DirectoryArea from "./components/DirectoryArea.vue";
 import directoryStore from "./store/directory";
-import DirectoryKey from "./store/key";
+import imageStore from "./store/image";
+import { DirectoryKey, ImageKey } from "./store/key";
 
 const dirStore = directoryStore();
+const imgStore = imageStore();
 provide(DirectoryKey, dirStore);
+provide(ImageKey, imgStore);
 </script>
 
 <template>

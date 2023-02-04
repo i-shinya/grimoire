@@ -16,6 +16,7 @@ import {
   faAngleRight,
   faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 // 使用するfont-awesomeアイコンを読み込む
 library.add(
@@ -23,7 +24,8 @@ library.add(
   faFolderOpen,
   faMagnifyingGlass,
   faAngleRight,
-  faAngleDown
+  faAngleDown,
+  faCopy
 );
 
 createApp(App)
