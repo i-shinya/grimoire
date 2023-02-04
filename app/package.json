@@ -15,6 +15,7 @@
     "app:debug": "tsc && concurrently vite \" electron .\" \"tsc -w\"",
     "app:dev": "tsc && concurrently vite \" electron .\" \"tsc -w\"",
     "app:build": "npm run vite:build && tsc && electron-builder",
+    "app:build-win": "npm run vite:build && tsc && electron-builder --win --x64",
     "app:preview": "npm run vite:build && tsc && electron .",
     "test": "jest"
   },
@@ -38,7 +39,7 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
+          "target": "portable",
           "arch": [
             "x64"
           ]
