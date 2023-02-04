@@ -16,7 +16,7 @@ const copyClipBoard = () => {
       init({
         closeable: false,
         color: "#FFFFFF",
-        message: `copy ${props.label} to clipboard !!`,
+        message: `Copy ${props.label} to Clipboard !!`,
         duration: 1000,
       });
     },

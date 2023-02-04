@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, watch } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { DirectoryKey, ImageKey } from "../store/key";
 import { ImageDetail } from "../core/type/image";
 import BreadCrumbs, { Bread } from "./ui/BreadCrumbs.vue";
@@ -24,8 +24,12 @@ watch(
 );
 
 const selectImage = (image: ImageDetail) => {
-  imageStore!!.selectDirectory(selectPath.value, image);
+  imageStore!!.selectImage(selectPath.value, image);
 };
+
+const isSelected = computed(() => (image: ImageDetail): boolean => {
+  return image.id === imageStore?.state.imageDetail?.id;
+});
 </script>
 
 <template>
@@ -34,7 +38,9 @@ const selectImage = (image: ImageDetail) => {
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
-          <va-image :src="item.dataUrl" />
+          <p :class="isSelected(item) ? 'is-selected-image' : ''">
+            <va-image :src="item.dataUrl" />
+          </p>
           <p class="image-label">{{ item.label }}</p>
         </div>
       </template>
@@ -85,6 +91,9 @@ const selectImage = (image: ImageDetail) => {
       padding: 8px;
       cursor: pointer;
 
+      .is-selected-image {
+        border: 2px solid rgb(150, 161, 109);
+      }
       .image-label {
         padding-top: 4px;
         font-size: 18px;

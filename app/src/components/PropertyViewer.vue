@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, watch, reactive } from "vue";
+import { inject, ref, watch } from "vue";
 import { ImageKey } from "../store/key";
 import { ImageDetail } from "../core/type/image";
 import Property from "./ui/Property.vue";
@@ -54,6 +54,22 @@ watch(
   background-color: rgb(34, 34, 34);
   padding: 16px;
   overflow: auto;
+
+  /* スクロール幅 */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+  /* スクロール背景 */
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: rgba(110, 108, 108, 0.2);
+  }
+  /* ドラック部 */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #c2c2c2;
+  }
 
   .property-viewer {
     .breads {
