@@ -1,5 +1,3 @@
-import { Tags } from "exiftool-vendored";
-
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名
@@ -19,7 +17,7 @@ export class Metadata {
   noise?: number;
   scale?: number;
 
-  public static build(metadata: Tags): Metadata {
+  public static build(metadata: any): Metadata {
     const meta = new Metadata();
     // Descriptionがある場合はポジティブプロンプトを設定
     if (metadata.Description) {

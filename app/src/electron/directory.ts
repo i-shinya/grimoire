@@ -4,7 +4,7 @@
  */
 import fs from "fs";
 import { dialog, BrowserWindow } from "electron";
-import { ExifTool } from "exiftool-vendored";
+import exifr from "exifr";
 
 import { DirectoryNode } from "../core/type/directory";
 import { ImageDetail, Metadata } from "../core/type/image";
@@ -121,12 +121,8 @@ export const readImage = (path: string): Buffer => {
  * @returns
  */
 export const getImageMeta = async (path: string): Promise<Metadata> => {
-  const exifTool = new ExifTool({ taskTimeoutMillis: 5000 });
-  return exifTool
-    .read(path)
-    .then((metadata) => {
-      const meta = Metadata.build(metadata);
-      return meta;
-    })
-    .finally(() => exifTool.end());
+  return exifr.parse(path).then((metadata: any) => {
+    const meta = Metadata.build(metadata);
+    return meta;
+  });
 };
