@@ -19,7 +19,7 @@ export default function imageStore() {
 
   return {
     state,
-    selectDirectory: selectImage,
+    selectImage,
   };
 }
 export type ImageStore = ReturnType<typeof imageStore>;
