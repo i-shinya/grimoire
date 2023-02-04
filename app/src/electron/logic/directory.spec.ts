@@ -1,5 +1,5 @@
 import { getImages, getImageMeta, readImage } from "./directory";
-import { ImageDetail } from "../core/type/image";
+import { ImageDetail } from "../../core/type/image";
 
 describe("directory.ts", () => {
   describe("getImages", () => {

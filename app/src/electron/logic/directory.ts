@@ -6,8 +6,8 @@ import fs from "fs";
 import { dialog, BrowserWindow } from "electron";
 import exifr from "exifr";
 
-import { DirectoryNode } from "../core/type/directory";
-import { ImageDetail, Metadata } from "../core/type/image";
+import { DirectoryNode } from "../../core/type/directory";
+import { ImageDetail, Metadata } from "../../core/type/image";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow

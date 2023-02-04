@@ -26,3 +26,9 @@ contextBridge.exposeInMainWorld("direcrotyAPI", {
     return res as Promise<ImageDetail[]>;
   },
 });
+
+contextBridge.exposeInMainWorld("windowAPI", {
+  closeWindow: () => ipcRenderer.invoke("close-window"),
+  resizeWindow: () => ipcRenderer.invoke("resize-window"),
+  minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
+});
