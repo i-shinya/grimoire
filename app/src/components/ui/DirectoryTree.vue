@@ -4,7 +4,7 @@
 import { inject, ref } from "vue";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTrees from "./DirectoryTrees.vue";
-import DirectoryKey from "../../store/key";
+import { DirectoryKey } from "../../store/key";
 
 defineProps<{
   node: DirectoryNode;

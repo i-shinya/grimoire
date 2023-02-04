@@ -3,7 +3,7 @@ import { Tags } from "exiftool-vendored";
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名
-  buffer: Buffer;
+  buffer: Buffer; // バイナリも一応持ってみているけどいらない気がする
   dataUrl: string;
   meta: Metadata;
 }
