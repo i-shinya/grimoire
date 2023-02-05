@@ -24,13 +24,13 @@
     "asar": true,
     "directories": {
       "buildResources": "assets",
-      "output": "release/${version}"
+      "output": "release/win"
     },
     "files": [
       "dist"
     ],
     "mac": {
-      "artifactName": "${productName}_${version}.${ext}",
+      "artifactName": "${productName}.${ext}",
       "target": [
         "dmg"
       ]
@@ -44,7 +44,7 @@
           ]
         }
       ],
-      "artifactName": "${productName}_${version}.${ext}"
+      "artifactName": "${productName}.${ext}"
     },
     "nsis": {
       "oneClick": false,
