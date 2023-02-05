@@ -7,6 +7,10 @@ import { createVuestic } from "vuestic-ui";
 import "vuestic-ui/css";
 import "material-design-icons-iconfont/dist/material-design-icons.min.css";
 
+// splitpanes用
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
@@ -38,5 +42,7 @@ library.add(
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .component("Splitpanes", Splitpanes)
+  .component("Pane", Pane)
   .use(createVuestic())
   .mount("#app");

@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 import { ImageDetail } from "../core/type/image";
 
-interface ImageState {
+export interface ImageState {
   selectedImageBasePath: string | null;
   imageDetail: ImageDetail | null;
 }

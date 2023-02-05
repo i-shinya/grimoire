@@ -41,10 +41,10 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
-          <p :class="isSelected(item) ? 'is-selected-image' : ''">
+          <div :class="isSelected(item) ? 'is-selected-image' : ''">
             <va-image :src="item.dataUrl" :contain="true" :ratio="0.75" />
-          </p>
-          <p class="image-label">{{ item.label }}</p>
+          </div>
+          <div class="image-label">{{ item.label }}</div>
         </div>
       </template>
     </div>
@@ -55,7 +55,8 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
 @use "../variables.scss" as var;
 
 #image-viewer {
-  width: calc(calc(100vw - 240px - 48px) / 2);
+  height: 100%;
+  width: 100%;
   border-right: 1px black solid;
   background-color: rgb(34, 34, 34);
   overflow: auto;
@@ -100,7 +101,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
       }
       .image-label {
         padding-top: 4px;
-        font-size: 18px;
+        font-size: 16px;
         text-align: center;
       }
     }

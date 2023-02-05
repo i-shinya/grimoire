@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide } from "vue";
+import { inject, provide, ref, watch, reactive } from "vue";
 import SideMenu from "./components/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
@@ -14,6 +14,22 @@ const dirStore = directoryStore();
 const imgStore = imageStore();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
+
+interface VriableState {
+  showPropertyViewer: boolean;
+}
+
+const variableState = reactive<VriableState>({
+  showPropertyViewer: false,
+});
+
+watch(
+  () => imgStore!!.state.selectedImageBasePath,
+  (state, prevState) => {
+    variableState.showPropertyViewer = !!imgStore!!.state.selectedImageBasePath;
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -21,11 +37,23 @@ provide(ImageKey, imgStore);
     <Header class="header"></Header>
     <div class="content-area">
       <SideMenu></SideMenu>
-      <DirectoryArea></DirectoryArea>
-      <ImageViewer></ImageViewer>
-      <PropertyViewer></PropertyViewer>
-      <Footer></Footer>
+      <splitpanes class="size-variable-area">
+        <pane min-size="14" size="22">
+          <DirectoryArea></DirectoryArea>
+        </pane>
+        <pane class="viewer-editor-area" size="78">
+          <splitpanes>
+            <pane>
+              <ImageViewer></ImageViewer>
+            </pane>
+            <pane v-if="variableState.showPropertyViewer" min-size="20">
+              <PropertyViewer></PropertyViewer>
+            </pane>
+          </splitpanes>
+        </pane>
+      </splitpanes>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -41,19 +69,41 @@ provide(ImageKey, imgStore);
   .content-area {
     display: flex;
     margin-top: var.$header-height;
-    height: calc(100vh - var.$header-height - var.$footer-height);
+    .size-variable-area {
+      height: calc(100vh - var.$header-height - var.$footer-height);
+      width: calc(100vw - var.$sidebar-width);
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+@use "./variables.scss" as var;
+
+/* splitpanesのスタイル上書き */
+.splitpanes__splitter {
+  min-width: 2px !important;
+  background: var.$split-bar-color;
+
+  &:hover {
+    min-width: 6px !important;
   }
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+/* vuesticのスタイル上書き */
+.va-breadcrumbs__separator {
+  padding-left: 2px !important;
+  padding-right: 4px !important;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.va-toast {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.va-breadcrumb-item {
+  white-space: nowrap;
 }
 </style>

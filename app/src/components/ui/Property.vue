@@ -43,11 +43,12 @@ const copyClipBoard = () => {
 
 <style lang="scss" scoped>
 .property {
+  font-size: 16px;
+  color: rgb(240, 240, 240);
   .label-area {
     display: flex;
     .label {
       padding-left: 4px;
-      color: rgb(221, 221, 221);
       cursor: pointer;
     }
     .clipboard-icon {
@@ -58,7 +59,7 @@ const copyClipBoard = () => {
   .value {
     background-color: rgb(54, 54, 54);
     padding: 6px;
-    line-height: 24px;
+    line-height: 26px;
   }
 }
 </style>

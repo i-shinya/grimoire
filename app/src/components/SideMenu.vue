@@ -28,7 +28,7 @@ const searchDirectroy = () => {};
   .icon-area {
     display: block;
     padding-top: 8px;
-    width: 48px;
+    width: var.$sidebar-width;
     resize: both;
   }
 }
