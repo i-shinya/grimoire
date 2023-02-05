@@ -1,7 +1,47 @@
-import { getImages, getImageMeta, readImage } from "./directory";
+import {
+  getDirectroyNodes,
+  getImages,
+  getImageMeta,
+  readImage,
+} from "./directory";
 import { ImageDetail } from "../../core/type/image";
 
 describe("directory.ts", () => {
+  describe("getDirectroyNodes", () => {
+    it("正常系：ディレクトリノードが取得できること", async () => {
+      const res = await getDirectroyNodes("./testdata/image");
+      expect(res).toMatchObject([
+        {
+          id: 1,
+          label: "nest-dir",
+          isDirectory: true,
+          children: [
+            {
+              id: 1,
+              label: "sample3.png",
+              isDirectory: false,
+            },
+          ],
+        },
+        {
+          id: 2,
+          label: "not-image.txt",
+          isDirectory: false,
+        },
+        {
+          id: 3,
+          label: "sample1.png",
+          isDirectory: false,
+        },
+        {
+          id: 4,
+          label: "sample2.png",
+          isDirectory: false,
+        },
+      ]);
+    });
+  });
+
   describe("getImages", () => {
     it("正常系：画像が取得できること", async () => {
       // エラーが起きないことだけ確認

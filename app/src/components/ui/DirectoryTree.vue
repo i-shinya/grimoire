@@ -1,8 +1,9 @@
 <!-- このUIのみ他UIから参照・他UIを参照しています。
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { DirectoryNode } from "../../core/type/directory";
+import { isImageExtension } from "../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
 import { DirectoryKey } from "../../store/key";
 
@@ -25,6 +26,11 @@ const directory = inject(DirectoryKey);
 const selectDirectory = (path: string) => {
   directory?.selectDirectory(path);
 };
+
+// ディレクトリor画像ファイルであることを確認
+const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
+  return node.isDirectory || isImageExtension(node.label);
+});
 </script>
 
 <template>
@@ -63,13 +69,16 @@ const selectDirectory = (path: string) => {
         </div>
       </template>
     </template>
+    <!-- childrenが存在しない場合はそのまま表示 -->
     <template v-else>
-      <!-- childrenが存在する場合はそのまま表示 -->
-      <div class="filename-area">
-        <div class="filename-row">
-          <div class="filename">{{ node.label }}</div>
+      <!-- ディレクトリ or 画像ファイル以外は表示しない -->
+      <template v-if="isDirectoryOrImageFile(node)">
+        <div class="filename-area">
+          <div class="filename-row">
+            <div class="filename">{{ node.label }}</div>
+          </div>
         </div>
-      </div>
+      </template>
     </template>
   </div>
 </template>

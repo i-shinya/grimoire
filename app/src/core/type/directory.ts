@@ -20,7 +20,7 @@ export class DirectoryNode {
     this.children = children;
   }
 
-  hasChildren(): boolean {
+  public hasChildren(): boolean {
     return !!this.children && this.children.length > 0;
   }
 }
