@@ -12,6 +12,7 @@ export default function imageStore() {
     imageDetail: null,
   });
 
+  // 画像ビューワーから選択
   const selectImage = async (path: string, imageDetail: ImageDetail) => {
     state.selectedImageBasePath = path;
     state.imageDetail = imageDetail;
