@@ -19,7 +19,7 @@ jobs:
       - run: mkdir -m 755 release
         working-directory: app
       - name: build release windows
-        run: docker run .
+        run: docker compose up
         working-directory: app
       - name: Create Release
         id: create_release
