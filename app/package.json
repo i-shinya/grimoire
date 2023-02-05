@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "grimoire",
-    "appId": "YourAppID",
+    "appId": "darc.grimoire",
     "asar": true,
     "directories": {
       "buildResources": "assets",
@@ -36,6 +36,7 @@
       ]
     },
     "win": {
+      "publisherName": "darc.i_shinya",
       "target": [
         {
           "target": "portable",
@@ -44,6 +45,7 @@
           ]
         }
       ],
+      "signAndEditExecutable": false,
       "artifactName": "${productName}.${ext}"
     },
     "nsis": {

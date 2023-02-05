@@ -38,10 +38,10 @@ watch(
     <div class="content-area">
       <SideMenu></SideMenu>
       <splitpanes class="size-variable-area">
-        <pane min-size="14" size="22">
+        <pane min-size="14" size="18">
           <DirectoryArea></DirectoryArea>
         </pane>
-        <pane class="viewer-editor-area" size="78">
+        <pane class="viewer-editor-area" size="82">
           <splitpanes>
             <pane>
               <ImageViewer></ImageViewer>
@@ -82,11 +82,11 @@ watch(
 
 /* splitpanesのスタイル上書き */
 .splitpanes__splitter {
-  min-width: 2px !important;
+  min-width: 4px !important;
   background: var.$split-bar-color;
 
   &:hover {
-    min-width: 6px !important;
+    min-width: 4px !important;
   }
 }
 
