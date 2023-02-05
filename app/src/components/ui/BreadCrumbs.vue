@@ -20,16 +20,19 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
+@use "../../variables.scss" as var;
+
 .breadcrumbs {
   font-size: 14px;
   padding-bottom: 6px;
   width: 100%;
   overflow-x: auto;
+  height: var.$bread-crumbs-height;
 
   /* スクロール幅 */
   &::-webkit-scrollbar {
-    width: 4px;
-    height: 5px;
+    width: 2px;
+    height: 2px;
   }
   /* スクロール背景 */
   &::-webkit-scrollbar-track {
@@ -40,6 +43,14 @@ defineProps<{
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: #c2c2c2;
+  }
+
+  &:hover {
+    /* スクロール幅 */
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
   }
 }
 </style>

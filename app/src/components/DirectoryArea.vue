@@ -59,6 +59,8 @@ $select-directroy-area-height: 30px;
   height: calc(100vh - var.$header-height - var.$footer-height);
   width: 240px;
   background-color: rgb(48, 48, 48);
+  overflow-x: auto;
+  overflow-y: hidden;
 
   .directory-button-area {
     height: $button-area-height;
@@ -92,9 +94,10 @@ $select-directroy-area-height: 30px;
 
     .directory-tree-area {
       padding-left: 16px;
+      // 8pxはスクロールバーの分
       height: calc(
         100vh - var.$header-height - var.$footer-height -
-          $select-directroy-area-height - $button-area-height
+          $select-directroy-area-height - $button-area-height - 8px
       );
       font-size: 14px;
       padding-top: 8px;
@@ -103,7 +106,7 @@ $select-directroy-area-height: 30px;
       /* スクロール幅 */
       &::-webkit-scrollbar {
         width: 8px;
-        height: 10px;
+        height: 8px;
       }
       /* スクロール背景 */
       &::-webkit-scrollbar-track {

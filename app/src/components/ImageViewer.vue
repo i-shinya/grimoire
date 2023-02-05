@@ -28,7 +28,10 @@ const selectImage = (image: ImageDetail) => {
 };
 
 const isSelected = computed(() => (image: ImageDetail): boolean => {
-  return image.id === imageStore?.state.imageDetail?.id;
+  return (
+    image.id === imageStore?.state.imageDetail?.id &&
+    selectPath.value === imageStore?.state.selectedImageBasePath
+  );
 });
 </script>
 
@@ -39,7 +42,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
           <p :class="isSelected(item) ? 'is-selected-image' : ''">
-            <va-image :src="item.dataUrl" />
+            <va-image :src="item.dataUrl" contain="true" />
           </p>
           <p class="image-label">{{ item.label }}</p>
         </div>
