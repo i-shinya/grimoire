@@ -4,6 +4,8 @@ import { ImageKey } from "../store/key";
 import { ImageDetail } from "../core/type/image";
 import Property from "./ui/Property.vue";
 import BreadCrumbs, { Bread } from "./ui/BreadCrumbs.vue";
+import { onMounted } from "vue";
+import { ImageState } from "../store/image";
 
 const imageStore = inject(ImageKey);
 
@@ -11,22 +13,34 @@ const basePath = ref<string>("");
 const properties = ref<ImageDetail | null>(null);
 const breads = ref<Bread[]>([]);
 
+const setProperty = (state: ImageState) => {
+  basePath.value = state.selectedImageBasePath ?? "";
+  properties.value = state.imageDetail ?? null;
+
+  breads.value = basePath.value.split("/").map((val, index) => {
+    return { id: index, text: val };
+  });
+  breads.value.push({
+    id: breads.value.length,
+    text: properties.value?.label ?? "",
+  });
+};
+
 watch(
   () => imageStore!!.state,
   (state, prevState) => {
-    basePath.value = state.selectedImageBasePath ?? "";
-    properties.value = state.imageDetail ?? null;
-
-    breads.value = basePath.value.split("/").map((val, index) => {
-      return { id: index, text: val };
-    });
-    breads.value.push({
-      id: breads.value.length,
-      text: properties.value?.label ?? "",
-    });
+    setProperty(state);
   },
   { deep: true }
 );
+
+onMounted(() => {
+  const state = imageStore?.state;
+  if (!state) {
+    return;
+  }
+  setProperty(state);
+});
 </script>
 
 <template>
@@ -51,7 +65,8 @@ watch(
 @use "../variables.scss" as var;
 
 #property-viewer {
-  width: calc(calc(100vw - 240px - 48px) / 2);
+  height: 100%;
+  width: 100%;
   background-color: rgb(34, 34, 34);
   padding: 16px;
   overflow: auto;
@@ -75,8 +90,6 @@ watch(
   .property-viewer {
     .breads {
       margin-bottom: 20px;
-    }
-    .property-area {
     }
   }
 }

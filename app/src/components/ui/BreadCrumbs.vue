@@ -28,6 +28,7 @@ defineProps<{
   width: 100%;
   overflow-x: auto;
   height: var.$bread-crumbs-height;
+  color: rgb(240, 240, 240);
 
   /* スクロール幅 */
   &::-webkit-scrollbar {

@@ -56,7 +56,8 @@ $button-area-height: 70px;
 $select-directroy-area-height: 30px;
 
 .directroy-area {
-  width: 240px;
+  height: 100%;
+  width: 100%;
   background-color: rgb(48, 48, 48);
   overflow-x: auto;
   overflow-y: hidden;
@@ -65,12 +66,12 @@ $select-directroy-area-height: 30px;
     height: $button-area-height;
     padding-top: 16px;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgb(124, 124, 124);
+    border-bottom: 1px solid var.$split-bar-color;
   }
 
   .tree-area {
     padding-top: 8px;
-    color: rgb(221, 221, 221);
+    color: rgb(231, 231, 231);
 
     .select-directory {
       height: $select-directroy-area-height;
@@ -78,7 +79,7 @@ $select-directroy-area-height: 30px;
       align-items: center;
       font-size: 14px;
       padding-bottom: 8px;
-      border-bottom: 1px solid rgb(124, 124, 124);
+      border-bottom: 1px solid var.$split-bar-color;
       .directory-name {
         padding-left: 8px;
         font-weight: bold;
