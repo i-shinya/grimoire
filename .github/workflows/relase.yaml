@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.0
-      - run: make -m 755 release
+      - run: mkdir -m 755 release
         working-directory: app
       - name: build release windows
         run: docker run .
