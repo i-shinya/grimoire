@@ -7,6 +7,7 @@ import { dialog, BrowserWindow } from "electron";
 import exifr from "exifr";
 
 import { DirectoryNode } from "../../core/type/directory";
+import { isImageExtension } from "../../core/image";
 import { ImageDetail, Metadata } from "../../core/type/image";
 
 export const openDirectoryDialog = (
@@ -55,7 +56,7 @@ export const getDirectroyNodes = (path: string): DirectoryNode[] => {
           idCounter.next(),
           dirent.name,
           `${path}/${dirent.name}`,
-          true
+          false
         );
       }
     })
@@ -79,7 +80,7 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
   const dirents = fs
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent: fs.Dirent) => {
-      return dirent.isFile() && isImage(dirent.name);
+      return dirent.isFile() && isImageExtension(dirent.name);
     });
   return await Promise.all(
     dirents.map(async (dirent: fs.Dirent, index: number) => {
@@ -94,16 +95,6 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
       };
     })
   );
-};
-
-/**
- * 拡張子チェック
- * @param filename
- * @returns
- */
-const isImage = (filename: string): boolean => {
-  const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
-  return !!filename.match(allowExtensions);
 };
 
 /**

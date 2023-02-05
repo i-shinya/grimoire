@@ -42,7 +42,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
           <p :class="isSelected(item) ? 'is-selected-image' : ''">
-            <va-image :src="item.dataUrl" contain="true" />
+            <va-image :src="item.dataUrl" contain="true" :ratio="0.75" />
           </p>
           <p class="image-label">{{ item.label }}</p>
         </div>
@@ -65,7 +65,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
   /* スクロール幅 */
   &::-webkit-scrollbar {
     width: 8px;
-    height: 10px;
+    height: 8px;
   }
   /* スクロール背景 */
   &::-webkit-scrollbar-track {

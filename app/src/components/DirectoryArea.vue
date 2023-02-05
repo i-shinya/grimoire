@@ -11,7 +11,7 @@ const directroyName = ref<string | null>(null);
 // 選択しているディレクトリのフルパス
 const directroyFullPath = ref<string | null>(null);
 
-const directoryNodes = ref<DirectoryNode[]>();
+const directoryNodes = ref<DirectoryNode[]>([]);
 
 const openDirectory = async () => {
   // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい

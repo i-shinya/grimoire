@@ -60,7 +60,7 @@ watch(
   /* スクロール幅 */
   &::-webkit-scrollbar {
     width: 8px;
-    height: 10px;
+    height: 8px;
   }
   /* スクロール背景 */
   &::-webkit-scrollbar-track {
