@@ -24,12 +24,11 @@ const searchDirectroy = () => {};
 @use "../variables.scss" as var;
 
 .sidemenu {
+  background-color: rgb(73, 73, 73);
   .icon-area {
     display: block;
     padding-top: 8px;
-    height: calc(100vh - var.$header-height - var.$footer-height);
     width: 48px;
-    background-color: rgb(73, 73, 73);
     resize: both;
   }
 }

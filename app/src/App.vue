@@ -19,11 +19,13 @@ provide(ImageKey, imgStore);
 <template>
   <div id="app-page">
     <Header class="header"></Header>
-    <SideMenu class="content-area"></SideMenu>
-    <DirectoryArea class="content-area"></DirectoryArea>
-    <ImageViewer class="content-area"></ImageViewer>
-    <PropertyViewer class="content-area"></PropertyViewer>
-    <Footer class="footer"></Footer>
+    <div class="content-area">
+      <SideMenu></SideMenu>
+      <DirectoryArea></DirectoryArea>
+      <ImageViewer></ImageViewer>
+      <PropertyViewer></PropertyViewer>
+      <Footer></Footer>
+    </div>
   </div>
 </template>
 
@@ -37,7 +39,9 @@ provide(ImageKey, imgStore);
   width: 100vw;
 
   .content-area {
+    display: flex;
     margin-top: var.$header-height;
+    height: calc(100vh - var.$header-height - var.$footer-height);
   }
 }
 

@@ -56,7 +56,6 @@ $button-area-height: 70px;
 $select-directroy-area-height: 30px;
 
 .directroy-area {
-  height: calc(100vh - var.$header-height - var.$footer-height);
   width: 240px;
   background-color: rgb(48, 48, 48);
   overflow-x: auto;
