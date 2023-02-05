@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.ref }}_${{ github.event.inputs.version }}
+          release_name: Release win_${{ github.event.inputs.version }}
           draft: false
           prerelease: false
       - name: upload relase windows artifaces
@@ -37,6 +37,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app/release/win
+          asset_path: ./app/release/win/grimoire.exe
           asset_name: grimoire.exe
           asset_content_type: application/exe
