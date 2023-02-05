@@ -9,35 +9,35 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-        - name: Set up node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18.0
-        - run: make -m 755 release
-          working-directory: app
-        - name: build release windows
-          run: docker run .
-          working-directory: app
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: ${{ github.event.inputs.version }}
-            release_name: Release ${{ github.ref }}_${{ github.event.inputs.version }}
-            draft: false
-            prerelease: false
-        - name: upload relase windows artifaces
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./release/win
-            asset_name: grimoire.exe
-            asset_content_type: application/exe
-          working-directory: app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.0
+      - run: make -m 755 release
+        working-directory: app
+      - name: build release windows
+        run: docker run .
+        working-directory: app
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.ref }}_${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+      - name: upload relase windows artifaces
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/win
+          asset_name: grimoire.exe
+          asset_content_type: application/exe
+        working-directory: app
