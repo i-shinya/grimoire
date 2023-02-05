@@ -2,10 +2,13 @@
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
+import { DirectoryKey, ImageKey } from "../../store/key";
 import { DirectoryNode } from "../../core/type/directory";
 import { isImageExtension } from "../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
-import { DirectoryKey } from "../../store/key";
+
+const directoryStore = inject(DirectoryKey);
+const imageStore = inject(ImageKey);
 
 defineProps<{
   node: DirectoryNode;
@@ -23,14 +26,25 @@ const switchChildVisible = () => {
 
 // store経由でイベントを発火する
 const directory = inject(DirectoryKey);
-const selectDirectory = (path: string) => {
-  directory?.selectDirectory(path);
+const selectDirectory = (node: DirectoryNode) => {
+  directory?.selectDirectory(`${node.basePath}/${node.label}`);
 };
 
 // ディレクトリor画像ファイルであることを確認
 const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
   return node.isDirectory || isImageExtension(node.label);
 });
+
+const selectImage = async (node: DirectoryNode) => {
+  await directoryStore?.selectDirectory(node.basePath);
+  const imageDetails = directoryStore?.state.imageDetails?.filter(
+    (detail) => detail.label === node.label
+  );
+  if (!imageDetails || imageDetails.length === 0) {
+    return;
+  }
+  await imageStore?.selectImage(node.basePath, imageDetails[0]);
+};
 </script>
 
 <template>
@@ -53,7 +67,7 @@ const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
             icon="fa-solid fa-angle-down"
             @click="switchChildVisible()"
           />
-          <div class="filename" @click="selectDirectory(node.fullPath)">
+          <div class="filename" @click="selectDirectory(node)">
             <div>{{ node.label }}</div>
           </div>
         </div>
@@ -75,7 +89,9 @@ const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
       <template v-if="isDirectoryOrImageFile(node)">
         <div class="filename-area">
           <div class="filename-row">
-            <div class="filename">{{ node.label }}</div>
+            <div class="filename" @click="selectImage(node)">
+              {{ node.label }}
+            </div>
           </div>
         </div>
       </template>

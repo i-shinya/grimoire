@@ -47,17 +47,12 @@ export const getDirectroyNodes = (path: string): DirectoryNode[] => {
         return new DirectoryNode(
           idCounter.next(),
           dirent.name,
-          `${path}/${dirent.name}`,
+          path,
           true,
           nodes
         );
       } else {
-        return new DirectoryNode(
-          idCounter.next(),
-          dirent.name,
-          `${path}/${dirent.name}`,
-          false
-        );
+        return new DirectoryNode(idCounter.next(), dirent.name, path, false);
       }
     })
     .sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1));

@@ -12,6 +12,7 @@ export default function directoryStore() {
     imageDetails: null,
   });
 
+  // ディレクトリツリーで選択
   const selectDirectory = async (path: string) => {
     state.selectedDirectoryPath = path;
     state.imageDetails = await (window as any).direcrotyAPI.getImages(path);
