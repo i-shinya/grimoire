@@ -37,7 +37,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/win
+          asset_path: ./app/release/win
           asset_name: grimoire.exe
           asset_content_type: application/exe
-        working-directory: app
