@@ -89,3 +89,7 @@ button:focus-visible {
   padding-left: 4px !important;
   padding-right: 4px !important;
 }
+
+.va-breadcrumb-item {
+  white-space: nowrap;
+}

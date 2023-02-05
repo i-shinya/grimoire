@@ -97,6 +97,7 @@ const selectDirectory = (path: string) => {
         flex-grow: 1;
         padding-top: 6px;
         padding-bottom: 6px;
+        white-space: nowrap;
       }
     }
   }
