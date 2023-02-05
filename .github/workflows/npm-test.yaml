@@ -14,7 +14,7 @@ jobs:
           node-version: 18.0
       - name: install npm packages
         run: npm ci
-        working-directory: ./apps
+        working-directory: app
       - name: npm test
         run: npm test
-        working-directory: ./apps
+        working-directory: app
