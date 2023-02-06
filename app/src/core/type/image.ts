@@ -10,12 +10,12 @@ export class Metadata {
   positive?: string; // Description
   // 以下はCommentの値
   negative?: string; // uc
-  steps?: number;
+  steps?: string;
+  scale?: string;
+  seed?: string;
   sampler?: string;
-  seed?: number;
-  strength?: number;
-  noise?: number;
-  scale?: number;
+  strength?: string;
+  noise?: string;
 
   public static build(metadata: any): Metadata {
     const meta = new Metadata();
@@ -28,25 +28,25 @@ export class Metadata {
       // TODO json形式が不正な時どうするかそのうち考える
       const comment = JSON.parse(metadata.Comment);
       if (comment.uc) {
-        meta.negative = comment.uc;
+        meta.negative = comment.uc.toString();
       }
       if (comment.steps) {
-        meta.steps = comment.steps;
+        meta.steps = comment.steps.toString();
       }
       if (comment.sampler) {
-        meta.sampler = comment.sampler;
+        meta.sampler = comment.sampler.toString();
       }
       if (comment.seed) {
-        meta.seed = comment.seed;
+        meta.seed = comment.seed.toString();
       }
       if (comment.strength) {
-        meta.strength = comment.strength;
+        meta.strength = comment.strength.toString();
       }
       if (comment.noise) {
-        meta.noise = comment.noise;
+        meta.noise = comment.noise.toString();
       }
       if (comment.scale) {
-        meta.scale = comment.scale;
+        meta.scale = comment.scale.toString();
       }
     }
     return meta;

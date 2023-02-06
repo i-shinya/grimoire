@@ -20,6 +20,7 @@ import {
   faAngleRight,
   faAngleDown,
   faXmark,
+  faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -37,7 +38,8 @@ library.add(
   faCopy,
   faXmark,
   faSquare,
-  faWindowMinimize
+  faWindowMinimize,
+  faTerminal
 );
 
 createApp(App)

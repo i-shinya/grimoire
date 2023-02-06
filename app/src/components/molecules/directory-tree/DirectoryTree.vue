@@ -2,11 +2,12 @@
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
-import { DirectoryKey, ImageKey } from "../../store/key";
-import { DirectoryNode } from "../../core/type/directory";
-import { isImageExtension } from "../../core/image";
-import DirectoryTrees from "../molecules/DirectoryTrees.vue";
+import { DirectoryKey, ImageKey } from "../../../store/key";
+import { DirectoryNode } from "../../../core/type/directory";
+import { isImageExtension } from "../../../core/image";
+import DirectoryTrees from "./DirectoryTrees.vue";
 
+// NOTE: 基本atomicとmoleculesからstoreは操作しないが、ツリーは階層が深いためこちらのみ許容する
 const directoryStore = inject(DirectoryKey);
 const imageStore = inject(ImageKey);
 

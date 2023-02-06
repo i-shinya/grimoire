@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, ref, watch } from "vue";
-import { ImageKey } from "../../store/key";
+import { ImageKey, PropertyKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import Property from "../atoms/Property.vue";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -8,6 +8,7 @@ import { onMounted } from "vue";
 import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
+const propertyStore = inject(PropertyKey);
 
 const basePath = ref<string>("");
 const properties = ref<ImageDetail | null>(null);
@@ -48,14 +49,20 @@ onMounted(() => {
     <div class="property-viewer" v-if="properties">
       <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
       <div class="property-area">
-        <Property label="positive" :value="properties.meta.positive"></Property>
-        <Property label="negative" :value="properties.meta.negative"></Property>
-        <Property label="steps" :value="properties.meta.steps"></Property>
-        <Property label="sampler" :value="properties.meta.sampler"></Property>
-        <Property label="seed" :value="properties.meta.seed"></Property>
-        <Property label="strength" :value="properties.meta.strength"></Property>
-        <Property label="noise" :value="properties.meta.noise"></Property>
-        <Property label="scale" :value="properties.meta.scale"></Property>
+        <Property
+          label="Positive Prompt"
+          :value="properties.meta.positive"
+        ></Property>
+        <Property
+          label="Negative Prompt"
+          :value="properties.meta.negative"
+        ></Property>
+        <Property label="Steps" :value="properties.meta.steps"></Property>
+        <Property label="Scale" :value="properties.meta.scale"></Property>
+        <Property label="Seed" :value="properties.meta.seed"></Property>
+        <Property label="Sampler" :value="properties.meta.sampler"></Property>
+        <Property label="Strength" :value="properties.meta.strength"></Property>
+        <Property label="Noise" :value="properties.meta.noise"></Property>
       </div>
     </div>
   </div>

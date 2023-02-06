@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { emit } from "process";
 import SideMenuIcon from "../atoms/SideMenuIcon.vue";
 
-const showDirectory = () => {};
-const searchDirectroy = () => {};
+const emits = defineEmits<{
+  (e: "show-derectory"): void;
+  (e: "show-editor"): void;
+}>();
+
+const showDirectory = () => {
+  emits("show-derectory");
+};
+const showEditor = () => {
+  emits("show-editor");
+};
 </script>
 
 <template>
@@ -13,9 +23,14 @@ const searchDirectroy = () => {};
         @click="showDirectory"
       ></SideMenuIcon>
       <SideMenuIcon
+        icon-type="fa-solid fa-terminal"
+        @click="showEditor"
+      ></SideMenuIcon>
+      <!-- 検索機能が欲しくなったら実装してください -->
+      <!-- <SideMenuIcon
         icon-type="fa-solid fa-magnifying-glass"
         @click="searchDirectroy"
-      ></SideMenuIcon>
+      ></SideMenuIcon> -->
     </div>
   </div>
 </template>
