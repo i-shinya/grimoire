@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { getDirectroyName, getBaseDirName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
-import DirectoryTree from "../molecules/DirectoryTrees.vue";
+import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
