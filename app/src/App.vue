@@ -24,9 +24,9 @@ const variableState = reactive<VriableState>({
 });
 
 watch(
-  () => imgStore!!.state.selectedImageBasePath,
+  () => imgStore!!.state,
   (state, prevState) => {
-    variableState.showPropertyViewer = !!imgStore!!.state.selectedImageBasePath;
+    variableState.showPropertyViewer = !!state.selectedImageBasePath;
   },
   { deep: true }
 );
