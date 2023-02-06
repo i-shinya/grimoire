@@ -18,7 +18,7 @@ describe("directory.ts", () => {
           children: [
             {
               id: 1,
-              label: "sample3.png",
+              label: "novel-ai-image_3.png",
               isDirectory: false,
             },
           ],
@@ -30,12 +30,12 @@ describe("directory.ts", () => {
         },
         {
           id: 3,
-          label: "sample1.png",
+          label: "novel-ai-image_1.png",
           isDirectory: false,
         },
         {
           id: 4,
-          label: "sample2.png",
+          label: "novel-ai-image_2.png",
           isDirectory: false,
         },
       ]);
@@ -59,7 +59,7 @@ describe("directory.ts", () => {
     it("正常系：画像が読み込めること", async () => {
       // エラーが起きないことだけ確認
       try {
-        await readImage("./testdata/image/sample1.png");
+        await readImage("./testdata/image/novel-ai-image_1.png");
       } catch (error) {
         fail;
       }
@@ -68,7 +68,7 @@ describe("directory.ts", () => {
 
   describe("getImageMeta", () => {
     it("正常系：メタデータが取得できること", async () => {
-      const res = await getImageMeta("./testdata/image/sample1.png");
+      const res = await getImageMeta("./testdata/image/novel-ai-image_1.png");
       expect(res).toMatchObject({
         positive:
           "masterpiece, best quality, masterpiece, best quality, masterpiece, best quality, {{{{ancient mechanical monster}}}}, {{{clockwork}}}, manipulate time,  {{antique watch}},  {{glass strips}}, {floating glass fragments}, {{colorful refraction}}, {beautiful detailed sky}, {{dark intense shadows}}, {{cinematic lighting}}, {{overexposure}}",
