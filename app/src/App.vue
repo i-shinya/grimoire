@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { inject, provide, ref, watch, reactive } from "vue";
-import SideMenu from "./components/SideMenu.vue";
+import SideMenu from "./components/organisms/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
-import ImageViewer from "./components/ImageViewer.vue";
-import PropertyViewer from "./components/PropertyViewer.vue";
-import DirectoryArea from "./components/DirectoryArea.vue";
+import ImageViewer from "./components/organisms/ImageViewer.vue";
+import PropertyViewer from "./components/organisms/PropertyViewer.vue";
+import DirectoryArea from "./components/organisms/DirectoryArea.vue";
 import directoryStore from "./store/directory";
 import imageStore from "./store/image";
 import { DirectoryKey, ImageKey } from "./store/key";

@@ -5,7 +5,7 @@ import { computed, inject, ref } from "vue";
 import { DirectoryKey, ImageKey } from "../../store/key";
 import { DirectoryNode } from "../../core/type/directory";
 import { isImageExtension } from "../../core/image";
-import DirectoryTrees from "./DirectoryTrees.vue";
+import DirectoryTrees from "../molecules/DirectoryTrees.vue";
 
 const directoryStore = inject(DirectoryKey);
 const imageStore = inject(ImageKey);

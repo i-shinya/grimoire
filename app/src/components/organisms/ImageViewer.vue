@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from "vue";
-import { DirectoryKey, ImageKey } from "../store/key";
-import { ImageDetail } from "../core/type/image";
-import BreadCrumbs, { Bread } from "./ui/BreadCrumbs.vue";
+import { DirectoryKey, ImageKey } from "../../store/key";
+import { ImageDetail } from "../../core/type/image";
+import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 
 const directoryStore = inject(DirectoryKey);
 const imageStore = inject(ImageKey);
@@ -52,7 +52,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
 </template>
 
 <style lang="scss" scoped>
-@use "../variables.scss" as var;
+@use "../../variables.scss" as var;
 
 #image-viewer {
   height: 100%;

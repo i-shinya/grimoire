@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DirectoryNode } from "../../core/type/directory";
-import DirectoryTree from "./DirectoryTree.vue";
+import DirectoryTree from "../atoms/DirectoryTree.vue";
 
 defineProps<{
   nodes: DirectoryNode[];

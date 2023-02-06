@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SideMenuIcon from "./ui/SideMenuIcon.vue";
+import SideMenuIcon from "../atoms/SideMenuIcon.vue";
 
 const showDirectory = () => {};
 const searchDirectroy = () => {};
@@ -21,7 +21,7 @@ const searchDirectroy = () => {};
 </template>
 
 <style lang="scss" scoped>
-@use "../variables.scss" as var;
+@use "../../variables.scss" as var;
 
 .sidemenu {
   background-color: rgb(73, 73, 73);

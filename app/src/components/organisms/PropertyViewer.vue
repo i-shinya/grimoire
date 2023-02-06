@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { inject, ref, watch } from "vue";
-import { ImageKey } from "../store/key";
-import { ImageDetail } from "../core/type/image";
-import Property from "./ui/Property.vue";
-import BreadCrumbs, { Bread } from "./ui/BreadCrumbs.vue";
+import { ImageKey } from "../../store/key";
+import { ImageDetail } from "../../core/type/image";
+import Property from "../atoms/Property.vue";
+import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { onMounted } from "vue";
-import { ImageState } from "../store/image";
+import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
 
@@ -62,7 +62,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use "../variables.scss" as var;
+@use "../../variables.scss" as var;
 
 #property-viewer {
   height: 100%;
