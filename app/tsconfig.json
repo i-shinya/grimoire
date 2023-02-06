@@ -15,5 +15,6 @@
     "outDir": "dist" // coreへの参照が入ったせいで"dist/electron"だとディレクトリ階層が変わってしまった
   },
   "include": ["src/electron/**/*"], // vueやtsをincludeするとエラーになる
+  "exclude": ["src/electron/**/*.spec.ts"], // vueやtsをincludeするとエラーになる
   "references": [{ "path": "./tsconfig.node.json" }]
 }
