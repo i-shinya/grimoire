@@ -2,6 +2,8 @@ import { InjectionKey } from "vue";
 import { DirectoryStore } from "./directory";
 import { ImageStore } from "./image";
 import { PropertyStore } from "./property";
+import { AreaVisiblilityStore } from "./area-visibility";
+import { PromptStore } from "./prompt";
 
 export const DirectoryKey: InjectionKey<DirectoryStore> =
   Symbol("directoryStore");
@@ -9,3 +11,9 @@ export const DirectoryKey: InjectionKey<DirectoryStore> =
 export const ImageKey: InjectionKey<ImageStore> = Symbol("imageStore");
 
 export const PropertyKey: InjectionKey<PropertyStore> = Symbol("propertyStore");
+
+export const AreaVisibilityKey: InjectionKey<AreaVisiblilityStore> = Symbol(
+  "areaVisibilityStore"
+);
+
+export const PromptKey: InjectionKey<PromptStore> = Symbol("promptStore");

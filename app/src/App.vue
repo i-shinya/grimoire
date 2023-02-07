@@ -4,74 +4,80 @@ import SideMenu from "./components/organisms/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
 import ImageViewer from "./components/organisms/ImageViewer.vue";
-import PropertyViewer from "./components/organisms/PropertyViewer.vue";
+import ImageMetaViewer from "./components/organisms/ImageMetaViewer.vue";
 import DirectoryArea from "./components/organisms/DirectoryArea.vue";
-import PropertyEditorArea from "./components/organisms/PropertyEditorArea.vue";
+import MetaEditorArea from "./components/organisms/MetaEditorArea.vue";
 import directoryStore from "./store/directory";
 import imageStore from "./store/image";
 import propertyStore from "./store/property";
-import { DirectoryKey, ImageKey, PropertyKey } from "./store/key";
+import areaVisiblilityStore from "./store/area-visibility";
+import promptStore from "./store/prompt";
+import {
+  AreaVisibilityKey,
+  DirectoryKey,
+  ImageKey,
+  PropertyKey,
+  PromptKey,
+} from "./store/key";
+import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
 
 const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
+const areaVisibleStore = areaVisiblilityStore();
+const promStore = promptStore();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
+provide(AreaVisibilityKey, areaVisibleStore);
+provide(PromptKey, promStore);
 
 interface VriableState {
   showDirectory: boolean;
   showPropertyViewer: boolean;
   showEditor: boolean;
+  showPromptEditor: boolean;
 }
-
-const variableState = reactive<VriableState>({
-  showDirectory: true,
-  showPropertyViewer: false,
-  showEditor: false,
-});
-
-watch(
-  () => imgStore!!.state,
-  (state, prevState) => {
-    variableState.showPropertyViewer = !!state.selectedImageBasePath;
-  },
-  { deep: true }
-);
-
-const showDirectory = () => {
-  variableState.showDirectory = !variableState.showDirectory;
-};
-
-const showEditor = () => {
-  variableState.showEditor = !variableState.showEditor;
-};
 </script>
 
 <template>
   <div id="app-page">
     <Header class="header"></Header>
     <div class="content-area">
-      <SideMenu
-        @show-editor="showEditor"
-        @show-derectory="showDirectory"
-      ></SideMenu>
+      <SideMenu></SideMenu>
       <splitpanes class="size-variable-area">
-        <pane v-if="variableState.showDirectory" min-size="14" size="18">
+        <pane
+          v-if="areaVisibleStore.state.showDirectoryArea"
+          min-size="14"
+          size="18"
+        >
           <DirectoryArea></DirectoryArea>
         </pane>
         <pane>
           <splitpanes horizontal>
-            <pane v-if="variableState.showEditor" size="45">
-              <PropertyEditorArea></PropertyEditorArea>
+            <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
+              <splitpanes>
+                <pane min-size="20">
+                  <MetaEditorArea></MetaEditorArea>
+                </pane>
+                <pane
+                  v-if="areaVisibleStore.state.showPromptEditor"
+                  min-size="20"
+                >
+                  <PromptEditorArea></PromptEditorArea>
+                </pane>
+              </splitpanes>
             </pane>
             <pane>
               <splitpanes>
-                <pane min-size="20">
+                <pane v-if="areaVisibleStore.state.showImageArea" min-size="20">
                   <ImageViewer></ImageViewer>
                 </pane>
-                <pane v-if="variableState.showPropertyViewer" min-size="20">
-                  <PropertyViewer></PropertyViewer>
+                <pane
+                  v-if="areaVisibleStore.state.showImageMetaViewer"
+                  min-size="20"
+                >
+                  <ImageMetaViewer></ImageMetaViewer>
                 </pane>
               </splitpanes>
             </pane>

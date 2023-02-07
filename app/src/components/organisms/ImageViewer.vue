@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from "vue";
-import { DirectoryKey, ImageKey } from "../../store/key";
+import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 
 const directoryStore = inject(DirectoryKey);
 const imageStore = inject(ImageKey);
+const areaVisiblilityStore = inject(AreaVisibilityKey);
 
 const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);
@@ -25,6 +26,7 @@ watch(
 
 const selectImage = (image: ImageDetail) => {
   imageStore!!.selectImage(selectPath.value, image);
+  areaVisiblilityStore?.showImageMetaViewer();
 };
 
 const isSelected = computed(() => (image: ImageDetail): boolean => {

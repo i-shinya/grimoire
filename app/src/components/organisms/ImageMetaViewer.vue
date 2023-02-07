@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, ref, watch } from "vue";
-import { ImageKey, PropertyKey } from "../../store/key";
+import { AreaVisibilityKey, ImageKey, PropertyKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import Property from "../atoms/Property.vue";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -9,22 +9,30 @@ import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
 const propertyStore = inject(PropertyKey);
+const areaVisiblilityStore = inject(AreaVisibilityKey);
 
 const basePath = ref<string>("");
-const properties = ref<ImageDetail | null>(null);
+const imageDetail = ref<ImageDetail | null>(null);
 const breads = ref<Bread[]>([]);
 
 const setProperty = (state: ImageState) => {
   basePath.value = state.selectedImageBasePath ?? "";
-  properties.value = state.imageDetail ?? null;
+  imageDetail.value = state.imageDetail ?? null;
 
   breads.value = basePath.value.split("/").map((val, index) => {
     return { id: index, text: val };
   });
   breads.value.push({
     id: breads.value.length,
-    text: properties.value?.label ?? "",
+    text: imageDetail.value?.label ?? "",
   });
+};
+
+const copyToEditor = () => {
+  if (imageDetail.value?.meta) {
+    propertyStore?.copyProperty(imageDetail.value.meta);
+    areaVisiblilityStore?.showEditorArea();
+  }
 };
 
 watch(
@@ -45,24 +53,34 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="property-viewer">
-    <div class="property-viewer" v-if="properties">
+  <div id="image-meta-viewer">
+    <div class="image-meta-viewer" v-if="imageDetail">
       <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
-      <div class="property-area">
+      <div class="meta-area">
+        <div class="copy-button mb-4" @click="copyToEditor">
+          <font-awesome-icon
+            class="copy-to-edittor-icon mr-2"
+            icon="fa-regular fa-circle-up"
+          />
+          <div>Copy to Editor</div>
+        </div>
         <Property
           label="Positive Prompt"
-          :value="properties.meta.positive"
+          :value="imageDetail.meta.positive"
         ></Property>
         <Property
           label="Negative Prompt"
-          :value="properties.meta.negative"
+          :value="imageDetail.meta.negative"
         ></Property>
-        <Property label="Steps" :value="properties.meta.steps"></Property>
-        <Property label="Scale" :value="properties.meta.scale"></Property>
-        <Property label="Seed" :value="properties.meta.seed"></Property>
-        <Property label="Sampler" :value="properties.meta.sampler"></Property>
-        <Property label="Strength" :value="properties.meta.strength"></Property>
-        <Property label="Noise" :value="properties.meta.noise"></Property>
+        <Property label="Steps" :value="imageDetail.meta.steps"></Property>
+        <Property label="Scale" :value="imageDetail.meta.scale"></Property>
+        <Property label="Seed" :value="imageDetail.meta.seed"></Property>
+        <Property label="Sampler" :value="imageDetail.meta.sampler"></Property>
+        <Property
+          label="Strength"
+          :value="imageDetail.meta.strength"
+        ></Property>
+        <Property label="Noise" :value="imageDetail.meta.noise"></Property>
       </div>
     </div>
   </div>
@@ -71,7 +89,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use "../../variables.scss" as var;
 
-#property-viewer {
+#image-meta-viewer {
   height: 100%;
   width: 100%;
   background-color: rgb(34, 34, 34);
@@ -94,9 +112,20 @@ onMounted(() => {
     background: #c2c2c2;
   }
 
-  .property-viewer {
+  .image-meta-viewer {
     .breads {
       margin-bottom: 20px;
+    }
+
+    .meta-area {
+      .copy-button {
+        display: flex;
+        border: 1px solid rgb(255, 255, 255);
+        padding: 4px;
+        cursor: pointer;
+        justify-content: center;
+        background-color: rgb(37, 18, 18);
+      }
     }
   }
 }

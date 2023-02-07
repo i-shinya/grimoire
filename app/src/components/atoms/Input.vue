@@ -49,7 +49,7 @@ const copyClipBoard = () => {
 </script>
 
 <template>
-  <div class="input-area mb-3">
+  <div class="input-area">
     <div class="label-area">
       <div class="label mb-2 mr-2" @click="copyClipBoard">{{ label }}</div>
       <font-awesome-icon
