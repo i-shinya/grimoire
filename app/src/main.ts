@@ -26,6 +26,7 @@ import {
   faCopy,
   faSquare,
   faWindowMinimize,
+  faCircleUp,
 } from "@fortawesome/free-regular-svg-icons";
 
 // 使用するfont-awesomeアイコンを読み込む
@@ -39,7 +40,8 @@ library.add(
   faXmark,
   faSquare,
   faWindowMinimize,
-  faTerminal
+  faTerminal,
+  faCircleUp
 );
 
 createApp(App)

@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { emit } from "process";
+import { inject } from "vue";
 import SideMenuIcon from "../atoms/SideMenuIcon.vue";
+import { AreaVisibilityKey } from "../../store/key";
 
-const emits = defineEmits<{
-  (e: "show-derectory"): void;
-  (e: "show-editor"): void;
-}>();
+const areaVisiblilityStore = inject(AreaVisibilityKey);
 
 const showDirectory = () => {
-  emits("show-derectory");
+  areaVisiblilityStore?.changeDirectoryVisiblility();
 };
-const showEditor = () => {
-  emits("show-editor");
+const showMetaEditor = () => {
+  areaVisiblilityStore?.changeEditorVisiblility();
 };
 </script>
 
@@ -24,7 +22,7 @@ const showEditor = () => {
       ></SideMenuIcon>
       <SideMenuIcon
         icon-type="fa-solid fa-terminal"
-        @click="showEditor"
+        @click="showMetaEditor"
       ></SideMenuIcon>
       <!-- 検索機能が欲しくなったら実装してください -->
       <!-- <SideMenuIcon

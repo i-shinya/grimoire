@@ -49,7 +49,7 @@ const copyClipBoard = () => {
 </script>
 
 <template>
-  <div class="text-area mb-3">
+  <div class="text-area">
     <div class="label-area">
       <div class="label mb-2 mr-2" @click="copyClipBoard">{{ label }}</div>
       <font-awesome-icon
@@ -89,6 +89,22 @@ const copyClipBoard = () => {
     border-style: double;
     border: 1px solid rgb(129, 129, 129);
     resize: none;
+
+    /* スクロール幅 */
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    /* スクロール背景 */
+    &::-webkit-scrollbar-track {
+      border-radius: 5px;
+      background: rgba(110, 108, 108, 0.2);
+    }
+    /* ドラック部 */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: #c2c2c2;
+    }
   }
 }
 </style>

@@ -2,60 +2,73 @@
 import { inject } from "vue";
 import Input from "../atoms/Input.vue";
 import Textarea from "../atoms/Textarea.vue";
-import { PropertyKey } from "../../store/key";
+import { AreaVisibilityKey, PropertyKey } from "../../store/key";
 
 const propertyStore = inject(PropertyKey);
+const areaVisiblilityStore = inject(AreaVisibilityKey);
 
 const receiveVal = (val: { label: string; value: string }) => {
   propertyStore?.setValue(val);
 };
+
+const selectPositivePrompt = () => {
+  areaVisiblilityStore?.showPromptEditor();
+};
+
+const selectNegativePrompt = () => {
+  areaVisiblilityStore?.showPromptEditor();
+};
 </script>
 
 <template>
-  <div id="property-editor-area">
+  <div id="meta-editor-area">
     <Textarea
+      class="mb-4"
       label="Positive Prompt"
       :value="propertyStore?.state.meta.positive ?? ''"
       @send-val="receiveVal"
+      @click="selectPositivePrompt"
     ></Textarea>
     <Textarea
+      class="mb-4"
       label="Negative Prompt"
       :value="propertyStore?.state.meta.negative ?? ''"
       @send-val="receiveVal"
+      @click="selectNegativePrompt"
     ></Textarea>
-    <div class="property-row">
+    <div class="meta-row">
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Steps"
         :value="propertyStore?.state.meta.steps ?? ''"
         @send-val="receiveVal"
       ></Input>
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Scale"
         :value="propertyStore?.state.meta.scale ?? ''"
         @send-val="receiveVal"
       ></Input>
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Seed"
         :value="propertyStore?.state.meta.seed ?? ''"
         @send-val="receiveVal"
       ></Input>
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Sampler"
         :value="propertyStore?.state.meta.sampler ?? ''"
         @send-val="receiveVal"
       ></Input>
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Strength"
         :value="propertyStore?.state.meta.strength ?? ''"
         @send-val="receiveVal"
       ></Input>
       <Input
-        class="property-input"
+        class="meta-input mb-4"
         label="Noise"
         :value="propertyStore?.state.meta.noise ?? ''"
         @send-val="receiveVal"
@@ -67,7 +80,7 @@ const receiveVal = (val: { label: string; value: string }) => {
 <style lang="scss" scoped>
 @use "../../variables.scss" as var;
 
-#property-editor-area {
+#meta-editor-area {
   height: 100%;
   width: 100%;
   background-color: rgb(37, 18, 18);
@@ -90,11 +103,11 @@ const receiveVal = (val: { label: string; value: string }) => {
     background: #acb2c7;
   }
 
-  .property-row {
+  .meta-row {
     display: flex;
     flex-wrap: wrap;
 
-    .property-input {
+    .meta-input {
       margin-right: 12px;
     }
   }
