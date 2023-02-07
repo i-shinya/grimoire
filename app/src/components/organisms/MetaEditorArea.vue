@@ -12,11 +12,11 @@ const receiveVal = (val: { label: string; value: string }) => {
 };
 
 const selectPositivePrompt = () => {
-  areaVisiblilityStore?.showPromptEditor();
+  // areaVisiblilityStore?.showPromptEditor();
 };
 
 const selectNegativePrompt = () => {
-  areaVisiblilityStore?.showPromptEditor();
+  // areaVisiblilityStore?.showPromptEditor();
 };
 </script>
 

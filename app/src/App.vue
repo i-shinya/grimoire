@@ -31,13 +31,6 @@ provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
 provide(AreaVisibilityKey, areaVisibleStore);
 provide(PromptKey, promStore);
-
-interface VriableState {
-  showDirectory: boolean;
-  showPropertyViewer: boolean;
-  showEditor: boolean;
-  showPromptEditor: boolean;
-}
 </script>
 
 <template>
