@@ -92,8 +92,8 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
 
     .image-area {
       color: white;
-      max-width: 300px;
-      min-width: 200px;
+      max-width: 240px;
+      min-width: 240px;
       max-height: 30%;
       padding: 8px;
       cursor: pointer;
