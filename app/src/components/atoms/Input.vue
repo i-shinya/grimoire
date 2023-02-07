@@ -58,7 +58,7 @@ const copyClipBoard = () => {
         @click="copyClipBoard"
       />
     </div>
-    <input class="input" type="text" v-model="val" />
+    <input class="input" type="text" v-model="val" spellcheck="false" />
   </div>
 </template>
 

@@ -58,7 +58,12 @@ const copyClipBoard = () => {
         @click="copyClipBoard"
       />
     </div>
-    <textarea class="text" type="textarea" v-model="val"></textarea>
+    <textarea
+      class="text"
+      type="textarea"
+      v-model="val"
+      spellcheck="false"
+    ></textarea>
   </div>
 </template>
 
