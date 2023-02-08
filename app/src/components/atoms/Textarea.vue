@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 使用しなくなったのでそのうち消すかも
 import { ref, onMounted, watch } from "vue";
 import { useToast } from "vuestic-ui";
 

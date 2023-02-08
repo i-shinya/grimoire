@@ -1,42 +1,23 @@
 <script setup lang="ts">
 import { inject } from "vue";
-import Input from "../atoms/Input.vue";
-import Textarea from "../atoms/Textarea.vue";
+import Property from "../atoms/Property.vue";
 import { AreaVisibilityKey, PropertyKey } from "../../store/key";
 
 const propertyStore = inject(PropertyKey);
-const areaVisiblilityStore = inject(AreaVisibilityKey);
-
-const receiveVal = (val: { label: string; value: string }) => {
-  propertyStore?.setValue(val);
-};
-
-const selectPositivePrompt = () => {
-  // areaVisiblilityStore?.showPromptEditor();
-};
-
-const selectNegativePrompt = () => {
-  // areaVisiblilityStore?.showPromptEditor();
-};
 </script>
 
 <template>
   <div id="meta-editor-area">
-    <Textarea
-      class="mb-4"
+    <Property
       label="Positive Prompt"
-      :value="propertyStore?.state.meta.positive ?? ''"
-      @send-val="receiveVal"
-      @click="selectPositivePrompt"
-    ></Textarea>
-    <Textarea
-      class="mb-4"
+      :value="propertyStore?.displayPostive()"
+    ></Property>
+    <Property
       label="Negative Prompt"
-      :value="propertyStore?.state.meta.negative ?? ''"
-      @send-val="receiveVal"
-      @click="selectNegativePrompt"
-    ></Textarea>
-    <div class="meta-row">
+      :value="propertyStore?.displayNegative()"
+    ></Property>
+    <!-- とりあえずはプロンプト以外はいらないかも -->
+    <!-- <div class="meta-row">
       <Input
         class="meta-input mb-4"
         label="Steps"
@@ -73,7 +54,7 @@ const selectNegativePrompt = () => {
         :value="propertyStore?.state.meta.noise ?? ''"
         @send-val="receiveVal"
       ></Input>
-    </div>
+    </div> -->
   </div>
 </template>
 

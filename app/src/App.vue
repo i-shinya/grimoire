@@ -11,13 +11,11 @@ import directoryStore from "./store/directory";
 import imageStore from "./store/image";
 import propertyStore from "./store/property";
 import areaVisiblilityStore from "./store/area-visibility";
-import promptStore from "./store/prompt";
 import {
   AreaVisibilityKey,
   DirectoryKey,
   ImageKey,
   PropertyKey,
-  PromptKey,
 } from "./store/key";
 import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
 
@@ -25,12 +23,10 @@ const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
 const areaVisibleStore = areaVisiblilityStore();
-const promStore = promptStore();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
 provide(AreaVisibilityKey, areaVisibleStore);
-provide(PromptKey, promStore);
 </script>
 
 <template>
