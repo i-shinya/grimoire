@@ -14,7 +14,9 @@ export default function areaVisiblilityStore() {
     showImageArea: true,
     showEditorArea: false,
     showImageMetaViewer: false,
-    showPromptEditor: false,
+    // 現状はエディター部分が表示されている時は常に表示
+    // 今後もいらなかったらフラグを削除しても良さそう
+    showPromptEditor: true,
   });
 
   const changeDirectoryVisiblility = () => {
