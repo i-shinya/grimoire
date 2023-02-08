@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { Sortable } from "sortablejs-vue3";
 import { Prompt } from "../../store/property";
 import Input from "../atoms/Input.vue";
 
@@ -42,7 +41,7 @@ watch(
       <div class="label mb-2 mr-2">{{ label }}</div>
     </div>
     <div class="editor-area">
-      <template v-for="item of prompt" key="id">
+      <template v-for="item of val" key="id">
         <div class="mb-1">
           <Input
             class="prompt-input"
@@ -60,8 +59,7 @@ watch(
 <style lang="scss" scoped>
 @use "../../variables.scss" as var;
 
-.prompt-editor-area {
-  // height: 100%;
+.prompt-editor {
   width: 100%;
   background-color: rgb(37, 18, 18);
   padding: 16px;

@@ -10,13 +10,25 @@ if (!propertyStore) {
 }
 
 const postiive = ref<Prompt[]>([]);
+const negative = ref<Prompt[]>([]);
 
 const receivePositive = (prompt: Prompt[]) => {
   propertyStore.updatePositive(prompt);
 };
+const receiveNegative = (prompt: Prompt[]) => {
+  propertyStore.updateNegative(prompt);
+};
 
 onMounted(() => {
   postiive.value =
+    propertyStore.state.postitive.map((val) => {
+      return {
+        id: val.id,
+        spell: val.spell,
+        emphasis: val.emphasis,
+      };
+    }) ?? []; // stateがreadonlyのためコピー
+  negative.value =
     propertyStore.state.postitive.map((val) => {
       return {
         id: val.id,
@@ -30,9 +42,16 @@ onMounted(() => {
 <template>
   <div id="prompt-editor-area">
     <PromptEditor
+      class="mb-4"
       label="Positive Prompt"
       :prompt="postiive"
       @send-val="receivePositive"
+    ></PromptEditor>
+    <PromptEditor
+      class="mb-4"
+      label="Negative Prompt"
+      :prompt="negative"
+      @send-val="receiveNegative"
     ></PromptEditor>
   </div>
 </template>
