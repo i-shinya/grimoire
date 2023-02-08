@@ -65,22 +65,45 @@ onMounted(() => {
           <div>Copy to Editor</div>
         </div>
         <Property
+          class="mb-4"
           label="Positive Prompt"
           :value="imageDetail.meta.positive"
         ></Property>
         <Property
+          class="mb-4"
           label="Negative Prompt"
           :value="imageDetail.meta.negative"
         ></Property>
-        <Property label="Steps" :value="imageDetail.meta.steps"></Property>
-        <Property label="Scale" :value="imageDetail.meta.scale"></Property>
-        <Property label="Seed" :value="imageDetail.meta.seed"></Property>
-        <Property label="Sampler" :value="imageDetail.meta.sampler"></Property>
         <Property
+          class="mb-4"
+          label="Steps"
+          :value="imageDetail.meta.steps"
+        ></Property>
+        <Property
+          class="mb-4"
+          label="Scale"
+          :value="imageDetail.meta.scale"
+        ></Property>
+        <Property
+          class="mb-4"
+          label="Seed"
+          :value="imageDetail.meta.seed"
+        ></Property>
+        <Property
+          class="mb-4"
+          label="Sampler"
+          :value="imageDetail.meta.sampler"
+        ></Property>
+        <Property
+          class="mb-4"
           label="Strength"
           :value="imageDetail.meta.strength"
         ></Property>
-        <Property label="Noise" :value="imageDetail.meta.noise"></Property>
+        <Property
+          class="mb-4"
+          label="Noise"
+          :value="imageDetail.meta.noise"
+        ></Property>
       </div>
     </div>
   </div>

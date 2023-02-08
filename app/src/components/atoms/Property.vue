@@ -28,7 +28,7 @@ const copyClipBoard = () => {
 </script>
 
 <template>
-  <div class="property mb-4">
+  <div class="property">
     <div class="label-area">
       <div class="label mb-2 mr-2" @click="copyClipBoard">{{ label }}</div>
       <font-awesome-icon
@@ -60,6 +60,7 @@ const copyClipBoard = () => {
     background-color: rgb(54, 54, 54);
     padding: 6px;
     line-height: 26px;
+    min-height: 26px;
   }
 }
 </style>

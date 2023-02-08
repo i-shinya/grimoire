@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject } from "vue";
 import Property from "../atoms/Property.vue";
-import { AreaVisibilityKey, PropertyKey } from "../../store/key";
+import { PropertyKey } from "../../store/key";
 
 const propertyStore = inject(PropertyKey);
 </script>
@@ -9,10 +9,12 @@ const propertyStore = inject(PropertyKey);
 <template>
   <div id="meta-editor-area">
     <Property
+      class="mb-4"
       label="Positive Prompt"
       :value="propertyStore?.displayPostive()"
     ></Property>
     <Property
+      class="mb-4"
       label="Negative Prompt"
       :value="propertyStore?.displayNegative()"
     ></Property>
