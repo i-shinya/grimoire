@@ -12,10 +12,10 @@ const emits = defineEmits<{
   (e: "send-val", prompt: Prompt[]): void;
 }>();
 
-const val = ref<Prompt[]>([]);
+const prompts = ref<Prompt[]>([]);
 
 const receiveVal = (val: { id: number; label: string; value: string }) => {
-  const res = props.prompt.map((prop: Prompt) => {
+  const res = prompts.value.map((prop: Prompt) => {
     if (prop.id === val.id) {
       prop.spell = val.value;
     }
@@ -25,12 +25,12 @@ const receiveVal = (val: { id: number; label: string; value: string }) => {
 };
 
 onMounted(() => {
-  val.value = props.prompt ?? "";
+  prompts.value = props.prompt ?? "";
 });
 watch(
   () => props.prompt,
   (state, prevState) => {
-    val.value = state;
+    prompts.value = state;
   }
 );
 </script>
@@ -41,7 +41,7 @@ watch(
       <div class="label mb-2 mr-2">{{ label }}</div>
     </div>
     <div class="editor-area">
-      <template v-for="item of val" key="id">
+      <template v-for="item of prompts" key="id">
         <div class="mb-1">
           <Input
             class="prompt-input"
