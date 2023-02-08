@@ -25,7 +25,8 @@ watch(
   () => directoryStore.state,
   (state, prevState) => {
     selectPath.value = state.selectedDirectoryPath ?? "";
-    images.value = state.imageDetails?.map((detail) => detail) ?? []; // state.imageDetailsがreadonlyのためコピー
+    // TODO ここreadonlyでバグるかも
+    images.value = state.imageDetails?.map((detail) => detail) ?? []; // statesがreadonlyのためコピー
     breads.value = selectPath.value.split("/").map((val, index) => {
       return { id: index, text: val };
     });

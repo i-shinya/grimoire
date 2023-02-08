@@ -1,9 +1,40 @@
 <script setup lang="ts">
-// TODO プロンプトエディター実装
+import { inject, ref, readonly, toRef, toRefs, onMounted, watch } from "vue";
+import { PropertyKey } from "../../store/key";
+import { Prompt } from "../../store/property";
+import PromptEditor from "../molecules/PromptEditor.vue";
+
+const propertyStore = inject(PropertyKey);
+if (!propertyStore) {
+  throw new Error("failed to inejct store from PropertyKey");
+}
+
+const postiive = ref<Prompt[]>([]);
+
+const receivePositive = (prompt: Prompt[]) => {
+  propertyStore.updatePositive(prompt);
+};
+
+onMounted(() => {
+  postiive.value =
+    propertyStore.state.postitive.map((val) => {
+      return {
+        id: val.id,
+        spell: val.spell,
+        emphasis: val.emphasis,
+      };
+    }) ?? []; // stateがreadonlyのためコピー
+});
 </script>
 
 <template>
-  <div id="prompt-editor-area"></div>
+  <div id="prompt-editor-area">
+    <PromptEditor
+      label="Positive Prompt"
+      :prompt="postiive"
+      @send-val="receivePositive"
+    ></PromptEditor>
+  </div>
 </template>
 
 <style lang="scss" scoped>

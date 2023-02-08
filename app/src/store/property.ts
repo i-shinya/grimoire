@@ -1,7 +1,8 @@
 import { reactive, readonly } from "vue";
 import { Metadata } from "../core/type/image";
 
-interface Prompt {
+export interface Prompt {
+  id: number;
   spell: string;
   emphasis: number; // 呪文の強調設定（+は強調、-はマイナス強調）
 }
@@ -27,17 +28,17 @@ export default function propertyStore() {
   });
 
   const addEmphasisSymbol = (spell: string, emphasis: number) => {
-    if (emphasis == 0) {
+    if (emphasis === 0) {
       return spell;
     }
     let result: string = spell;
     if (emphasis > 0) {
       for (let i = 0; i < emphasis; i++) {
-        emphasisStartSymbol + spell + emphasisEndSymbol;
+        result = emphasisStartSymbol + result + emphasisEndSymbol;
       }
     } else {
       for (let i = 0; i < emphasis; i--) {
-        conservativeStartSymbol + spell + conservativeEndSymbol;
+        result = conservativeStartSymbol + result + conservativeEndSymbol;
       }
     }
     return result;
@@ -48,7 +49,7 @@ export default function propertyStore() {
       .map((val) => {
         return addEmphasisSymbol(val.spell, val.emphasis);
       })
-      .join(",");
+      .join(", ");
   };
 
   const displayNegative = () => {
@@ -56,18 +57,18 @@ export default function propertyStore() {
       .map((val) => {
         return addEmphasisSymbol(val.spell, val.emphasis);
       })
-      .join(",");
+      .join(", ");
   };
 
-  const analizeSpell = (text: string): Prompt[] => {
-    const texts = text.split(",");
-    return texts.map((text): Prompt => {
-      let spell: string = text;
+  const analizeSpell = (prompt: string): Prompt[] => {
+    const texts = prompt.split(",");
+    return texts.map((text, index): Prompt => {
+      let spell: string = text.trim();
       let emphasis: number = 0;
       // 強調表現{}が先頭末尾にある場合emphasisをインクリメント
       while (
         spell.startsWith(emphasisStartSymbol) &&
-        spell.startsWith(emphasisEndSymbol)
+        spell.endsWith(emphasisEndSymbol)
       ) {
         spell = spell.slice(1).slice(0, -1);
         emphasis++;
@@ -76,13 +77,13 @@ export default function propertyStore() {
       // マイナス強調表現[]が先頭末尾にある場合emphasisをデクリメント
       while (
         spell.startsWith(conservativeStartSymbol) &&
-        spell.startsWith(conservativeEndSymbol)
+        spell.endsWith(conservativeEndSymbol)
       ) {
         spell = spell.slice(1).slice(0, -1);
         emphasis--;
       }
 
-      return { spell, emphasis };
+      return { id: index, spell, emphasis };
     });
   };
 
@@ -91,6 +92,13 @@ export default function propertyStore() {
     state.meta = meta;
     state.postitive = analizeSpell(meta.positive ?? "");
     state.negative = analizeSpell(meta.negative ?? "");
+  };
+
+  const updatePositive = (postitive: Prompt[]) => {
+    state.postitive = postitive;
+  };
+  const updateNegative = (negative: Prompt[]) => {
+    state.negative = negative;
   };
 
   // 現状使ってないけどそのうち使いそう
@@ -119,6 +127,8 @@ export default function propertyStore() {
     copyProperty,
     displayPostive,
     displayNegative,
+    updatePositive,
+    updateNegative,
   };
 }
 export type PropertyStore = ReturnType<typeof propertyStore>;
