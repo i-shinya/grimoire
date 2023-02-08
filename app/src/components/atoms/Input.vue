@@ -1,17 +1,17 @@
 <script setup lang="ts">
-// 使用しなくなったのでそのうち消すかも
 import { ref, onMounted, watch } from "vue";
 import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
-  label: string;
+  id: number | null; // 必要なら使う
+  label: string | null;
   value: string | undefined;
 }>();
 
 const val = ref<string>("");
 
 const emits = defineEmits<{
-  (e: "send-val", val: { label: string; value: string }): void;
+  (e: "send-val", val: { id: number; label: string; value: string }): void;
 }>();
 
 onMounted(() => {
@@ -25,7 +25,11 @@ watch(
 );
 
 watch(val, (state, prevState) => {
-  emits("send-val", { label: props.label, value: state });
+  emits("send-val", {
+    id: props.id ?? 0,
+    label: props.label ?? "",
+    value: state,
+  });
 });
 
 const { init, close, closeAll } = useToast();
@@ -51,7 +55,7 @@ const copyClipBoard = () => {
 
 <template>
   <div class="input-area">
-    <div class="label-area">
+    <div class="label-area" v-if="label">
       <div class="label mb-2 mr-2" @click="copyClipBoard">{{ label }}</div>
       <font-awesome-icon
         class="clipboard-icon"
@@ -83,7 +87,7 @@ const copyClipBoard = () => {
     width: 100%;
     color: rgb(240, 240, 240);
     background-color: rgb(54, 54, 54);
-    padding: 6px;
+    padding: 2px;
     line-height: 26px;
     border-style: double;
     border: 1px solid rgb(129, 129, 129);
