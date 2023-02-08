@@ -4,6 +4,9 @@ import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
 
 const propertyStore = inject(PropertyKey);
+if (!propertyStore) {
+  throw new Error("failed to inejct store from PropertyKey");
+}
 </script>
 
 <template>
@@ -11,12 +14,12 @@ const propertyStore = inject(PropertyKey);
     <Property
       class="mb-4"
       label="Positive Prompt"
-      :value="propertyStore?.displayPostive()"
+      :value="propertyStore.displayPostive()"
     ></Property>
     <Property
       class="mb-4"
       label="Negative Prompt"
-      :value="propertyStore?.displayNegative()"
+      :value="propertyStore.displayNegative()"
     ></Property>
     <!-- とりあえずはプロンプト以外はいらないかも -->
     <!-- <div class="meta-row">

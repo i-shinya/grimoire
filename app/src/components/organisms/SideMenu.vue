@@ -4,12 +4,15 @@ import SideMenuIcon from "../atoms/SideMenuIcon.vue";
 import { AreaVisibilityKey } from "../../store/key";
 
 const areaVisiblilityStore = inject(AreaVisibilityKey);
+if (!areaVisiblilityStore) {
+  throw new Error("failed to inejct store from AreaVisibilityKey");
+}
 
 const showDirectory = () => {
-  areaVisiblilityStore?.changeDirectoryVisiblility();
+  areaVisiblilityStore.changeDirectoryVisiblility();
 };
 const showMetaEditor = () => {
-  areaVisiblilityStore?.changeEditorVisiblility();
+  areaVisiblilityStore.changeEditorVisiblility();
 };
 </script>
 

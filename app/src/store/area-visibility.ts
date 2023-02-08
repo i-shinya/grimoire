@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 
 interface AreaVisiblilityState {
   showDirectoryArea: boolean;
@@ -39,7 +39,7 @@ export default function areaVisiblilityStore() {
   };
 
   return {
-    state,
+    state: readonly(state), // 読み取りしかできないようにする
     changeDirectoryVisiblility,
     changeEditorVisiblility,
     showImageMetaViewer,

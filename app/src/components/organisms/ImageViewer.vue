@@ -5,18 +5,27 @@ import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 
 const directoryStore = inject(DirectoryKey);
+if (!directoryStore) {
+  throw new Error("failed to inejct store from DirectoryKey");
+}
 const imageStore = inject(ImageKey);
+if (!imageStore) {
+  throw new Error("failed to inejct store from ImageKey");
+}
 const areaVisiblilityStore = inject(AreaVisibilityKey);
+if (!areaVisiblilityStore) {
+  throw new Error("failed to inejct store from AreaVisibilityKey");
+}
 
 const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);
 const breads = ref<Bread[]>([]);
 
 watch(
-  () => directoryStore!!.state,
+  () => directoryStore.state,
   (state, prevState) => {
     selectPath.value = state.selectedDirectoryPath ?? "";
-    images.value = state.imageDetails ?? [];
+    images.value = state.imageDetails?.map((detail) => detail) ?? []; // state.imageDetailsがreadonlyのためコピー
     breads.value = selectPath.value.split("/").map((val, index) => {
       return { id: index, text: val };
     });
@@ -25,14 +34,14 @@ watch(
 );
 
 const selectImage = (image: ImageDetail) => {
-  imageStore!!.selectImage(selectPath.value, image);
-  areaVisiblilityStore?.showImageMetaViewer();
+  imageStore.selectImage(selectPath.value, image);
+  areaVisiblilityStore.showImageMetaViewer();
 };
 
 const isSelected = computed(() => (image: ImageDetail): boolean => {
   return (
-    image.id === imageStore?.state.imageDetail?.id &&
-    selectPath.value === imageStore?.state.selectedImageBasePath
+    image.id === imageStore.state.imageDetail?.id &&
+    selectPath.value === imageStore.state.selectedImageBasePath
   );
 });
 </script>

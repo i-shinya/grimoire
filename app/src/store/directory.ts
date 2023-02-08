@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 import { ImageDetail } from "../core/type/image";
 
 interface DirectoryState {
@@ -19,7 +19,7 @@ export default function directoryStore() {
   };
 
   return {
-    state,
+    state: readonly(state), // 読み取りしかできないようにする
     selectDirectory,
   };
 }

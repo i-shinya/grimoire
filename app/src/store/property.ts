@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 import { Metadata } from "../core/type/image";
 
 interface Prompt {
@@ -115,7 +115,7 @@ export default function propertyStore() {
   };
 
   return {
-    state,
+    state: readonly(state), // 読み取りしかできないようにする
     copyProperty,
     displayPostive,
     displayNegative,

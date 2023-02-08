@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 import { ImageDetail } from "../core/type/image";
 
 export interface ImageState {
@@ -19,7 +19,7 @@ export default function imageStore() {
   };
 
   return {
-    state,
+    state: readonly(state), // 読み取りしかできないようにする
     selectImage,
   };
 }
