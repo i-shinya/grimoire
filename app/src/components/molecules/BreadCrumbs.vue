@@ -49,8 +49,8 @@ defineProps<{
   &:hover {
     /* スクロール幅 */
     &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
   }
 }

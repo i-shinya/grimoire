@@ -74,14 +74,42 @@ $select-directroy-area-height: 30px;
     color: rgb(231, 231, 231);
 
     .select-directory {
+      width: 100%;
       height: $select-directroy-area-height;
       display: flex;
       align-items: center;
       font-size: 14px;
       padding-bottom: 8px;
+      padding-left: 8px;
+      padding-right: 8px;
       border-bottom: 1px solid var.$split-bar-color;
+      overflow-y: auto;
+
+      /* スクロール幅 */
+      &::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+      }
+      /* スクロール背景 */
+      &::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background: rgba(110, 108, 108, 0.2);
+      }
+      /* ドラック部 */
+      &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: #c2c2c2;
+      }
+
+      &:hover {
+        /* スクロール幅 */
+        &::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+      }
+
       .directory-name {
-        padding-left: 8px;
         font-weight: bold;
       }
 
