@@ -19,8 +19,11 @@ import {
   faMagnifyingGlass,
   faAngleRight,
   faAngleDown,
+  faAngleUp,
   faXmark,
   faTerminal,
+  faArrowUpWideShort,
+  faArrowDownWideShort,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -36,12 +39,15 @@ library.add(
   faMagnifyingGlass,
   faAngleRight,
   faAngleDown,
+  faAngleUp,
   faCopy,
   faXmark,
   faSquare,
   faWindowMinimize,
   faTerminal,
-  faCircleUp
+  faCircleUp,
+  faArrowUpWideShort,
+  faArrowDownWideShort
 );
 
 createApp(App)

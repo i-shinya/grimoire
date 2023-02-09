@@ -87,10 +87,9 @@ const copyClipBoard = () => {
     width: 100%;
     color: rgb(240, 240, 240);
     background-color: rgb(54, 54, 54);
-    padding: 2px;
+    padding: 0px;
     line-height: 26px;
-    border-style: double;
-    border: 1px solid rgb(129, 129, 129);
+    border-style: none;
   }
 }
 </style>

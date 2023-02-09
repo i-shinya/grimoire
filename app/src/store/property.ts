@@ -17,8 +17,8 @@ interface PropertyState {
 // 強調・マイナス強調の記号
 const emphasisStartSymbol = "{";
 const emphasisEndSymbol = "}";
-const conservativeStartSymbol = "[";
-const conservativeEndSymbol = "]";
+const restraintStartSymbol = "[";
+const restraintEndSymbol = "]";
 
 export default function propertyStore() {
   const state: PropertyState = reactive({
@@ -37,8 +37,8 @@ export default function propertyStore() {
         result = emphasisStartSymbol + result + emphasisEndSymbol;
       }
     } else {
-      for (let i = 0; i < emphasis; i--) {
-        result = conservativeStartSymbol + result + conservativeEndSymbol;
+      for (let i = 0; i > emphasis; i--) {
+        result = restraintStartSymbol + result + restraintEndSymbol;
       }
     }
     return result;
@@ -76,13 +76,14 @@ export default function propertyStore() {
 
       // マイナス強調表現[]が先頭末尾にある場合emphasisをデクリメント
       while (
-        spell.startsWith(conservativeStartSymbol) &&
-        spell.endsWith(conservativeEndSymbol)
+        spell.startsWith(restraintStartSymbol) &&
+        spell.endsWith(restraintEndSymbol)
       ) {
         spell = spell.slice(1).slice(0, -1);
         emphasis--;
       }
 
+      spell = spell.trim();
       return { id: index, spell, emphasis };
     });
   };
