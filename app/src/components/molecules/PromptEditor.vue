@@ -44,6 +44,14 @@ const restraint = (id: number) => {
   emits("send-val", res);
 };
 
+const addSpell = () => {
+  const nextId =
+    prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1;
+  console.log(nextId);
+  prompts.value.push({ id: nextId, spell: "", emphasis: 0 });
+  emits("send-val", prompts.value);
+};
+
 onMounted(() => {
   prompts.value = props.prompt ?? "";
 });
@@ -100,6 +108,9 @@ watch(
           </div>
         </div>
       </template>
+      <div class="plus-button mt-3" @click="addSpell">
+        <font-awesome-icon class="plus-icon" icon="fa-solid fa-plus" />
+      </div>
     </div>
   </div>
 </template>
@@ -139,8 +150,8 @@ watch(
 
         .emphasis {
           display: flex;
-          // align-items: center;
-          // justify-content: center;
+          align-items: center;
+          justify-content: center;
         }
       }
       .up-down-icon {
@@ -149,6 +160,22 @@ watch(
         font-size: 14px;
         flex-grow: 0;
         justify-content: center;
+      }
+    }
+
+    .plus-button {
+      width: 100%;
+      display: flex;
+      border: 1px solid rgb(255, 255, 255);
+      padding: 4px;
+      cursor: pointer;
+      justify-content: center;
+
+      .plus-icon {
+        height: 14px;
+        width: 14px;
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 50%;
       }
     }
   }

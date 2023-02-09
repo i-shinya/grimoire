@@ -44,6 +44,10 @@ const copyToEditor = () => {
   }
 };
 
+onMounted(() => {
+  const state = imageStore.state;
+  setProperty(state);
+});
 watch(
   () => imageStore.state,
   (state, prevState) => {
@@ -51,13 +55,6 @@ watch(
   },
   { deep: true }
 );
-onMounted(() => {
-  const state = imageStore.state;
-  if (!state) {
-    return;
-  }
-  setProperty(state);
-});
 </script>
 
 <template>

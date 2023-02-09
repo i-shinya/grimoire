@@ -84,7 +84,7 @@ export default function propertyStore() {
       }
 
       spell = spell.trim();
-      return { id: index, spell, emphasis };
+      return { id: index++, spell, emphasis };
     });
   };
 

@@ -24,6 +24,7 @@ import {
   faTerminal,
   faArrowUpWideShort,
   faArrowDownWideShort,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -47,7 +48,8 @@ library.add(
   faTerminal,
   faCircleUp,
   faArrowUpWideShort,
-  faArrowDownWideShort
+  faArrowDownWideShort,
+  faPlus
 );
 
 createApp(App)
