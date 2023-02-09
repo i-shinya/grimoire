@@ -121,7 +121,7 @@ watch(
   height: 100%;
   width: 100%;
   background-color: rgb(34, 34, 34);
-  padding: 16px;
+  padding: 12px;
   overflow: auto;
 
   /* スクロール幅 */

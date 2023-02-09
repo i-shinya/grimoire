@@ -83,7 +83,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
   border-right: 1px black solid;
   background-color: rgb(34, 34, 34);
   overflow: auto;
-  padding: 16px;
+  padding: 12px;
 
   /* スクロール幅 */
   &::-webkit-scrollbar {

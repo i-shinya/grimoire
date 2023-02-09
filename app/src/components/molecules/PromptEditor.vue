@@ -97,7 +97,7 @@ watch(
       <template v-for="(item, index) in prompts" key="id">
         <div class="editor-row mb-1">
           <div class="editor-border-area">
-            <div class="up-down-icon mr-4">
+            <div class="up-down-icon mr-3">
               <font-awesome-icon
                 class="clickable"
                 icon="fa-solid fa-angle-up"
@@ -110,7 +110,7 @@ watch(
               />
             </div>
             <Input
-              class="prompt-input mr-4"
+              class="prompt-input mr-3"
               :id="item.id"
               :label="null"
               :value="item.spell"
@@ -165,8 +165,26 @@ watch(
 
 .prompt-editor {
   width: 100%;
+  height: 100%;
   background-color: rgb(37, 18, 18);
-  padding: 16px;
+  padding: 12px;
+  overflow-y: auto;
+
+  /* スクロール幅 */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  /* スクロール背景 */
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: rgba(110, 108, 108, 0.2);
+  }
+  /* ドラック部 */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #acb2c7;
+  }
 
   .label-area {
     display: flex;

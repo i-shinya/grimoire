@@ -70,7 +70,7 @@ if (!propertyStore) {
   height: 100%;
   width: 100%;
   background-color: rgb(37, 18, 18);
-  padding: 16px;
+  padding: 12px;
   overflow: auto;
 
   /* スクロール幅 */

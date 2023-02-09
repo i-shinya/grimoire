@@ -45,18 +45,24 @@ watch(
 
 <template>
   <div id="prompt-editor-area">
-    <PromptEditor
-      class="mb-4"
-      label="Positive Prompt"
-      :prompt="postiive"
-      @send-val="receivePositive"
-    ></PromptEditor>
-    <PromptEditor
-      class="mb-4"
-      label="Negative Prompt"
-      :prompt="negative"
-      @send-val="receiveNegative"
-    ></PromptEditor>
+    <splitpanes>
+      <pane>
+        <PromptEditor
+          class="mb-4"
+          label="Positive Prompt"
+          :prompt="postiive"
+          @send-val="receivePositive"
+        ></PromptEditor>
+      </pane>
+      <pane>
+        <PromptEditor
+          class="mb-4"
+          label="Negative Prompt"
+          :prompt="negative"
+          @send-val="receiveNegative"
+        ></PromptEditor>
+      </pane>
+    </splitpanes>
   </div>
 </template>
 
@@ -67,7 +73,6 @@ watch(
   height: 100%;
   width: 100%;
   background-color: rgb(37, 18, 18);
-  padding: 16px;
   overflow: auto;
 
   /* スクロール幅 */

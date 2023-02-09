@@ -46,7 +46,7 @@ provide(AreaVisibilityKey, areaVisibleStore);
           <splitpanes horizontal>
             <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
               <splitpanes>
-                <pane min-size="20">
+                <pane size="40" min-size="20">
                   <MetaEditorArea></MetaEditorArea>
                 </pane>
                 <pane

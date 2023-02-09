@@ -133,7 +133,7 @@ $select-directroy-area-height: 30px;
     }
 
     .directory-tree-area {
-      padding-left: 16px;
+      padding-left: 12px;
       // 8pxはスクロールバーの分
       height: calc(
         100vh - var.$header-height - var.$footer-height -
