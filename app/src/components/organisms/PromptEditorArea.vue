@@ -19,24 +19,28 @@ const receiveNegative = (prompt: Prompt[]) => {
   propertyStore.updateNegative(prompt);
 };
 
+// stateがreadonlyのためコピー
+const copyPrompt = (prompts) =>
+  prompts.map((val) => {
+    return {
+      id: val.id,
+      spell: val.spell,
+      emphasis: val.emphasis,
+    };
+  }) ?? [];
+
 onMounted(() => {
-  postiive.value =
-    propertyStore.state.postitive.map((val) => {
-      return {
-        id: val.id,
-        spell: val.spell,
-        emphasis: val.emphasis,
-      };
-    }) ?? []; // stateがreadonlyのためコピー
-  negative.value =
-    propertyStore.state.postitive.map((val) => {
-      return {
-        id: val.id,
-        spell: val.spell,
-        emphasis: val.emphasis,
-      };
-    }) ?? []; // stateがreadonlyのためコピー
+  postiive.value = copyPrompt(propertyStore.state.postitive);
+  negative.value = copyPrompt(propertyStore.state.negative);
 });
+watch(
+  () => propertyStore.state,
+  (state, prevState) => {
+    postiive.value = copyPrompt(state.postitive);
+    negative.value = copyPrompt(state.negative);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
