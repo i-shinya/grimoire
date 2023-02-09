@@ -24,6 +24,26 @@ const receiveVal = (val: { id: number; label: string; value: string }) => {
   emits("send-val", res);
 };
 
+const emphasis = (id: number) => {
+  const res = prompts.value.map((prop: Prompt) => {
+    if (prop.id === id) {
+      prop.emphasis++;
+    }
+    return prop;
+  });
+  emits("send-val", res);
+};
+
+const restraint = (id: number) => {
+  const res = prompts.value.map((prop: Prompt) => {
+    if (prop.id === id) {
+      prop.emphasis--;
+    }
+    return prop;
+  });
+  emits("send-val", res);
+};
+
 onMounted(() => {
   prompts.value = props.prompt ?? "";
 });
@@ -42,14 +62,42 @@ watch(
     </div>
     <div class="editor-area">
       <template v-for="item of prompts" key="id">
-        <div class="mb-1">
+        <div class="editor-row mb-1">
+          <div class="up-down-icon mr-4">
+            <font-awesome-icon icon="fa-solid fa-angle-up" />
+            <font-awesome-icon icon="fa-solid fa-angle-down" />
+          </div>
           <Input
-            class="prompt-input"
+            class="prompt-input mr-4"
             :id="item.id"
             :label="null"
             :value="item.spell"
             @send-val="receiveVal"
           ></Input>
+          <div class="emphasis-area">
+            <font-awesome-icon
+              class="mr-2"
+              icon="fa-solid fa-arrow-down-wide-short"
+              @click="restraint(item.id)"
+            />
+            <font-awesome-icon
+              class="mr-2"
+              icon="fa-solid fa-arrow-up-wide-short"
+              @click="emphasis(item.id)"
+            />
+            <div class="emphasis">
+              <template v-if="item.emphasis >= 0">
+                <div>{}</div>
+                <div>&times;</div>
+                <div>{{ item.emphasis }}</div>
+              </template>
+              <template v-else>
+                <div>[]</div>
+                <div>&times;</div>
+                <div>{{ -item.emphasis }}</div>
+              </template>
+            </div>
+          </div>
         </div>
       </template>
     </div>
@@ -69,6 +117,39 @@ watch(
     .label {
       padding-left: 4px;
       cursor: pointer;
+    }
+  }
+
+  .editor-area {
+    .editor-row {
+      display: flex;
+      border: 1px solid rgb(129, 129, 129);
+      background-color: rgb(54, 54, 54);
+      align-items: center;
+      padding-left: 4px;
+      padding-right: 4px;
+
+      .prompt-input {
+        flex-grow: 1;
+      }
+      .emphasis-area {
+        display: flex;
+        flex-grow: 0;
+        align-items: center;
+
+        .emphasis {
+          display: flex;
+          // align-items: center;
+          // justify-content: center;
+        }
+      }
+      .up-down-icon {
+        display: flex;
+        flex-flow: column;
+        font-size: 14px;
+        flex-grow: 0;
+        justify-content: center;
+      }
     }
   }
 }
