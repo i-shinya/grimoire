@@ -102,6 +102,10 @@ provide(AreaVisibilityKey, areaVisibleStore);
 <style lang="scss">
 @use "./variables.scss" as var;
 
+.clickable {
+  cursor: pointer;
+}
+
 /* splitpanesのスタイル上書き */
 .splitpanes__splitter {
   min-width: 3px !important;
