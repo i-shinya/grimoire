@@ -2,14 +2,24 @@
 再帰コンポーネント実現のためこのようにしています。 -->
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
-import { DirectoryKey, ImageKey } from "../../../store/key";
+import { DirectoryKey, ImageKey, AreaVisibilityKey } from "../../../store/key";
 import { DirectoryNode } from "../../../core/type/directory";
 import { isImageExtension } from "../../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
 
 // NOTE: 基本atomicとmoleculesからstoreは操作しないが、ツリーは階層が深いためこちらのみ許容する
 const directoryStore = inject(DirectoryKey);
+if (!directoryStore) {
+  throw new Error("failed to inejct store from DirectoryKey");
+}
 const imageStore = inject(ImageKey);
+if (!imageStore) {
+  throw new Error("failed to inejct store from ImageKey");
+}
+const areaVisiblilityStore = inject(AreaVisibilityKey);
+if (!areaVisiblilityStore) {
+  throw new Error("failed to inejct store from AreaVisibilityKey");
+}
 
 defineProps<{
   node: DirectoryNode;
@@ -44,7 +54,8 @@ const selectImage = async (node: DirectoryNode) => {
   if (!imageDetails || imageDetails.length === 0) {
     return;
   }
-  await imageStore?.selectImage(node.basePath, imageDetails[0]);
+  areaVisiblilityStore.showImageMetaViewer();
+  await imageStore.selectImage(node.basePath, imageDetails[0]);
 };
 </script>
 

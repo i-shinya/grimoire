@@ -57,6 +57,26 @@ const deletePrompt = (id: number) => {
   emits("send-val", res);
 };
 
+const incrementIndex = (prompt: Prompt, index: number) => {
+  if (index === 0) {
+    return;
+  }
+  let tmp = prompts.value[index - 1]; // 入れ替え対象をtmpに
+  prompts.value[index - 1] = prompt; // 対象indexに値を設定
+  prompts.value[index] = tmp;
+  emits("send-val", prompts.value);
+};
+
+const decrementIndex = (prompt: Prompt, index: number) => {
+  if (index === prompts.value.length - 1) {
+    return;
+  }
+  let tmp = prompts.value[index + 1]; // 入れ替え対象をtmpに
+  prompts.value[index + 1] = prompt; // 対象indexに値を設定
+  prompts.value[index] = tmp;
+  emits("send-val", prompts.value);
+};
+
 onMounted(() => {
   prompts.value = props.prompt ?? "";
 });
@@ -74,12 +94,20 @@ watch(
       <div class="label mb-2 mr-2">{{ label }}</div>
     </div>
     <div class="editor-area">
-      <template v-for="item of prompts" key="id">
+      <template v-for="(item, index) in prompts" key="id">
         <div class="editor-row mb-1">
           <div class="editor-border-area">
             <div class="up-down-icon mr-4">
-              <font-awesome-icon icon="fa-solid fa-angle-up" />
-              <font-awesome-icon icon="fa-solid fa-angle-down" />
+              <font-awesome-icon
+                class="clickable"
+                icon="fa-solid fa-angle-up"
+                @click="incrementIndex(item, index)"
+              />
+              <font-awesome-icon
+                class="clickable"
+                icon="fa-solid fa-angle-down"
+                @click="decrementIndex(item, index)"
+              />
             </div>
             <Input
               class="prompt-input mr-4"
@@ -90,12 +118,12 @@ watch(
             ></Input>
             <div class="emphasis-area">
               <font-awesome-icon
-                class="mr-2"
+                class="clickable mr-2"
                 icon="fa-solid fa-arrow-down-wide-short"
                 @click="restraint(item.id)"
               />
               <font-awesome-icon
-                class="mr-2"
+                class="clickable mr-2"
                 icon="fa-solid fa-arrow-up-wide-short"
                 @click="emphasis(item.id)"
               />
@@ -115,7 +143,7 @@ watch(
           </div>
           <div class="close-icon ml-2">
             <font-awesome-icon
-              class="window-operate-button"
+              class="window-operate-button clickable"
               icon="fa-solid fa-xmark"
               @click="deletePrompt(item.id)"
             />
@@ -123,7 +151,10 @@ watch(
         </div>
       </template>
       <div class="plus-button mt-3" @click="addSpell">
-        <font-awesome-icon class="plus-icon" icon="fa-solid fa-plus" />
+        <font-awesome-icon
+          class="plus-icon clickable"
+          icon="fa-solid fa-plus"
+        />
       </div>
     </div>
   </div>
@@ -141,7 +172,6 @@ watch(
     display: flex;
     .label {
       padding-left: 4px;
-      cursor: pointer;
     }
   }
 
@@ -189,7 +219,6 @@ watch(
         width: 20px;
         border: 1px solid rgb(255, 255, 255);
         border-radius: 50%;
-        cursor: pointer;
       }
     }
 
@@ -198,7 +227,6 @@ watch(
       display: flex;
       border: 1px solid rgb(255, 255, 255);
       padding: 4px;
-      cursor: pointer;
       justify-content: center;
 
       .plus-icon {
