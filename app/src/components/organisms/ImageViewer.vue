@@ -39,6 +39,10 @@ const selectImage = (image: ImageDetail) => {
   areaVisiblilityStore.showImageMetaViewer();
 };
 
+const reloadDirectoryTree = async () => {
+  directoryStore.selectDirectory(selectPath.value);
+};
+
 const isSelected = computed(() => (image: ImageDetail): boolean => {
   return (
     image.id === imageStore.state.imageDetail?.id &&
@@ -49,7 +53,14 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
 
 <template>
   <div id="image-viewer">
-    <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
+    <div class="cread-crumbs-area" v-if="breads.length !== 0">
+      <font-awesome-icon
+        class="clickable mr-3 pt-1"
+        icon="fa-solid fa-arrow-rotate-right"
+        @click="reloadDirectoryTree"
+      />
+      <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
+    </div>
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
@@ -90,8 +101,11 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     background: #c2c2c2;
   }
 
-  .breads {
-    margin-bottom: 20px;
+  .cread-crumbs-area {
+    display: flex;
+    .breads {
+      margin-bottom: 20px;
+    }
   }
 
   .image-viewer {

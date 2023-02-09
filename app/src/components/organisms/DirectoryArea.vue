@@ -28,6 +28,13 @@ const openDirectory = async () => {
   ).direcrotyAPI.showDirectories(path);
   directoryNodes.value = res;
 };
+
+const reloadDirectoryTree = async () => {
+  const res: DirectoryNode[] = await (
+    window as any
+  ).direcrotyAPI.showDirectories(directroyFullPath.value);
+  directoryNodes.value = res;
+};
 </script>
 
 <template>
@@ -39,6 +46,11 @@ const openDirectory = async () => {
     </div>
     <div class="tree-area" v-if="directroyName">
       <div class="select-directory">
+        <font-awesome-icon
+          class="clickable mr-2"
+          icon="fa-solid fa-arrow-rotate-right"
+          @click="reloadDirectoryTree"
+        />
         <p class="directory-name">{{ directroyName }}</p>
         <p class="basedir-name">{{ baseDir }}</p>
       </div>
