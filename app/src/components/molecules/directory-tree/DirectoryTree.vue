@@ -36,9 +36,8 @@ const switchChildVisible = () => {
 };
 
 // store経由でイベントを発火する
-const directory = inject(DirectoryKey);
 const selectDirectory = (node: DirectoryNode) => {
-  directory?.selectDirectory(`${node.basePath}/${node.label}`);
+  directoryStore.selectDirectory(`${node.basePath}/${node.label}`);
 };
 
 // ディレクトリor画像ファイルであることを確認
