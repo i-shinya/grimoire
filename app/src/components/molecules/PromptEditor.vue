@@ -46,8 +46,9 @@ const restraint = (id: number) => {
 
 const addSpell = () => {
   const nextId =
-    prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1;
-  console.log(nextId);
+    prompts.value.length !== 0
+      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
+      : 1;
   prompts.value.push({ id: nextId, spell: "", emphasis: 0 });
   emits("send-val", prompts.value);
 };
