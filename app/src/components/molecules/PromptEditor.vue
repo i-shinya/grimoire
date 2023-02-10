@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { nextTick, ref, onMounted, watch, toRefs } from "vue";
 import { Prompt } from "../../store/property";
 import Input from "../atoms/Input.vue";
 
@@ -13,6 +13,13 @@ const emits = defineEmits<{
 }>();
 
 const prompts = ref<Prompt[]>([]);
+
+// v-forの配列を取得する用
+let editorRowRefs: any[] = [];
+const setEditorRowRefs = (el: any): void => {
+  if (!el) return;
+  editorRowRefs.push(el);
+};
 
 const receiveVal = (val: { id: number; label: string; value: string }) => {
   const res = prompts.value.map((prop: Prompt) => {
@@ -44,18 +51,48 @@ const restraint = (id: number) => {
   emits("send-val", res);
 };
 
-const addSpell = () => {
+const addPrompt = () => {
   const nextId =
     prompts.value.length !== 0
       ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
       : 1;
   prompts.value.push({ id: nextId, spell: "", emphasis: 0 });
   emits("send-val", prompts.value);
+
+  // 最後の列にフォーカスする
+  nextTick(() => {
+    const rowEl = editorRowRefs[editorRowRefs.length - 1] as Element;
+    const borderArea = rowEl.childNodes.item(0);
+    const inputArea = borderArea.childNodes.item(1);
+    inputArea.childNodes.forEach((el) => {
+      if (el.nodeName === "INPUT") {
+        const input = el as HTMLInputElement;
+        input.focus();
+      }
+    });
+  });
 };
 
-const deletePrompt = (id: number) => {
+const deletePrompt = (id: number, index: number) => {
   const res = prompts.value.filter((val) => val.id !== id);
   emits("send-val", res);
+
+  // 削除後の同じindexに行があったらフォーカスする
+  nextTick(() => {
+    if (editorRowRefs.length === 0) {
+      return;
+    }
+    let target = editorRowRefs.length - 1 < index ? index - 1 : index;
+    const rowEl = editorRowRefs[target] as Element;
+    const borderArea = rowEl.childNodes.item(0);
+    const inputArea = borderArea.childNodes.item(1);
+    inputArea.childNodes.forEach((el) => {
+      if (el.nodeName === "INPUT") {
+        const input = el as HTMLInputElement;
+        input.focus();
+      }
+    });
+  });
 };
 
 const incrementIndex = (prompt: Prompt, index: number) => {
@@ -85,6 +122,7 @@ watch(
   () => props.prompt,
   (state, prevState) => {
     prompts.value = state;
+    editorRowRefs = [];
   }
 );
 </script>
@@ -95,67 +133,67 @@ watch(
       <div class="label mb-2 mr-2">{{ label }}</div>
     </div>
     <div class="editor-area">
-      <template v-for="(item, index) in prompts" key="id">
-        <div class="editor-row mb-1">
-          <div class="editor-border-area">
-            <div class="up-down-icon mr-3">
-              <font-awesome-icon
-                class="clickable"
-                icon="fa-solid fa-angle-up"
-                @click="incrementIndex(item, index)"
-              />
-              <font-awesome-icon
-                class="clickable"
-                icon="fa-solid fa-angle-down"
-                @click="decrementIndex(item, index)"
-              />
-            </div>
-            <Input
-              class="prompt-input mr-3"
-              :id="item.id"
-              :label="null"
-              :value="item.spell"
-              @send-val="receiveVal"
-            ></Input>
-            <div class="emphasis-area">
-              <font-awesome-icon
-                class="clickable mr-2"
-                icon="fa-solid fa-arrow-down-wide-short"
-                @click="restraint(item.id)"
-              />
-              <font-awesome-icon
-                class="clickable mr-2"
-                icon="fa-solid fa-arrow-up-wide-short"
-                @click="emphasis(item.id)"
-              />
-              <div class="emphasis">
-                <template v-if="item.emphasis >= 0">
-                  <div>{}</div>
-                  <div>&times;</div>
-                  <div>{{ item.emphasis }}</div>
-                </template>
-                <template v-else>
-                  <div>[]</div>
-                  <div>&times;</div>
-                  <div>{{ -item.emphasis }}</div>
-                </template>
-              </div>
-            </div>
-          </div>
-          <div class="close-icon ml-2">
+      <div
+        class="editor-row mb-1"
+        v-for="(item, index) in prompts"
+        key="id"
+        :ref="setEditorRowRefs"
+      >
+        <div class="editor-border-area" :class="item.id">
+          <div class="up-down-icon mr-3">
             <font-awesome-icon
-              class="window-operate-button clickable"
-              icon="fa-solid fa-xmark"
-              @click="deletePrompt(item.id)"
+              class="clickable"
+              icon="fa-solid fa-angle-up"
+              @click="incrementIndex(item, index)"
+            />
+            <font-awesome-icon
+              class="clickable"
+              icon="fa-solid fa-angle-down"
+              @click="decrementIndex(item, index)"
             />
           </div>
+          <Input
+            class="prompt-input mr-3"
+            :id="item.id"
+            :label="null"
+            :value="item.spell"
+            @send-val="receiveVal"
+          ></Input>
+          <div class="emphasis-area">
+            <font-awesome-icon
+              class="clickable mr-2"
+              icon="fa-solid fa-arrow-down-wide-short"
+              @click="restraint(item.id)"
+            />
+            <font-awesome-icon
+              class="clickable mr-2"
+              icon="fa-solid fa-arrow-up-wide-short"
+              @click="emphasis(item.id)"
+            />
+            <div class="emphasis">
+              <template v-if="item.emphasis >= 0">
+                <div>{}</div>
+                <div>&times;</div>
+                <div>{{ item.emphasis }}</div>
+              </template>
+              <template v-else>
+                <div>[]</div>
+                <div>&times;</div>
+                <div>{{ -item.emphasis }}</div>
+              </template>
+            </div>
+          </div>
         </div>
-      </template>
-      <div class="plus-button mt-3" @click="addSpell">
-        <font-awesome-icon
-          class="plus-icon clickable"
-          icon="fa-solid fa-plus"
-        />
+        <div class="close-icon ml-2">
+          <font-awesome-icon
+            class="window-operate-button clickable"
+            icon="fa-solid fa-xmark"
+            @click="deletePrompt(item.id, index)"
+          />
+        </div>
+      </div>
+      <div class="plus-button clickable mt-3" @click="addPrompt">
+        <font-awesome-icon class="plus-icon" icon="fa-solid fa-plus" />
       </div>
     </div>
   </div>
@@ -198,6 +236,7 @@ watch(
     .editor-row {
       display: flex;
       align-items: center;
+      font-size: 14px;
 
       .editor-border-area {
         display: flex;
@@ -245,12 +284,12 @@ watch(
       width: 100%;
       display: flex;
       border: 1px solid rgb(255, 255, 255);
-      padding: 4px;
+      padding: 2px;
       justify-content: center;
 
       .plus-icon {
-        height: 14px;
-        width: 14px;
+        height: 13px;
+        width: 13px;
         border: 1px solid rgb(255, 255, 255);
         border-radius: 50%;
       }
