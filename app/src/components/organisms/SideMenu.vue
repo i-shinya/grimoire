@@ -3,16 +3,15 @@ import { inject } from "vue";
 import SideMenuIcon from "../atoms/SideMenuIcon.vue";
 import { AreaVisibilityKey } from "../../store/key";
 
-const areaVisiblilityStore = inject(AreaVisibilityKey);
-if (!areaVisiblilityStore) {
+const areaVisiblityStore = inject(AreaVisibilityKey);
+if (!areaVisiblityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
-}
 
 const showDirectory = () => {
-  areaVisiblilityStore.changeDirectoryVisiblility();
+  areaVisiblityStore.changeDirectoryVisiblility();
 };
 const showMetaEditor = () => {
-  areaVisiblilityStore.changeEditorVisiblility();
+  areaVisiblityStore.changeEditorVisiblility();
 };
 </script>
 

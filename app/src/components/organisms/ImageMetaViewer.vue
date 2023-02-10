@@ -8,17 +8,13 @@ import { onMounted } from "vue";
 import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
-if (!imageStore) {
-  throw new Error("failed to inejct store from ImageKey");
-}
+if (!imageStore) throw new Error("failed to inejct store from ImageKey");
 const propertyStore = inject(PropertyKey);
-if (!propertyStore) {
-  throw new Error("failed to inejct store from PropertyKey");
-}
-const areaVisiblilityStore = inject(AreaVisibilityKey);
-if (!areaVisiblilityStore) {
+if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
+
+const areaVisiblityStore = inject(AreaVisibilityKey);
+if (!areaVisiblityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
-}
 
 const basePath = ref<string>("");
 const imageDetail = ref<ImageDetail | null>(null);
@@ -40,7 +36,7 @@ const setProperty = (state: ImageState) => {
 const copyToEditor = () => {
   if (imageDetail.value?.meta) {
     propertyStore.copyProperty(imageDetail.value.meta);
-    areaVisiblilityStore.showEditorArea();
+    areaVisiblityStore.showEditorArea();
   }
 };
 

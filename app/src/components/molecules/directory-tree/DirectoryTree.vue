@@ -16,8 +16,8 @@ const imageStore = inject(ImageKey);
 if (!imageStore) {
   throw new Error("failed to inejct store from ImageKey");
 }
-const areaVisiblilityStore = inject(AreaVisibilityKey);
-if (!areaVisiblilityStore) {
+const areaVisiblityStore = inject(AreaVisibilityKey);
+if (!areaVisiblityStore) {
   throw new Error("failed to inejct store from AreaVisibilityKey");
 }
 
@@ -53,7 +53,7 @@ const selectImage = async (node: DirectoryNode) => {
   if (!imageDetails || imageDetails.length === 0) {
     return;
   }
-  areaVisiblilityStore.showImageMetaViewer();
+  areaVisiblityStore.showImageMetaViewer();
   await imageStore.selectImage(node.basePath, imageDetails[0]);
 };
 </script>

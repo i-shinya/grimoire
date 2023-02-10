@@ -5,17 +5,13 @@ import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 
 const directoryStore = inject(DirectoryKey);
-if (!directoryStore) {
+if (!directoryStore)
   throw new Error("failed to inejct store from DirectoryKey");
-}
 const imageStore = inject(ImageKey);
-if (!imageStore) {
-  throw new Error("failed to inejct store from ImageKey");
-}
-const areaVisiblilityStore = inject(AreaVisibilityKey);
-if (!areaVisiblilityStore) {
+if (!imageStore) throw new Error("failed to inejct store from ImageKey");
+const areaVisiblityStore = inject(AreaVisibilityKey);
+if (!areaVisiblityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
-}
 
 const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);
@@ -36,7 +32,7 @@ watch(
 
 const selectImage = (image: ImageDetail) => {
   imageStore.selectImage(selectPath.value, image);
-  areaVisiblilityStore.showImageMetaViewer();
+  areaVisiblityStore.showImageMetaViewer();
 };
 
 const reloadDirectoryTree = async () => {

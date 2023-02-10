@@ -1,6 +1,6 @@
 import { reactive, readonly } from "vue";
 
-interface AreaVisiblilityState {
+interface AreaVisiblityState {
   showDirectoryArea: boolean;
   showImageArea: boolean;
   showEditorArea: boolean;
@@ -8,8 +8,8 @@ interface AreaVisiblilityState {
   showPromptEditor: boolean;
 }
 
-export default function areaVisiblilityStore() {
-  const state: AreaVisiblilityState = reactive({
+export default function areaVisiblityStore() {
+  const state: AreaVisiblityState = reactive({
     showDirectoryArea: true,
     showImageArea: true,
     showEditorArea: false,
@@ -47,4 +47,4 @@ export default function areaVisiblilityStore() {
     showPromptEditor,
   };
 }
-export type AreaVisiblilityStore = ReturnType<typeof areaVisiblilityStore>;
+export type AreaVisiblityStore = ReturnType<typeof areaVisiblityStore>;

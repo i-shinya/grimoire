@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { inject, ref, readonly, toRef, toRefs, onMounted, watch } from "vue";
+import { inject, ref, onMounted, watch } from "vue";
 import { PropertyKey } from "../../store/key";
 import { Prompt } from "../../store/property";
 import PromptEditor from "../molecules/PromptEditor.vue";
 
 const propertyStore = inject(PropertyKey);
-if (!propertyStore) {
-  throw new Error("failed to inejct store from PropertyKey");
-}
+if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
 
 const postiive = ref<Prompt[]>([]);
 const negative = ref<Prompt[]>([]);

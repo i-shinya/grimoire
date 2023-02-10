@@ -4,9 +4,7 @@ import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
 
 const propertyStore = inject(PropertyKey);
-if (!propertyStore) {
-  throw new Error("failed to inejct store from PropertyKey");
-}
+if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
 </script>
 
 <template>
@@ -21,45 +19,6 @@ if (!propertyStore) {
       label="Negative Prompt"
       :value="propertyStore.displayNegative()"
     ></Property>
-    <!-- とりあえずはプロンプト以外はいらないかも -->
-    <!-- <div class="meta-row">
-      <Input
-        class="meta-input mb-4"
-        label="Steps"
-        :value="propertyStore?.state.meta.steps ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-      <Input
-        class="meta-input mb-4"
-        label="Scale"
-        :value="propertyStore?.state.meta.scale ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-      <Input
-        class="meta-input mb-4"
-        label="Seed"
-        :value="propertyStore?.state.meta.seed ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-      <Input
-        class="meta-input mb-4"
-        label="Sampler"
-        :value="propertyStore?.state.meta.sampler ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-      <Input
-        class="meta-input mb-4"
-        label="Strength"
-        :value="propertyStore?.state.meta.strength ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-      <Input
-        class="meta-input mb-4"
-        label="Noise"
-        :value="propertyStore?.state.meta.noise ?? ''"
-        @send-val="receiveVal"
-      ></Input>
-    </div> -->
   </div>
 </template>
 

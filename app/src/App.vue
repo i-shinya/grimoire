@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, watch, reactive } from "vue";
+import { provide } from "vue";
 import SideMenu from "./components/organisms/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
@@ -10,7 +10,7 @@ import MetaEditorArea from "./components/organisms/MetaEditorArea.vue";
 import directoryStore from "./store/directory";
 import imageStore from "./store/image";
 import propertyStore from "./store/property";
-import areaVisiblilityStore from "./store/area-visibility";
+import areaVisiblityStore from "./store/area-visibility";
 import {
   AreaVisibilityKey,
   DirectoryKey,
@@ -22,7 +22,7 @@ import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
 const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
-const areaVisibleStore = areaVisiblilityStore();
+const areaVisibleStore = areaVisiblityStore();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { nextTick, ref, onMounted, watch, toRefs } from "vue";
+import { nextTick, ref, onMounted, watch } from "vue";
 import { Prompt } from "../../store/property";
 import Input from "../atoms/Input.vue";
 
 const props = defineProps<{
-  label: string;
+  label: "Positive Prompt" | "Negative Prompt";
   prompt: Prompt[];
 }>();
 
@@ -275,6 +275,7 @@ watch(
         align-items: center;
         height: 20px;
         width: 20px;
+        font-size: 18px;
         border: 1px solid rgb(255, 255, 255);
         border-radius: 50%;
       }
