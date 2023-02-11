@@ -26,6 +26,7 @@ import {
   faArrowDownWideShort,
   faPlus,
   faArrowRotateRight,
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -51,7 +52,8 @@ library.add(
   faArrowUpWideShort,
   faArrowDownWideShort,
   faPlus,
-  faArrowRotateRight
+  faArrowRotateRight,
+  faList
 );
 
 createApp(App)

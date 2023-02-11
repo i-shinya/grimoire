@@ -67,41 +67,49 @@ watch(
         <Property
           class="mb-4"
           label="Positive Prompt"
+          :shortcutText="null"
           :value="imageDetail.meta.positive"
         ></Property>
         <Property
           class="mb-4"
           label="Negative Prompt"
+          :shortcutText="null"
           :value="imageDetail.meta.negative"
         ></Property>
         <Property
           class="mb-4"
           label="Steps"
+          :shortcutText="null"
           :value="imageDetail.meta.steps"
         ></Property>
         <Property
           class="mb-4"
           label="Scale"
+          :shortcutText="null"
           :value="imageDetail.meta.scale"
         ></Property>
         <Property
           class="mb-4"
           label="Seed"
+          :shortcutText="null"
           :value="imageDetail.meta.seed"
         ></Property>
         <Property
           class="mb-4"
           label="Sampler"
+          :shortcutText="null"
           :value="imageDetail.meta.sampler"
         ></Property>
         <Property
           class="mb-4"
           label="Strength"
+          :shortcutText="null"
           :value="imageDetail.meta.strength"
         ></Property>
         <Property
           class="mb-4"
           label="Noise"
+          :shortcutText="null"
           :value="imageDetail.meta.noise"
         ></Property>
       </div>
