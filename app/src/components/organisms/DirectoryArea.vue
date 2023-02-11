@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref, onMounted } from "vue";
 import { getDirectroyName, getBaseDirName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
+import { DirectoryKey } from "../../store/key";
+
+const directoryStore = inject(DirectoryKey);
+if (!directoryStore)
+  throw new Error("failed to inejct store from DirectoryKey");
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
 // 選択しているディレクトリ名
 const directroyName = ref<string | null>(null);
-// 選択しているディレクトリのフルパス
-const directroyFullPath = ref<string | null>(null);
 
 const directoryNodes = ref<DirectoryNode[]>([]);
 
@@ -19,7 +22,7 @@ const openDirectory = async () => {
   if (!path) {
     return;
   }
-  directroyFullPath.value = path;
+  directoryStore.setOpenDirectory(path);
   directroyName.value = getDirectroyName(path)!!;
   baseDir.value = getBaseDirName(path)!!;
 
@@ -32,9 +35,21 @@ const openDirectory = async () => {
 const reloadDirectoryTree = async () => {
   const res: DirectoryNode[] = await (
     window as any
-  ).direcrotyAPI.showDirectories(directroyFullPath.value);
+  ).direcrotyAPI.showDirectories(directoryStore.state.openDirectoryPath);
   directoryNodes.value = res;
 };
+
+onMounted(async () => {
+  if (directoryStore.state.openDirectoryPath) {
+    directroyName.value = getDirectroyName(
+      directoryStore.state.openDirectoryPath
+    )!!;
+    const res: DirectoryNode[] = await (
+      window as any
+    ).direcrotyAPI.showDirectories(directoryStore.state.openDirectoryPath);
+    directoryNodes.value = res;
+  }
+});
 </script>
 
 <template>
