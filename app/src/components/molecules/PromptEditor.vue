@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, onMounted, watch } from "vue";
+import { nextTick, ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { Prompt } from "../../store/property";
 import Input from "../atoms/Input.vue";
 
@@ -51,7 +51,7 @@ const restraint = (id: number) => {
   emits("send-val", res);
 };
 
-const getInput = (target: number): HTMLInputElement | undefined => {
+const focusInput = (target: number) => {
   const rowEl = editorRowRefs[target] as Element;
   const borderArea = rowEl.childNodes.item(0);
   const inputArea = borderArea.childNodes.item(1);
@@ -59,10 +59,9 @@ const getInput = (target: number): HTMLInputElement | undefined => {
   inputArea.childNodes.forEach((el) => {
     if (el.nodeName === "INPUT") {
       input = el as HTMLInputElement;
-      return;
+      input.focus();
     }
   });
-  return input;
 };
 
 const addPrompt = () => {
@@ -75,8 +74,7 @@ const addPrompt = () => {
 
   // 最後の列にフォーカスする
   nextTick(() => {
-    const input = getInput(editorRowRefs.length - 1);
-    input?.focus();
+    focusInput(editorRowRefs.length - 1);
   });
 };
 
@@ -89,8 +87,7 @@ const addNextPrompt = (id: number, index: number) => {
   emits("send-val", prompts.value);
 
   nextTick(() => {
-    const input = getInput(index + 1);
-    input?.focus();
+    focusInput(index + 1);
   });
 };
 
@@ -105,8 +102,7 @@ const deletePrompt = (id: number, index: number) => {
     }
     // 最後の行の場合は一個前にフォーカス
     let target = editorRowRefs.length - 1 < index ? index - 1 : index;
-    const input = getInput(target);
-    input?.focus();
+    focusInput(target);
   });
 };
 
@@ -137,26 +133,24 @@ const inputKeyDown = (
   index: number,
   val: { id: number; event: KeyboardEvent }
 ) => {
-  console.log(val.event);
-  if (val.event.key === "ArrowDown") {
+  // console.log(val.event);
+  if (val.event.code === "ArrowDown") {
     if (index === prompts.value.length - 1) {
       // 最後の行だった場合何もしない
       return;
     }
     // 次の要素をフォーカスする
-    const input = getInput(index + 1);
-    input?.focus();
-  } else if (val.event.key === "ArrowUp") {
+    focusInput(index + 1);
+  } else if (val.event.code === "ArrowUp") {
     if (index === 0) {
       // 最初の行だった場合何もしない
       return;
     }
     // 前の要素をフォーカスする
-    const input = getInput(index - 1);
-    input?.focus();
-  } else if (val.event.key === "Enter") {
+    focusInput(index - 1);
+  } else if (val.event.code === "Enter") {
     addNextPrompt(val.id, index);
-  } else if (val.event.key === "Delete") {
+  } else if (val.event.code === "Delete") {
     deletePrompt(val.id, index);
   }
 };
@@ -241,7 +235,9 @@ watch(
       </div>
       <div class="plus-button clickable mt-3" @click="addPrompt">
         <font-awesome-icon class="plus-icon mr-3" icon="fa-solid fa-plus" />
-        <p class="shortcut-text">press EnterKey</p>
+        <p class="shortcut-text" v-if="prompts.length !== 0">
+          click or press EnterKey
+        </p>
       </div>
     </div>
   </div>
