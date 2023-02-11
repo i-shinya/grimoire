@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from "vue";
 import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
-  id: number | null; // 必要なら使う
+  id: number; // 必要なら使う
   label: string | null;
   value: string | undefined;
 }>();
@@ -12,7 +12,12 @@ const val = ref<string>("");
 
 const emits = defineEmits<{
   (e: "send-val", val: { id: number; label: string; value: string }): void;
+  (e: "key-down", val: { id: number; event: KeyboardEvent }): void;
 }>();
+
+const pressKey = (event: KeyboardEvent) => {
+  emits("key-down", { id: props.id, event });
+};
 
 onMounted(() => {
   val.value = props.value ?? "";
@@ -63,7 +68,13 @@ const copyClipBoard = () => {
         @click="copyClipBoard"
       />
     </div>
-    <input class="input" type="text" v-model="val" spellcheck="false" />
+    <input
+      class="input"
+      type="text"
+      v-model="val"
+      spellcheck="false"
+      @keydown="pressKey"
+    />
   </div>
 </template>
 
