@@ -3,7 +3,6 @@ import { ref, onMounted, watch } from "vue";
 import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
-  id: number; // 必要なら使う
   label: string | null;
   value: string | undefined;
 }>();
@@ -11,12 +10,12 @@ const props = defineProps<{
 const val = ref<string>("");
 
 const emits = defineEmits<{
-  (e: "send-val", val: { id: number; label: string; value: string }): void;
-  (e: "key-down", val: { id: number; event: KeyboardEvent }): void;
+  (e: "send-val", val: { label: string; value: string }): void;
+  (e: "key-down", event: KeyboardEvent): void;
 }>();
 
 const pressKey = (event: KeyboardEvent) => {
-  emits("key-down", { id: props.id, event });
+  emits("key-down", event);
 };
 
 onMounted(() => {
@@ -31,7 +30,6 @@ watch(
 
 watch(val, (state, prevState) => {
   emits("send-val", {
-    id: props.id ?? 0,
     label: props.label ?? "",
     value: state,
   });

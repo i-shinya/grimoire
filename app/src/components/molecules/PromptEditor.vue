@@ -21,34 +21,19 @@ const setEditorRowRefs = (el: any): void => {
   editorRowRefs.push(el);
 };
 
-const receiveVal = (val: { id: number; label: string; value: string }) => {
-  const res = prompts.value.map((prop: Prompt) => {
-    if (prop.id === val.id) {
-      prop.spell = val.value;
-    }
-    return prop;
-  });
-  emits("send-val", res);
+const receiveVal = (index, val: { label: string; value: string }) => {
+  prompts.value[index].spell = val.value;
+  emits("send-val", prompts.value);
 };
 
-const emphasis = (id: number) => {
-  const res = prompts.value.map((prop: Prompt) => {
-    if (prop.id === id) {
-      prop.emphasis++;
-    }
-    return prop;
-  });
-  emits("send-val", res);
+const emphasis = (index: number) => {
+  prompts.value[index].emphasis = prompts.value[index].emphasis + 1;
+  emits("send-val", prompts.value);
 };
 
-const restraint = (id: number) => {
-  const res = prompts.value.map((prop: Prompt) => {
-    if (prop.id === id) {
-      prop.emphasis--;
-    }
-    return prop;
-  });
-  emits("send-val", res);
+const restraint = (index: number) => {
+  prompts.value[index].emphasis = prompts.value[index].emphasis + 1;
+  emits("send-val", prompts.value);
 };
 
 const focusInput = (target: number) => {
@@ -78,7 +63,7 @@ const addPrompt = () => {
   });
 };
 
-const addNextPrompt = (id: number, index: number) => {
+const addNextPrompt = (index: number) => {
   const nextId =
     prompts.value.length !== 0
       ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
@@ -91,9 +76,22 @@ const addNextPrompt = (id: number, index: number) => {
   });
 };
 
-const deletePrompt = (id: number, index: number) => {
-  const res = prompts.value.filter((val) => val.id !== id);
-  emits("send-val", res);
+const addBeforePrompt = (index: number) => {
+  const nextId =
+    prompts.value.length !== 0
+      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
+      : 1;
+  prompts.value.splice(index - 1, 0, { id: nextId, spell: "", emphasis: 0 });
+  emits("send-val", prompts.value);
+
+  nextTick(() => {
+    focusInput(index - 1);
+  });
+};
+
+const deletePrompt = (index: number) => {
+  prompts.value.splice(index, 1);
+  emits("send-val", prompts.value);
 
   // 削除後の同じindexに行があったらフォーカスする
   nextTick(() => {
@@ -129,29 +127,30 @@ const decrementIndex = (prompt: Prompt, index: number) => {
 };
 
 // インプットで入力されたキー入力を判定
-const inputKeyDown = (
-  index: number,
-  val: { id: number; event: KeyboardEvent }
-) => {
+const inputKeyDown = (index: number, event: KeyboardEvent) => {
   // console.log(val.event);
-  if (val.event.code === "ArrowDown") {
+  if (event.code === "ArrowDown") {
     if (index === prompts.value.length - 1) {
       // 最後の行だった場合何もしない
       return;
     }
     // 次の要素をフォーカスする
     focusInput(index + 1);
-  } else if (val.event.code === "ArrowUp") {
+  } else if (event.code === "ArrowUp") {
     if (index === 0) {
       // 最初の行だった場合何もしない
       return;
     }
     // 前の要素をフォーカスする
     focusInput(index - 1);
-  } else if (val.event.code === "Enter") {
-    addNextPrompt(val.id, index);
-  } else if (val.event.code === "Delete") {
-    deletePrompt(val.id, index);
+  } else if (event.code === "Enter") {
+    if (event.shiftKey) {
+      addBeforePrompt(index);
+    } else {
+      addNextPrompt(index);
+    }
+  } else if (event.code === "Delete") {
+    deletePrompt(index);
   }
 };
 
@@ -194,22 +193,21 @@ watch(
           </div>
           <Input
             class="prompt-input mr-3"
-            :id="item.id"
             :label="null"
             :value="item.spell"
-            @send-val="receiveVal"
+            @send-val="(v) => receiveVal(index, v)"
             @key-down="(v) => inputKeyDown(index, v)"
           ></Input>
           <div class="emphasis-area">
             <font-awesome-icon
               class="clickable mr-2"
               icon="fa-solid fa-arrow-down-wide-short"
-              @click="restraint(item.id)"
+              @click="restraint(index)"
             />
             <font-awesome-icon
               class="clickable mr-2"
               icon="fa-solid fa-arrow-up-wide-short"
-              @click="emphasis(item.id)"
+              @click="emphasis(index)"
             />
             <div class="emphasis">
               <template v-if="item.emphasis >= 0">
@@ -229,7 +227,7 @@ watch(
           <font-awesome-icon
             class="window-operate-button clickable"
             icon="fa-solid fa-xmark"
-            @click="deletePrompt(item.id, index)"
+            @click="deletePrompt(index)"
           />
         </div>
       </div>
