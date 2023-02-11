@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, watch } from "vue";
+import { inject, ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { PropertyKey } from "../../store/key";
 import { Prompt } from "../../store/property";
 import PromptEditor from "../molecules/PromptEditor.vue";
@@ -31,6 +31,7 @@ onMounted(() => {
   postiive.value = copyPrompt(propertyStore.state.postitive);
   negative.value = copyPrompt(propertyStore.state.negative);
 });
+
 watch(
   () => propertyStore.state,
   (state, prevState) => {

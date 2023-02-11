@@ -1,10 +1,66 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, onBeforeUnmount, onMounted } from "vue";
 import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
+import { useToast } from "vuestic-ui";
 
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
+
+const { init, close, closeAll } = useToast();
+const copyToClipbord = (input: string, flyText: string) => {
+  navigator.clipboard.writeText(input).then(
+    () => {
+      /* clipboard successfully set */
+      init({
+        closeable: false,
+        color: "#FFFFFF",
+        message: flyText,
+        offsetX: 20,
+        offsetY: 30,
+        duration: 2000,
+      });
+    },
+    () => {
+      /* clipboard write failed */
+    }
+  );
+};
+
+const editorShortcutKey = (event: KeyboardEvent) => {
+  if (
+    event.code === "KeyC" &&
+    event.ctrlKey === true &&
+    event.shiftKey == false
+  ) {
+    if (!propertyStore.displayPostive()) {
+      return;
+    }
+    copyToClipbord(
+      propertyStore.displayPostive(),
+      `Copy "Positive Prompt" to Clipboard!!`
+    );
+  } else if (
+    event.code === "KeyC" &&
+    event.ctrlKey === true &&
+    event.shiftKey == true
+  ) {
+    if (!propertyStore.displayNegative()) {
+      return;
+    }
+    copyToClipbord(
+      propertyStore.displayNegative(),
+      `Copy "Negative Prompt" to Clipboard!!`
+    );
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("keydown", editorShortcutKey);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener("keydown", editorShortcutKey);
+});
 </script>
 
 <template>
@@ -12,10 +68,12 @@ if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
     <Property
       class="mb-4"
       label="Positive Prompt"
+      shortcutText="press Ctrl + C"
       :value="propertyStore.displayPostive()"
     ></Property>
     <Property
       class="mb-4"
+      shortcutText="press Ctrl + Shift+ C"
       label="Negative Prompt"
       :value="propertyStore.displayNegative()"
     ></Property>

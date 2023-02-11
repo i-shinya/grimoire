@@ -3,6 +3,7 @@ import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
   label: string;
+  shortcutText: string | null;
   value: number | string | undefined;
 }>();
 
@@ -16,7 +17,9 @@ const copyClipBoard = () => {
       init({
         closeable: false,
         color: "#FFFFFF",
-        message: `Copy ${props.label} to Clipboard !!`,
+        message: `Copy "${props.label}" to Clipboard!!`,
+        offsetX: 20,
+        offsetY: 30,
         duration: 1000,
       });
     },
@@ -30,12 +33,13 @@ const copyClipBoard = () => {
 <template>
   <div class="property">
     <div class="label-area">
-      <div class="label mb-2 mr-2" @click="copyClipBoard">{{ label }}</div>
+      <div class="label mb-2 mr-3" @click="copyClipBoard">{{ label }}</div>
       <font-awesome-icon
-        class="clipboard-icon"
+        class="clipboard-icon mr-3"
         icon="fa-regular fa-copy"
         @click="copyClipBoard"
       />
+      <div class="shortcut-text">{{ shortcutText }}</div>
     </div>
     <div class="value">{{ value }}</div>
   </div>
@@ -61,6 +65,11 @@ const copyClipBoard = () => {
     padding: 6px;
     line-height: 26px;
     min-height: 26px;
+  }
+
+  .shortcut-text {
+    color: rgb(182, 182, 182);
+    font-size: 13px;
   }
 }
 </style>

@@ -11,7 +11,6 @@ const imageStore = inject(ImageKey);
 if (!imageStore) throw new Error("failed to inejct store from ImageKey");
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
-
 const areaVisiblityStore = inject(AreaVisibilityKey);
 if (!areaVisiblityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
