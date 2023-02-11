@@ -95,11 +95,25 @@ export default function propertyStore() {
     state.negative = analizeSpell(meta.negative ?? "");
   };
 
-  const updatePositive = (postitive: Prompt[]) => {
-    state.postitive = postitive;
+  const updatePositive = (postitive: Omit<Prompt[], "id">) => {
+    const res = postitive.map((v, index) => {
+      return {
+        id: index, // indexを元にidを再設定する
+        spell: v.spell,
+        emphasis: v.emphasis,
+      };
+    });
+    state.postitive = res;
   };
-  const updateNegative = (negative: Prompt[]) => {
-    state.negative = negative;
+  const updateNegative = (negative: Omit<Prompt[], "id">) => {
+    const res = negative.map((v, index) => {
+      return {
+        id: index, // indexを元にidを再設定する
+        spell: v.spell,
+        emphasis: v.emphasis,
+      };
+    });
+    state.negative = res;
   };
 
   // 現状使ってないけどそのうち使いそう
