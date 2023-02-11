@@ -51,6 +51,20 @@ const restraint = (id: number) => {
   emits("send-val", res);
 };
 
+const getInput = (target: number): HTMLInputElement | undefined => {
+  const rowEl = editorRowRefs[target] as Element;
+  const borderArea = rowEl.childNodes.item(0);
+  const inputArea = borderArea.childNodes.item(1);
+  let input: HTMLInputElement | undefined;
+  inputArea.childNodes.forEach((el) => {
+    if (el.nodeName === "INPUT") {
+      input = el as HTMLInputElement;
+      return;
+    }
+  });
+  return input;
+};
+
 const addPrompt = () => {
   const nextId =
     prompts.value.length !== 0
@@ -61,15 +75,8 @@ const addPrompt = () => {
 
   // 最後の列にフォーカスする
   nextTick(() => {
-    const rowEl = editorRowRefs[editorRowRefs.length - 1] as Element;
-    const borderArea = rowEl.childNodes.item(0);
-    const inputArea = borderArea.childNodes.item(1);
-    inputArea.childNodes.forEach((el) => {
-      if (el.nodeName === "INPUT") {
-        const input = el as HTMLInputElement;
-        input.focus();
-      }
-    });
+    const input = getInput(editorRowRefs.length - 1);
+    input?.focus();
   });
 };
 
@@ -82,19 +89,14 @@ const deletePrompt = (id: number, index: number) => {
     if (editorRowRefs.length === 0) {
       return;
     }
+    // 最後の行の場合は一個前にフォーカス
     let target = editorRowRefs.length - 1 < index ? index - 1 : index;
-    const rowEl = editorRowRefs[target] as Element;
-    const borderArea = rowEl.childNodes.item(0);
-    const inputArea = borderArea.childNodes.item(1);
-    inputArea.childNodes.forEach((el) => {
-      if (el.nodeName === "INPUT") {
-        const input = el as HTMLInputElement;
-        input.focus();
-      }
-    });
+    const input = getInput(target);
+    input?.focus();
   });
 };
 
+// 行を上に移動する
 const incrementIndex = (prompt: Prompt, index: number) => {
   if (index === 0) {
     return;
@@ -105,6 +107,7 @@ const incrementIndex = (prompt: Prompt, index: number) => {
   emits("send-val", prompts.value);
 };
 
+// 行を下に移動する
 const decrementIndex = (prompt: Prompt, index: number) => {
   if (index === prompts.value.length - 1) {
     return;
@@ -113,6 +116,30 @@ const decrementIndex = (prompt: Prompt, index: number) => {
   prompts.value[index + 1] = prompt; // 対象indexに値を設定
   prompts.value[index] = tmp;
   emits("send-val", prompts.value);
+};
+
+// インプットで入力されたキー入力を判定
+const inputKeyDown = (
+  index: number,
+  val: { id: number; event: KeyboardEvent }
+) => {
+  if (val.event.key === "ArrowDown") {
+    if (index === prompts.value.length - 1) {
+      // 最後の行だった場合何もしない
+      return;
+    }
+    // 次の要素をフォーカスする
+    const input = getInput(index + 1);
+    input?.focus();
+  } else if (val.event.key === "ArrowUp") {
+    if (index === 0) {
+      // 最初の行だった場合何もしない
+      return;
+    }
+    // 前の要素をフォーカスする
+    const input = getInput(index - 1);
+    input?.focus();
+  }
 };
 
 onMounted(() => {
@@ -158,6 +185,7 @@ watch(
             :label="null"
             :value="item.spell"
             @send-val="receiveVal"
+            @key-down="(v) => inputKeyDown(index, v)"
           ></Input>
           <div class="emphasis-area">
             <font-awesome-icon
