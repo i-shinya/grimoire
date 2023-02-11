@@ -80,6 +80,20 @@ const addPrompt = () => {
   });
 };
 
+const addNextPrompt = (id: number, index: number) => {
+  const nextId =
+    prompts.value.length !== 0
+      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
+      : 1;
+  prompts.value.splice(index + 1, 0, { id: nextId, spell: "", emphasis: 0 });
+  emits("send-val", prompts.value);
+
+  nextTick(() => {
+    const input = getInput(index + 1);
+    input?.focus();
+  });
+};
+
 const deletePrompt = (id: number, index: number) => {
   const res = prompts.value.filter((val) => val.id !== id);
   emits("send-val", res);
@@ -123,6 +137,7 @@ const inputKeyDown = (
   index: number,
   val: { id: number; event: KeyboardEvent }
 ) => {
+  console.log(val.event);
   if (val.event.key === "ArrowDown") {
     if (index === prompts.value.length - 1) {
       // 最後の行だった場合何もしない
@@ -139,6 +154,10 @@ const inputKeyDown = (
     // 前の要素をフォーカスする
     const input = getInput(index - 1);
     input?.focus();
+  } else if (val.event.key === "Enter") {
+    addNextPrompt(val.id, index);
+  } else if (val.event.key === "Delete") {
+    deletePrompt(val.id, index);
   }
 };
 
@@ -221,7 +240,8 @@ watch(
         </div>
       </div>
       <div class="plus-button clickable mt-3" @click="addPrompt">
-        <font-awesome-icon class="plus-icon" icon="fa-solid fa-plus" />
+        <font-awesome-icon class="plus-icon mr-3" icon="fa-solid fa-plus" />
+        <p class="shortcut-text">press EnterKey</p>
       </div>
     </div>
   </div>
@@ -321,6 +341,11 @@ watch(
         width: 13px;
         border: 1px solid rgb(255, 255, 255);
         border-radius: 50%;
+      }
+
+      .shortcut-text {
+        color: rgb(182, 182, 182);
+        font-size: 13px;
       }
     }
   }

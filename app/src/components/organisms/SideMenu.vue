@@ -8,10 +8,10 @@ if (!areaVisiblityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
 
 const showDirectory = () => {
-  areaVisiblityStore.changeDirectoryVisiblility();
+  areaVisiblityStore.changeDirectoryVisiblity();
 };
 const showMetaEditor = () => {
-  areaVisiblityStore.changeEditorVisiblility();
+  areaVisiblityStore.changeEditorVisiblity();
 };
 </script>
 
