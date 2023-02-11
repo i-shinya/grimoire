@@ -13,18 +13,28 @@ const showDirectory = () => {
 const showMetaEditor = () => {
   areaVisiblityStore.changeEditorVisiblity();
 };
+const showImageViewer = () => {
+  areaVisiblityStore.changeImageArea();
+};
 </script>
 
 <template>
   <div class="sidemenu">
     <div class="icon-area">
       <SideMenuIcon
+        :is-show="areaVisiblityStore.state.showDirectoryArea"
         icon-type="fa-solid fa-folder-open"
         @click="showDirectory"
       ></SideMenuIcon>
       <SideMenuIcon
+        :is-show="areaVisiblityStore.state.showEditorArea"
         icon-type="fa-solid fa-terminal"
         @click="showMetaEditor"
+      ></SideMenuIcon>
+      <SideMenuIcon
+        :is-show="areaVisiblityStore.state.showImageArea"
+        icon-type="fa-solid fa-list"
+        @click="showImageViewer"
       ></SideMenuIcon>
       <!-- 検索機能が欲しくなったら実装してください -->
       <!-- <SideMenuIcon

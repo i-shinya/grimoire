@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch } from "vue";
+import { computed, inject, ref, watch, onMounted } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -17,6 +17,15 @@ const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);
 const breads = ref<Bread[]>([]);
 
+onMounted(() => {
+  selectPath.value = directoryStore.state.selectedDirectoryPath ?? "";
+  // TODO ここreadonlyでバグるかも
+  images.value =
+    directoryStore.state.imageDetails?.map((detail) => detail) ?? []; // statesがreadonlyのためコピー
+  breads.value = selectPath.value.split("/").map((val, index) => {
+    return { id: index, text: val };
+  });
+});
 watch(
   () => directoryStore.state,
   (state, prevState) => {

@@ -26,6 +26,10 @@ export default function areaVisiblityStore() {
     state.showEditorArea = !state.showEditorArea;
   };
 
+  const changeImageArea = () => {
+    state.showImageArea = !state.showImageArea;
+  };
+
   const showImageMetaViewer = () => {
     state.showImageMetaViewer = true;
   };
@@ -42,6 +46,7 @@ export default function areaVisiblityStore() {
     state: readonly(state), // 読み取りしかできないようにする
     changeDirectoryVisiblity,
     changeEditorVisiblity,
+    changeImageArea,
     showImageMetaViewer,
     showEditorArea,
     showPromptEditor,

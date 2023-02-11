@@ -57,9 +57,9 @@ provide(AreaVisibilityKey, areaVisibleStore);
                 </pane>
               </splitpanes>
             </pane>
-            <pane>
+            <pane v-if="areaVisibleStore.state.showImageArea">
               <splitpanes>
-                <pane v-if="areaVisibleStore.state.showImageArea" min-size="20">
+                <pane min-size="20">
                   <ImageViewer></ImageViewer>
                 </pane>
                 <pane
