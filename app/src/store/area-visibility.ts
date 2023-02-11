@@ -19,10 +19,10 @@ export default function areaVisiblityStore() {
     showPromptEditor: true,
   });
 
-  const changeDirectoryVisiblility = () => {
+  const changeDirectoryVisiblity = () => {
     state.showDirectoryArea = !state.showDirectoryArea;
   };
-  const changeEditorVisiblility = () => {
+  const changeEditorVisiblity = () => {
     state.showEditorArea = !state.showEditorArea;
   };
 
@@ -40,8 +40,8 @@ export default function areaVisiblityStore() {
 
   return {
     state: readonly(state), // 読み取りしかできないようにする
-    changeDirectoryVisiblility,
-    changeEditorVisiblility,
+    changeDirectoryVisiblity,
+    changeEditorVisiblity,
     showImageMetaViewer,
     showEditorArea,
     showPromptEditor,
