@@ -81,11 +81,11 @@ const addBeforePrompt = (index: number) => {
     prompts.value.length !== 0
       ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
       : 1;
-  prompts.value.splice(index - 1, 0, { id: nextId, spell: "", emphasis: 0 });
+  prompts.value.splice(index, 0, { id: nextId, spell: "", emphasis: 0 });
   emits("send-val", prompts.value);
 
   nextTick(() => {
-    focusInput(index - 1);
+    focusInput(index);
   });
 };
 
@@ -105,25 +105,33 @@ const deletePrompt = (index: number) => {
 };
 
 // 行を上に移動する
-const incrementIndex = (prompt: Prompt, index: number) => {
+const moveToUp = (index: number) => {
   if (index === 0) {
     return;
   }
   let tmp = prompts.value[index - 1]; // 入れ替え対象をtmpに
-  prompts.value[index - 1] = prompt; // 対象indexに値を設定
+  prompts.value[index - 1] = prompts.value[index]; // 対象indexに値を設定
   prompts.value[index] = tmp;
   emits("send-val", prompts.value);
+
+  nextTick(() => {
+    focusInput(index - 1);
+  });
 };
 
 // 行を下に移動する
-const decrementIndex = (prompt: Prompt, index: number) => {
+const moveToDown = (index: number) => {
   if (index === prompts.value.length - 1) {
     return;
   }
   let tmp = prompts.value[index + 1]; // 入れ替え対象をtmpに
-  prompts.value[index + 1] = prompt; // 対象indexに値を設定
+  prompts.value[index + 1] = prompts.value[index]; // 対象indexに値を設定
   prompts.value[index] = tmp;
   emits("send-val", prompts.value);
+
+  nextTick(() => {
+    focusInput(index + 1);
+  });
 };
 
 // インプットで入力されたキー入力を判定
@@ -134,15 +142,25 @@ const inputKeyDown = (index: number, event: KeyboardEvent) => {
       // 最後の行だった場合何もしない
       return;
     }
-    // 次の要素をフォーカスする
-    focusInput(index + 1);
+    if (event.ctrlKey) {
+      // 行を下に移動
+      moveToDown(index);
+    } else {
+      // 次の要素をフォーカスする
+      focusInput(index + 1);
+    }
   } else if (event.code === "ArrowUp") {
     if (index === 0) {
       // 最初の行だった場合何もしない
       return;
     }
-    // 前の要素をフォーカスする
-    focusInput(index - 1);
+    if (event.ctrlKey) {
+      // 行を上に移動
+      moveToUp(index);
+    } else {
+      // 前の要素をフォーカスする
+      focusInput(index - 1);
+    }
   } else if (event.code === "Enter") {
     if (event.shiftKey) {
       addBeforePrompt(index);
@@ -183,12 +201,12 @@ watch(
             <font-awesome-icon
               class="clickable"
               icon="fa-solid fa-angle-up"
-              @click="incrementIndex(item, index)"
+              @click="moveToUp(index)"
             />
             <font-awesome-icon
               class="clickable"
               icon="fa-solid fa-angle-down"
-              @click="decrementIndex(item, index)"
+              @click="moveToDown(index)"
             />
           </div>
           <Input
