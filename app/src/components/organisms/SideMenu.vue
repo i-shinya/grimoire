@@ -3,18 +3,18 @@ import { inject } from "vue";
 import SideMenuIcon from "../atoms/SideMenuIcon.vue";
 import { AreaVisibilityKey } from "../../store/key";
 
-const areaVisiblityStore = inject(AreaVisibilityKey);
-if (!areaVisiblityStore)
+const areaVisibilityStore = inject(AreaVisibilityKey);
+if (!areaVisibilityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
 
 const showDirectory = () => {
-  areaVisiblityStore.changeDirectoryVisiblity();
+  areaVisibilityStore.changeDirectoryVisibility();
 };
 const showMetaEditor = () => {
-  areaVisiblityStore.changeEditorVisiblity();
+  areaVisibilityStore.changeEditorVisibility();
 };
 const showImageViewer = () => {
-  areaVisiblityStore.changeImageArea();
+  areaVisibilityStore.changeImageArea();
 };
 </script>
 
@@ -22,17 +22,17 @@ const showImageViewer = () => {
   <div class="sidemenu">
     <div class="icon-area">
       <SideMenuIcon
-        :is-show="areaVisiblityStore.state.showDirectoryArea"
+        :is-show="areaVisibilityStore.state.showDirectoryArea"
         icon-type="fa-solid fa-folder-open"
         @click="showDirectory"
       ></SideMenuIcon>
       <SideMenuIcon
-        :is-show="areaVisiblityStore.state.showEditorArea"
+        :is-show="areaVisibilityStore.state.showEditorArea"
         icon-type="fa-solid fa-terminal"
         @click="showMetaEditor"
       ></SideMenuIcon>
       <SideMenuIcon
-        :is-show="areaVisiblityStore.state.showImageArea"
+        :is-show="areaVisibilityStore.state.showImageArea"
         icon-type="fa-solid fa-list"
         @click="showImageViewer"
       ></SideMenuIcon>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, watch, onBeforeUnmount } from "vue";
+import { inject, ref, onMounted, watch } from "vue";
 import { PropertyKey } from "../../store/key";
 import { Prompt } from "../../store/property";
 import PromptEditor from "../molecules/PromptEditor.vue";

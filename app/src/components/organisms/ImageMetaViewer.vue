@@ -11,8 +11,8 @@ const imageStore = inject(ImageKey);
 if (!imageStore) throw new Error("failed to inejct store from ImageKey");
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
-const areaVisiblityStore = inject(AreaVisibilityKey);
-if (!areaVisiblityStore)
+const areaVisibilityStore = inject(AreaVisibilityKey);
+if (!areaVisibilityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
 
 const basePath = ref<string>("");
@@ -35,7 +35,7 @@ const setProperty = (state: ImageState) => {
 const copyToEditor = () => {
   if (imageDetail.value?.meta) {
     propertyStore.copyProperty(imageDetail.value.meta);
-    areaVisiblityStore.showEditorArea();
+    areaVisibilityStore.showEditorArea();
   }
 };
 

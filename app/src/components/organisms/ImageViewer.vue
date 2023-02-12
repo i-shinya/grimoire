@@ -9,8 +9,8 @@ if (!directoryStore)
   throw new Error("failed to inejct store from DirectoryKey");
 const imageStore = inject(ImageKey);
 if (!imageStore) throw new Error("failed to inejct store from ImageKey");
-const areaVisiblityStore = inject(AreaVisibilityKey);
-if (!areaVisiblityStore)
+const areaVisibilityStore = inject(AreaVisibilityKey);
+if (!areaVisibilityStore)
   throw new Error("failed to inejct store from AreaVisibilityKey");
 
 const selectPath = ref<string>("");
@@ -41,7 +41,7 @@ watch(
 
 const selectImage = (image: ImageDetail) => {
   imageStore.selectImage(selectPath.value, image);
-  areaVisiblityStore.showImageMetaViewer();
+  areaVisibilityStore.showImageMetaViewer();
 };
 
 const reloadDirectoryTree = async () => {

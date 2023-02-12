@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, onMounted, watch, onBeforeUnmount } from "vue";
+import { nextTick, ref, onMounted, watch } from "vue";
 import { Prompt } from "../../store/property";
 import Input from "../atoms/Input.vue";
 

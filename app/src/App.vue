@@ -10,7 +10,7 @@ import MetaEditorArea from "./components/organisms/MetaEditorArea.vue";
 import directoryStore from "./store/directory";
 import imageStore from "./store/image";
 import propertyStore from "./store/property";
-import areaVisiblityStore from "./store/area-visibility";
+import areaVisibilityStore from "./store/area-visibility";
 import {
   AreaVisibilityKey,
   DirectoryKey,
@@ -22,7 +22,7 @@ import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
 const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
-const areaVisibleStore = areaVisiblityStore();
+const areaVisibleStore = areaVisibilityStore();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
@@ -37,8 +37,8 @@ provide(AreaVisibilityKey, areaVisibleStore);
       <splitpanes class="size-variable-area">
         <pane
           v-if="areaVisibleStore.state.showDirectoryArea"
-          min-size="14"
-          size="18"
+          min-size="10"
+          size="14"
         >
           <DirectoryArea></DirectoryArea>
         </pane>
