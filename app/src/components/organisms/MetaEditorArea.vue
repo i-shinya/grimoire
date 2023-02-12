@@ -5,7 +5,7 @@ import { PropertyKey } from "../../store/key";
 import { useToast } from "vuestic-ui";
 
 const propertyStore = inject(PropertyKey);
-if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
+if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 
 const { init, close, closeAll } = useToast();
 const copyToClipbord = (input: string, flyText: string) => {

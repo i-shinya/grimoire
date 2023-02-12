@@ -125,11 +125,8 @@ provide(AreaVisibilityKey, areaVisibleStore);
 }
 
 .va-toast {
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-  padding-left: 2px !important;
-  padding-right: 2px !important;
-  border-radius: 0px !important;
+  padding: 2px !important;
+  border-radius: 0 !important;
 }
 
 .va-breadcrumb-item {

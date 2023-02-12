@@ -7,7 +7,7 @@ import { DirectoryKey } from "../../store/key";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
-  throw new Error("failed to inejct store from DirectoryKey");
+  throw new Error("failed to inject store from DirectoryKey");
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);

@@ -8,12 +8,12 @@ import { onMounted } from "vue";
 import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
-if (!imageStore) throw new Error("failed to inejct store from ImageKey");
+if (!imageStore) throw new Error("failed to inject store from ImageKey");
 const propertyStore = inject(PropertyKey);
-if (!propertyStore) throw new Error("failed to inejct store from PropertyKey");
+if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
-  throw new Error("failed to inejct store from AreaVisibilityKey");
+  throw new Error("failed to inject store from AreaVisibilityKey");
 
 const basePath = ref<string>("");
 const imageDetail = ref<ImageDetail | null>(null);
@@ -59,7 +59,7 @@ watch(
       <div class="meta-area">
         <div class="copy-button mb-4" @click="copyToEditor">
           <font-awesome-icon
-            class="copy-to-edittor-icon mr-2"
+            class="copy-to-editor-icon mr-2"
             icon="fa-regular fa-circle-up"
           />
           <div>Copy to Editor</div>

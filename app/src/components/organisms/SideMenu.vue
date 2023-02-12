@@ -5,7 +5,7 @@ import { AreaVisibilityKey } from "../../store/key";
 
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
-  throw new Error("failed to inejct store from AreaVisibilityKey");
+  throw new Error("failed to inject store from AreaVisibilityKey");
 
 const showDirectory = () => {
   areaVisibilityStore.changeDirectoryVisibility();
@@ -19,7 +19,7 @@ const showImageViewer = () => {
 </script>
 
 <template>
-  <div class="sidemenu">
+  <div class="side-menu">
     <div class="icon-area">
       <SideMenuIcon
         :is-show="areaVisibilityStore.state.showDirectoryArea"
@@ -48,7 +48,7 @@ const showImageViewer = () => {
 <style lang="scss" scoped>
 @use "../../variables.scss" as var;
 
-.sidemenu {
+.side-menu {
   background-color: rgb(73, 73, 73);
   .icon-area {
     display: block;

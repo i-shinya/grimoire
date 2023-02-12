@@ -6,12 +6,12 @@ import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
-  throw new Error("failed to inejct store from DirectoryKey");
+  throw new Error("failed to inject store from DirectoryKey");
 const imageStore = inject(ImageKey);
-if (!imageStore) throw new Error("failed to inejct store from ImageKey");
+if (!imageStore) throw new Error("failed to inject store from ImageKey");
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
-  throw new Error("failed to inejct store from AreaVisibilityKey");
+  throw new Error("failed to inject store from AreaVisibilityKey");
 
 const selectPath = ref<string>("");
 const images = ref<ImageDetail[]>([]);

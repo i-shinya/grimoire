@@ -35,7 +35,7 @@ watch(val, (state, prevState) => {
   });
 });
 
-const { init, close, closeAll } = useToast();
+const { init } = useToast();
 
 const copyClipBoard = () => {
   const text = props.value?.toString() ?? "";
@@ -96,7 +96,7 @@ const copyClipBoard = () => {
     width: 100%;
     color: rgb(240, 240, 240);
     background-color: rgb(54, 54, 54);
-    padding: 0px;
+    padding: 0;
     line-height: 26px;
     border-style: none;
   }
