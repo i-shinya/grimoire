@@ -173,11 +173,11 @@ const inputKeyDown = (index: number, event: KeyboardEvent) => {
 };
 
 onMounted(() => {
-  prompts.value = props.prompt ?? "";
+  prompts.value = props.prompt ?? [];
 });
 watch(
   () => props.prompt,
-  (state, prevState) => {
+  (state) => {
     prompts.value = state;
     editorRowRefs = [];
   }
