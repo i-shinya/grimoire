@@ -3,4 +3,4 @@ node_modules
 logs
 .vscode
 release
-testdata
+../electron/testdata

@@ -4,7 +4,7 @@ import {
   getImageMeta,
   readImage,
 } from "./directory";
-import { ImageDetail } from "../../core/type/image";
+import { ImageDetail } from "../type/image";
 
 describe("directory.ts", () => {
   describe("getDirectroyNodes", () => {
