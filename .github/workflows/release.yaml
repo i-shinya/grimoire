@@ -17,10 +17,8 @@ jobs:
         with:
           node-version: 18.0
       - run: mkdir -m 755 release
-        working-directory: app
       - name: build release windows
         run: docker compose up
-        working-directory: app
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,6 +35,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app/release/win/grimoire.exe
+          asset_path: ./release/win/grimoire.exe
           asset_name: grimoire.exe
           asset_content_type: application/exe
