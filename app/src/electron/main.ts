@@ -15,8 +15,8 @@ import {
   defaultWidth,
 } from "./logic/window";
 
-const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
-const isDebug = process.env.npm_lifecycle_event === "app:debug" ? true : false;
+const isDev = process.env.npm_lifecycle_event === "app:dev";
+const isDebug = process.env.npm_lifecycle_event === "app:debug";
 
 function createWindow() {
   // Create the browser window.
