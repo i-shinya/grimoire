@@ -93,8 +93,8 @@ provide(AreaVisibilityKey, areaVisibleStore);
     display: flex;
     margin-top: var.$header-height;
     .size-variable-area {
-      height: calc(100vh - var.$header-height - var.$footer-height);
-      width: calc(100vw - var.$sidebar-width);
+      height: calc(100vh - #{var.$header-height} - #{var.$footer-height});
+      width: calc(100vw - #{var.$sidebar-width});
     }
   }
 }
