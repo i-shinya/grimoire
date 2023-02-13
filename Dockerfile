@@ -11,6 +11,6 @@ RUN apt-get install -y libwine
 WORKDIR /app
 
 COPY ./ /app/
-RUN npm i
+RUN npm ci
 
-CMD bash -c "npm run app:build-win && chmod -R 777 ./release"
+CMD bash -c "npm run electron:build-win && chmod -R 777 ./release"

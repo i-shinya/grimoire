@@ -6,9 +6,8 @@ import fs from "fs";
 import { dialog, BrowserWindow } from "electron";
 import exifr from "exifr";
 
-import { DirectoryNode } from "../../core/type/directory";
-import { isImageExtension } from "../../core/image";
-import { ImageDetail, Metadata } from "../../core/type/image";
+import { DirectoryNode } from "../type/directory";
+import { ImageDetail, Metadata } from "../type/image";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow
@@ -90,6 +89,15 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
       };
     })
   );
+};
+
+/**
+ * 拡張子が画像か判定する
+ * @param filename
+ */
+export const isImageExtension = (filename: string): boolean => {
+    const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
+    return !!filename.match(allowExtensions);
 };
 
 /**

@@ -21,7 +21,7 @@ const setEditorRowRefs = (el: any): void => {
   editorRowRefs.push(el);
 };
 
-const receiveVal = (index, val: { label: string; value: string }) => {
+const receiveVal = (index: number, val: { label: string; value: string }) => {
   prompts.value[index].spell = val.value;
   emits("send-val", prompts.value);
 };
@@ -213,8 +213,8 @@ watch(
             class="prompt-input mr-3"
             :label="null"
             :value="item.spell"
-            @send-val="(v) => receiveVal(index, v)"
-            @key-down="(v) => inputKeyDown(index, v)"
+            @send-val="(v: any) => receiveVal(index, v)"
+            @key-down="(v: any) => inputKeyDown(index, v)"
           ></Input>
           <div class="emphasis-area">
             <font-awesome-icon

@@ -1,11 +1,11 @@
-name: relase-artifacts
+name: release-artifacts
 on:
   workflow_dispatch:
     inputs:
       version:
         description: "アプリのバージョン"
         required: true
-        default: 0.0.1
+        default: 0.1.0
 jobs:
   release:
     runs-on: ubuntu-latest

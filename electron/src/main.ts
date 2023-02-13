@@ -1,7 +1,7 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
-import { DirectoryNode } from "../core/type/directory";
-import { ImageDetail } from "../core/type/image";
+import { DirectoryNode } from "./type/directory";
+import { ImageDetail } from "./type/image";
 import {
   getDirectroyNodes,
   getImages,
@@ -40,7 +40,7 @@ function createWindow() {
     }
   } else {
     // dev以外の場合はファイルからページを取得
-    mainWindow.loadFile(join(__dirname, "../index.html"));
+    mainWindow.loadFile(join(__dirname, "./index.html"));
   }
 
   // ダイアログを表示する

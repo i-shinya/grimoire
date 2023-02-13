@@ -18,8 +18,8 @@ const receiveNegative = (prompt: Prompt[]) => {
 };
 
 // stateがreadonlyのためコピー
-const copyPrompt = (prompts) =>
-  prompts.map((val) => {
+const copyPrompt = (prompts: any) =>
+  prompts.map((val: any) => {
     return {
       id: val.id,
       spell: val.spell,
