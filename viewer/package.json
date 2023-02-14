@@ -4,7 +4,6 @@
   "scripts": {
     "vite:dev": "vite",
     "vite:build": "vue-tsc --noEmit && vite build",
-    "lint": "eslint -c .eslintrc --ext .ts ./src",
     "test": "jest"
   },
   "dependencies": {
