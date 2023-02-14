@@ -5,20 +5,29 @@ on:
       version:
         description: "アプリのバージョン"
         required: true
-        default: 0.1.0
+        default: 0.2.0
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: node:18-slim
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.0
+          node-version: 18.13
       - run: mkdir -m 755 release
-      - name: build release windows
-        run: docker compose up
+      - nam: apt install package
+        run: |
+          dpkg --add-architecture i386
+          apt-get update
+          apt-get install -y wine wine32
+      - name: npm ci
+        run: npm ci
+      - name: build app
+        run: | 
+          npm run electron:build-win
+          chmod -R 777 ./release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
