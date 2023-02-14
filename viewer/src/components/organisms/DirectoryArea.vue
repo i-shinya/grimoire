@@ -4,13 +4,19 @@ import { getBaseDirName, getDirectoryName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
 import { DirectoryKey } from "../../store/key";
-import { DirectoryAPI, DirectoryAPIFromNode } from "../../core/api/directory";
+import {
+  DirectoryAPI,
+  DirectoryAPIKey,
+  DirectoryNodeAPI,
+} from "../../core/api/directory";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
   throw new Error("failed to inject store from DirectoryKey");
-// TODO injectで使うようにしたいな
-const directoryAPI: DirectoryAPI = new DirectoryAPIFromNode();
+const directoryAPI = inject<DirectoryAPI>(DirectoryAPIKey);
+if (!directoryAPI) {
+  throw new Error("failed to inject api from directoryAPI");
+}
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
@@ -20,7 +26,6 @@ const directoryName = ref<string | null>(null);
 const directoryNodes = ref<DirectoryNode[]>([]);
 
 const openDirectory = async () => {
-  // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
   const path: string = await directoryAPI.openDialog();
   if (!path) {
     return;
@@ -151,8 +156,8 @@ $select-directory-area-height: 30px;
       padding-left: 12px;
       // 8pxはスクロールバーの分
       height: calc(
-        100vh - #{var.$header-height} - #{var.$footer-height} -
-          $select-directory-area-height - $button-area-height - 8px
+        100vh - #{var.$header-height} - #{var.$footer-height} - #{$select-directory-area-height} -
+          #{$button-area-height} - 8px
       );
       font-size: 14px;
       padding-top: 8px;

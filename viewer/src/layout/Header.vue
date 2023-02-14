@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { WindowAPI, WindowAPIFromNode } from "../core/api/window";
+import { WindowAPI, WindowAPIKey, WindowNodeAPI } from "../core/api/window";
+import { inject } from "vue";
 
-const windowAPI: WindowAPI = new WindowAPIFromNode();
+const windowAPI = inject<WindowAPI>(WindowAPIKey);
+if (!windowAPI) {
+  throw new Error("failed to inject api from windowAPI");
+}
 
 const closeWindow = () => {
   windowAPI.closeWindow();

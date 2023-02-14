@@ -243,8 +243,8 @@ watch(
         </div>
         <div class="close-icon ml-2">
           <font-awesome-icon
-            class="window-operate-button clickable"
-            icon="fa-solid fa-xmark"
+            class="clickable"
+            icon="fa-solid fa-minus"
             @click="deletePrompt(index)"
           />
         </div>
@@ -336,8 +336,6 @@ watch(
         height: 20px;
         width: 20px;
         font-size: 18px;
-        border: 1px solid rgb(255, 255, 255);
-        border-radius: 50%;
       }
     }
 

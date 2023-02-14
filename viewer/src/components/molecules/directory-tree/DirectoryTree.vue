@@ -6,6 +6,11 @@ import { DirectoryKey, ImageKey, AreaVisibilityKey } from "../../../store/key";
 import { DirectoryNode } from "../../../core/type/directory";
 import { isImageExtension } from "../../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
+import {
+  DirectoryAPI,
+  DirectoryAPIKey,
+  DirectoryNodeAPI,
+} from "../../../core/api/directory";
 
 // NOTE: 基本atomicとmoleculesからstoreは操作しないが、ツリーは階層が深いためこちらのみ許容する
 const directoryStore = inject(DirectoryKey);
@@ -20,6 +25,10 @@ const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore) {
   throw new Error("failed to inject store from AreaVisibilityKey");
 }
+const directoryAPI = inject<DirectoryAPI>(DirectoryAPIKey);
+if (!directoryAPI) {
+  throw new Error("failed to inject api from directoryAPI");
+}
 
 defineProps<{
   node: DirectoryNode;
@@ -28,15 +37,14 @@ defineProps<{
 const showChild = ref<Boolean>(false);
 
 const switchChildVisible = () => {
-  if (showChild.value) {
-    showChild.value = false;
-  } else {
-    showChild.value = true;
-  }
+  showChild.value = !showChild.value;
 };
 
 // store経由でイベントを発火する
-const selectDirectory = (node: DirectoryNode) => {
+const selectDirectory = async (node: DirectoryNode) => {
+  await directoryAPI
+    .getImages(`${node.basePath}/${node.label}`)
+    .then((res) => directoryStore.setImageDetails(res));
   directoryStore.selectDirectory(`${node.basePath}/${node.label}`);
 };
 
@@ -46,15 +54,18 @@ const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
 });
 
 const selectImage = async (node: DirectoryNode) => {
-  await directoryStore?.selectDirectory(node.basePath);
-  const imageDetails = directoryStore?.state.imageDetails?.filter(
-    (detail) => detail.label === node.label
-  );
-  if (!imageDetails || imageDetails.length === 0) {
-    return;
-  }
-  areaVisibilityStore.showImageMetaViewer();
-  await imageStore.selectImage(node.basePath, imageDetails[0]);
+  await directoryAPI.getImages(node.basePath).then((res) => {
+    directoryStore.setImageDetails(res);
+    directoryStore.selectDirectory(node.basePath);
+
+    // 選択画像を抽出してストアに格納
+    const imageDetails = res.filter((detail) => detail.label === node.label);
+    if (!imageDetails || imageDetails.length === 0) {
+      return;
+    }
+    areaVisibilityStore.showImageMetaViewer();
+    imageStore.selectImage(node.basePath, imageDetails[0]);
+  });
 };
 </script>
 
@@ -90,7 +101,7 @@ const selectImage = async (node: DirectoryNode) => {
             class="hidden-arrow-icon"
             icon="fa-solid fa-angle-right"
           />
-          <DirectoryTrees :nodes="node.children!!"></DirectoryTrees>
+          <DirectoryTrees :nodes="node.children"></DirectoryTrees>
         </div>
       </template>
     </template>
