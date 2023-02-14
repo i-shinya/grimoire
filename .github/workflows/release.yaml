@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18.13
       - run: mkdir -m 755 release
-      - nam: apt install package
+      - name: apt install package
         run: |
           dpkg --add-architecture i386
           apt-get update
