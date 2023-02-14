@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { WindowAPI, WindowAPIFromNode } from "../core/api/window";
+
+const windowAPI: WindowAPI = new WindowAPIFromNode();
+
 const closeWindow = () => {
-  (window as any).windowAPI.closeWindow();
+  windowAPI.closeWindow();
 };
 
 const resizeWindow = () => {
-  (window as any).windowAPI.resizeWindow();
+  windowAPI.resizeWindow();
 };
 
 const minimizeWindow = () => {
-  (window as any).windowAPI.minimizeWindow();
+  windowAPI.minimizeWindow();
 };
 </script>
 

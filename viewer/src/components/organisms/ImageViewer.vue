@@ -45,7 +45,7 @@ const selectImage = (image: ImageDetail) => {
 };
 
 const reloadDirectoryTree = async () => {
-  directoryStore.selectDirectory(selectPath.value);
+  await directoryStore.selectDirectory(selectPath.value);
 };
 
 const isSelected = computed(() => (image: ImageDetail): boolean => {

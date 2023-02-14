@@ -1,76 +1,76 @@
 <script setup lang="ts">
-import { inject, ref, onMounted } from "vue";
-import { getDirectroyName, getBaseDirName } from "../../core/path";
+import { inject, onMounted, ref } from "vue";
+import { getBaseDirName, getDirectoryName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
 import { DirectoryKey } from "../../store/key";
+import { DirectoryAPI, DirectoryAPIFromNode } from "../../core/api/directory";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
   throw new Error("failed to inject store from DirectoryKey");
+// TODO injectで使うようにしたいな
+const directoryAPI: DirectoryAPI = new DirectoryAPIFromNode();
 
 // 選択しているディレクトリのベースパス
 const baseDir = ref<string | null>(null);
 // 選択しているディレクトリ名
-const directroyName = ref<string | null>(null);
+const directoryName = ref<string | null>(null);
 
 const directoryNodes = ref<DirectoryNode[]>([]);
 
 const openDirectory = async () => {
   // FIXME vscode上でglobal.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
-  const path: string = await (window as any).direcrotyAPI.openDialog();
+  const path: string = await directoryAPI.openDialog();
   if (!path) {
     return;
   }
   directoryStore.setOpenDirectory(path);
-  directroyName.value = getDirectroyName(path)!!;
+  directoryName.value = getDirectoryName(path)!!;
   baseDir.value = getBaseDirName(path)!!;
 
-  const res: DirectoryNode[] = await (
-    window as any
-  ).direcrotyAPI.showDirectories(path);
-  directoryNodes.value = res;
+  directoryNodes.value = await directoryAPI.showDirectories(path);
 };
 
 const reloadDirectoryTree = async () => {
-  const res: DirectoryNode[] = await (
-    window as any
-  ).direcrotyAPI.showDirectories(directoryStore.state.openDirectoryPath);
-  directoryNodes.value = res;
+  if (directoryStore.state.openDirectoryPath) {
+    directoryNodes.value = await directoryAPI.showDirectories(
+      directoryStore.state.openDirectoryPath
+    );
+  }
 };
 
 onMounted(async () => {
   if (directoryStore.state.openDirectoryPath) {
-    directroyName.value = getDirectroyName(
+    directoryName.value = getDirectoryName(
       directoryStore.state.openDirectoryPath
     )!!;
-    const res: DirectoryNode[] = await (
-      window as any
-    ).direcrotyAPI.showDirectories(directoryStore.state.openDirectoryPath);
-    directoryNodes.value = res;
+    directoryNodes.value = await directoryAPI.showDirectories(
+      directoryStore.state.openDirectoryPath
+    );
   }
 });
 </script>
 
 <template>
-  <div class="directroy-area">
+  <div class="directory-area">
     <div class="directory-button-area row justify-center">
       <va-button size="medium" class="directory-button" @click="openDirectory"
         >Open Directory</va-button
       >
     </div>
-    <div class="tree-area" v-if="directroyName">
+    <div class="tree-area" v-if="directoryName">
       <div class="select-directory">
         <font-awesome-icon
           class="clickable mr-2"
           icon="fa-solid fa-arrow-rotate-right"
           @click="reloadDirectoryTree"
         />
-        <p class="directory-name">{{ directroyName }}</p>
+        <p class="directory-name">{{ directoryName }}</p>
         <p class="basedir-name">{{ baseDir }}</p>
       </div>
       <div class="directory-tree-area">
-        <DirectoryTree :nodes="directoryNodes!!"></DirectoryTree>
+        <DirectoryTree :nodes="directoryNodes"></DirectoryTree>
       </div>
     </div>
   </div>
@@ -80,9 +80,9 @@ onMounted(async () => {
 @use "../../variables.scss" as var;
 
 $button-area-height: 70px;
-$select-directroy-area-height: 30px;
+$select-directory-area-height: 30px;
 
-.directroy-area {
+.directory-area {
   height: 100%;
   width: 100%;
   background-color: rgb(48, 48, 48);
@@ -102,7 +102,7 @@ $select-directroy-area-height: 30px;
 
     .select-directory {
       width: 100%;
-      height: $select-directroy-area-height;
+      height: $select-directory-area-height;
       display: flex;
       align-items: center;
       font-size: 14px;
@@ -151,8 +151,8 @@ $select-directroy-area-height: 30px;
       padding-left: 12px;
       // 8pxはスクロールバーの分
       height: calc(
-        100vh - var.$header-height - var.$footer-height -
-          $select-directroy-area-height - $button-area-height - 8px
+        100vh - #{var.$header-height} - #{var.$footer-height} -
+          $select-directory-area-height - $button-area-height - 8px
       );
       font-size: 14px;
       padding-top: 8px;

@@ -14,11 +14,11 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // contextBridgeを使用してレンダラープロセスにAPIとして公開する
-contextBridge.exposeInMainWorld("direcrotyAPI", {
-  openDialog: () => ipcRenderer.invoke("open-direcroty-dialog"),
+contextBridge.exposeInMainWorld("directoryAPI", {
+  openDialog: () => ipcRenderer.invoke("open-directory-dialog"),
   showDirectories: (path: string): Promise<DirectoryNode[]> => {
     // このへんもうちょい上手く書きたい
-    const res = ipcRenderer.invoke("get-direcroty-nodes", path);
+    const res = ipcRenderer.invoke("get-directory-nodes", path);
     return res as Promise<DirectoryNode[]>;
   },
   getImages: (path: string): Promise<ImageDetail[]> => {

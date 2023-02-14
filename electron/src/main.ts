@@ -45,14 +45,14 @@ function createWindow() {
 
   // ダイアログを表示する
   ipcMain.handle(
-    "open-direcroty-dialog",
+    "open-directory-dialog",
     async (_e: Electron.IpcMainInvokeEvent, _args: any): Promise<string> => {
       return openDirectoryDialog(mainWindow);
     }
   );
   // ディレクトリノードを取得する
   ipcMain.handle(
-    "get-direcroty-nodes",
+    "get-directory-nodes",
     (_e: Electron.IpcMainInvokeEvent, path: string): DirectoryNode[] => {
       return getDirectroyNodes(path);
     }

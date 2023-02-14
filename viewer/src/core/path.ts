@@ -1,4 +1,4 @@
-export function getDirectroyName(pathName: string) {
+export function getDirectoryName(pathName: string) {
   return pathName.split("\\").pop()?.split("/").pop();
 }
 
