@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { WindowAPI, WindowAPIKey, WindowNodeAPI } from "../core/api/window";
+import { WindowAPI, WindowAPIKey } from "../core/api/window";
 import { inject } from "vue";
 
 const windowAPI = inject<WindowAPI>(WindowAPIKey);
