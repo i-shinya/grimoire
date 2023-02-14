@@ -19,15 +19,14 @@ jobs:
       - run: mkdir -m 755 release
       - name: apt install package
         run: |
-          dpkg --add-architecture i386
-          apt-get update
-          apt-get install -y wine wine32
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine wine32
       - name: npm ci
         run: npm ci
       - name: build app
         run: | 
           npm run electron:build-win
-          chmod -R 777 ./release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
