@@ -1,11 +1,11 @@
 import { DirectoryNode } from "./src/core/type/directory";
 interface Window {
-  direcrotyAPI: DirecrotyAPI;
+  directoryAPI: DirectoryAPI;
 }
 
-interface DirecrotyAPI {
+interface DirectoryAPI {
   openDialog: () => Promise<string>;
   showDirectories: () => Promise<DirectoryNode>;
 }
 
-declare let openDialog: Window["direcrotyAPI"];
+declare let openDialog: Window["directoryAPI"];
