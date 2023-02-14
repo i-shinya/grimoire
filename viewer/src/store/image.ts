@@ -13,7 +13,7 @@ export default function imageStore() {
   });
 
   // 画像ビューワーから選択
-  const selectImage = async (path: string, imageDetail: ImageDetail) => {
+  const selectImage = (path: string, imageDetail: ImageDetail) => {
     state.selectedImageBasePath = path;
     state.imageDetail = imageDetail;
   };

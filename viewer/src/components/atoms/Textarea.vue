@@ -92,8 +92,6 @@ const copyClipBoard = () => {
     background-color: rgb(54, 54, 54);
     padding: 6px;
     line-height: 26px;
-    border-style: double;
-    border: 1px solid rgb(129, 129, 129);
     resize: none;
 
     /* スクロール幅 */

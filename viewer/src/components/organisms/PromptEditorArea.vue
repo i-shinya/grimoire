@@ -7,7 +7,7 @@ import PromptEditor from "../molecules/PromptEditor.vue";
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 
-const postiive = ref<Prompt[]>([]);
+const positive = ref<Prompt[]>([]);
 const negative = ref<Prompt[]>([]);
 
 const receivePositive = (prompt: Prompt[]) => {
@@ -28,14 +28,14 @@ const copyPrompt = (prompts: any) =>
   }) ?? [];
 
 onMounted(() => {
-  postiive.value = copyPrompt(propertyStore.state.postitive);
+  positive.value = copyPrompt(propertyStore.state.postitive);
   negative.value = copyPrompt(propertyStore.state.negative);
 });
 
 watch(
   () => propertyStore.state,
   (state, prevState) => {
-    postiive.value = copyPrompt(state.postitive);
+    positive.value = copyPrompt(state.postitive);
     negative.value = copyPrompt(state.negative);
   },
   { deep: true }
@@ -49,7 +49,7 @@ watch(
         <PromptEditor
           class="mb-4"
           label="Positive Prompt"
-          :prompt="postiive"
+          :prompt="positive"
           @send-val="receivePositive"
         ></PromptEditor>
       </pane>

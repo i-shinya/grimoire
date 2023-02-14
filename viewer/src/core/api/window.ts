@@ -1,10 +1,13 @@
+export const WindowAPIKey = Symbol("WindowAPIKey");
+
 export interface WindowAPI {
   closeWindow(): Promise<void>;
   resizeWindow(): Promise<void>;
   minimizeWindow(): Promise<void>;
 }
 
-export class WindowAPIFromNode implements WindowAPI {
+// FIXME global.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
+export class WindowNodeAPI implements WindowAPI {
   async closeWindow(): Promise<void> {
     return (window as any).windowAPI.closeWindow();
   }

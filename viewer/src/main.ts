@@ -27,6 +27,7 @@ import {
   faPlus,
   faArrowRotateRight,
   faList,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -34,6 +35,12 @@ import {
   faWindowMinimize,
   faCircleUp,
 } from "@fortawesome/free-regular-svg-icons";
+import {
+  DirectoryAPI,
+  DirectoryAPIKey,
+  DirectoryNodeAPI,
+} from "./core/api/directory";
+import { WindowAPI, WindowAPIKey, WindowNodeAPI } from "./core/api/window";
 
 // 使用するfont-awesomeアイコンを読み込む
 library.add(
@@ -52,13 +59,20 @@ library.add(
   faArrowUpWideShort,
   faArrowDownWideShort,
   faPlus,
+  faMinus,
   faArrowRotateRight,
   faList
 );
+
+// TODO 今後electron以外での起動が追加されたら環境変数か何かで注入するクラスを変更する
+const directoryAPI = new DirectoryNodeAPI();
+const windowAPI = new WindowNodeAPI();
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .component("Splitpanes", Splitpanes)
   .component("Pane", Pane)
+  .provide<DirectoryAPI>(DirectoryAPIKey, directoryAPI)
+  .provide<WindowAPI>(WindowAPIKey, windowAPI)
   .use(createVuestic())
   .mount("#app");

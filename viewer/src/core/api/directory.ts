@@ -1,13 +1,16 @@
 import { DirectoryNode } from "../type/directory";
 import { ImageDetail } from "../type/image";
 
+export const DirectoryAPIKey = Symbol("DirectoryAPIKey");
+
 export interface DirectoryAPI {
   openDialog(): Promise<string>;
   showDirectories(path: string): Promise<DirectoryNode[]>;
   getImages(path: string): Promise<ImageDetail[]>;
 }
 
-export class DirectoryAPIFromNode implements DirectoryAPI {
+// FIXME global.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
+export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(): Promise<string> {
     return await (window as any).directoryAPI.openDialog();
   }

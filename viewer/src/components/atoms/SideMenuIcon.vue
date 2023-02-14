@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="side-menu-icon" :class="isShow ? 'is-show' : 'hoge'">
+  <div class="side-menu-icon" :class="isShow ? 'is-show' : ''">
     <font-awesome-icon class="menu-icon" :icon="iconType" />
   </div>
 </template>
