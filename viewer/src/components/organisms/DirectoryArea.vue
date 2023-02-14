@@ -4,11 +4,7 @@ import { getBaseDirName, getDirectoryName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
 import { DirectoryKey } from "../../store/key";
-import {
-  DirectoryAPI,
-  DirectoryAPIKey,
-  DirectoryNodeAPI,
-} from "../../core/api/directory";
+import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)

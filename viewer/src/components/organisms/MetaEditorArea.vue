@@ -8,7 +8,7 @@ const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 
 const { init, close, closeAll } = useToast();
-const copyToClipbord = (input: string, flyText: string) => {
+const copyToClipboard = (input: string, flyText: string) => {
   navigator.clipboard.writeText(input).then(
     () => {
       /* clipboard successfully set */
@@ -28,27 +28,19 @@ const copyToClipbord = (input: string, flyText: string) => {
 };
 
 const editorShortcutKey = (event: KeyboardEvent) => {
-  if (
-    event.code === "KeyC" &&
-    event.ctrlKey === true &&
-    event.shiftKey == false
-  ) {
+  if (event.code === "KeyC" && event.ctrlKey && !event.shiftKey) {
     if (!propertyStore.displayPostive()) {
       return;
     }
-    copyToClipbord(
+    copyToClipboard(
       propertyStore.displayPostive(),
       `Copy "Positive Prompt" to Clipboard!!`
     );
-  } else if (
-    event.code === "KeyC" &&
-    event.ctrlKey === true &&
-    event.shiftKey == true
-  ) {
+  } else if (event.code === "KeyC" && event.ctrlKey && event.shiftKey) {
     if (!propertyStore.displayNegative()) {
       return;
     }
-    copyToClipbord(
+    copyToClipboard(
       propertyStore.displayNegative(),
       `Copy "Negative Prompt" to Clipboard!!`
     );

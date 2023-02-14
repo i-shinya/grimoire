@@ -6,11 +6,7 @@ import { DirectoryKey, ImageKey, AreaVisibilityKey } from "../../../store/key";
 import { DirectoryNode } from "../../../core/type/directory";
 import { isImageExtension } from "../../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
-import {
-  DirectoryAPI,
-  DirectoryAPIKey,
-  DirectoryNodeAPI,
-} from "../../../core/api/directory";
+import { DirectoryAPI, DirectoryAPIKey } from "../../../core/api/directory";
 
 // NOTE: 基本atomicとmoleculesからstoreは操作しないが、ツリーは階層が深いためこちらのみ許容する
 const directoryStore = inject(DirectoryKey);
