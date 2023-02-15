@@ -20,3 +20,18 @@ export class WindowNodeAPI implements WindowAPI {
     await window.windowAPI.minimizeWindow();
   }
 }
+
+// デモ用は何もしない
+export class WindowDemoAPI implements WindowAPI {
+  async closeWindow(): Promise<void> {
+    return;
+  }
+
+  async resizeWindow(): Promise<void> {
+    return;
+  }
+
+  async minimizeWindow(): Promise<void> {
+    return;
+  }
+}

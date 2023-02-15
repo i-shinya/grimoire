@@ -38,9 +38,15 @@ import {
 import {
   DirectoryAPI,
   DirectoryAPIKey,
+  DirectoryDemoAPI,
   DirectoryNodeAPI,
 } from "./core/api/directory";
-import { WindowAPI, WindowAPIKey, WindowNodeAPI } from "./core/api/window";
+import {
+  WindowAPI,
+  WindowAPIKey,
+  WindowDemoAPI,
+  WindowNodeAPI,
+} from "./core/api/window";
 
 // 使用するfont-awesomeアイコンを読み込む
 library.add(
@@ -64,9 +70,23 @@ library.add(
   faList
 );
 
-// TODO 今後electron以外での起動が追加されたら環境変数か何かで注入するクラスを変更する
-const directoryAPI = new DirectoryNodeAPI();
-const windowAPI = new WindowNodeAPI();
+let directoryAPI: DirectoryAPI;
+let windowAPI: WindowAPI;
+switch (import.meta.env.VITE_BUILD_MODE) {
+  case "demo":
+    directoryAPI = new DirectoryDemoAPI();
+    windowAPI = new WindowDemoAPI();
+    break;
+  case "electron":
+    directoryAPI = new DirectoryNodeAPI();
+    windowAPI = new WindowNodeAPI();
+    break;
+  default:
+    console.log("[WARN] import.meta.env.VITE_BUILD_MODE is not found");
+    directoryAPI = new DirectoryNodeAPI();
+    windowAPI = new WindowNodeAPI();
+    break;
+}
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

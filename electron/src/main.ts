@@ -3,7 +3,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "./type/directory";
 import { ImageDetail } from "./type/image";
 import {
-  getDirectroyNodes,
+  getDirectoryNodes,
   getImages,
   openDirectoryDialog,
 } from "./logic/directory";
@@ -54,7 +54,7 @@ function createWindow() {
   ipcMain.handle(
     "get-directory-nodes",
     (_e: Electron.IpcMainInvokeEvent, path: string): DirectoryNode[] => {
-      return getDirectroyNodes(path);
+      return getDirectoryNodes(path);
     }
   );
   // ディレクトリ内のファイルを取得する

@@ -34,13 +34,13 @@ export const openDirectoryDialog = (
  * @param path
  * @returns
  */
-export const getDirectroyNodes = (path: string): DirectoryNode[] => {
+export const getDirectoryNodes = (path: string): DirectoryNode[] => {
   const idCounter = new FileIdCounter();
   return fs
     .readdirSync(path, { withFileTypes: true })
     .map((dirent: fs.Dirent): DirectoryNode => {
       if (dirent.isDirectory()) {
-        const nodes = getDirectroyNodes(`${path}/${dirent.name}`).sort((a, b) =>
+        const nodes = getDirectoryNodes(`${path}/${dirent.name}`).sort((a, b) =>
           a.hasChildren() > b.hasChildren() ? -1 : 1
         );
         return new DirectoryNode(
@@ -96,8 +96,8 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
  * @param filename
  */
 export const isImageExtension = (filename: string): boolean => {
-    const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
-    return !!filename.match(allowExtensions);
+  const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
+  return !!filename.match(allowExtensions);
 };
 
 /**
