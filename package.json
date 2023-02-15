@@ -5,7 +5,7 @@
   "description": "AI イラストを管理するツール",
   "scripts": {
     "web:demo": "npm run vite:demo -w viewer",
-    "web:demo-build": "npm run vite:demo-build -w viewer",
+    "web:demo-build": "VITE_BUILD_MODE=electron npm run vite:demo-build -w viewer",
     "electron:debug": "concurrently \"npm run vite:electron-dev -w viewer\" \"npm run app:debug -w electron\"",
     "electron:dev": "concurrently \"npm run vite:electron-dev -w viewer\" \"npm run app:dev -w electron\"",
     "electron:build": "npm run vite:electron-build -w viewer && npm run app:build -w electron",
@@ -22,7 +22,5 @@
     "electron",
     "viewer"
   ],
-  "devDependencies": {
-    "vite": "^2.9.9"
-  }
+  "devDependencies": {}
 }

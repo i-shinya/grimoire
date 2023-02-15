@@ -8,12 +8,12 @@ if (process.env.VITE_BUILD_MODE === "demo") {
 } else if (process.env.VITE_BUILD_MODE === "electron") {
   outDir = "../electron/dist";
 } else {
-  console.log("[WARN] process.env.VITE_BUILD_MODE is not found");
-  outDir = "";
+  throw new Error("process.env.VITE_BUILD_MODE is not found");
 }
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  //@ts-ignore
   plugins: [vue()],
   base: "./", //add base path
   server: {

@@ -1,7 +1,5 @@
 import { createApp } from "vue";
 import "./style.css";
-// electron用のtsconfigの設定のせいで
-// @ts-ignore
 import App from "./App.vue";
 import { createVuestic } from "vuestic-ui";
 import "vuestic-ui/css";
@@ -82,7 +80,7 @@ switch (import.meta.env.VITE_BUILD_MODE) {
     windowAPI = new WindowNodeAPI();
     break;
   default:
-    console.log("[WARN] import.meta.env.VITE_BUILD_MODE is not found");
+    console.log("[WARN] VITE_BUILD_MODE is not found");
     directoryAPI = new DirectoryNodeAPI();
     windowAPI = new WindowNodeAPI();
     break;

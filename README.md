@@ -4,6 +4,8 @@ Grimoire はAIイラスト管理用のデスクトップアプリです。
 
 現状はWindows版のみ提供しています。
 
+[README in English](./README_en.md)
+
 ## ユーザガイド
 
 TODO
