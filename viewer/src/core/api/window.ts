@@ -1,3 +1,4 @@
+// inject用のkey
 export const WindowAPIKey = Symbol("WindowAPIKey");
 
 export interface WindowAPI {
@@ -6,17 +7,16 @@ export interface WindowAPI {
   minimizeWindow(): Promise<void>;
 }
 
-// FIXME global.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
 export class WindowNodeAPI implements WindowAPI {
   async closeWindow(): Promise<void> {
-    return (window as any).windowAPI.closeWindow();
+    return await window.windowAPI.closeWindow();
   }
 
   async resizeWindow(): Promise<void> {
-    (window as any).windowAPI.resizeWindow();
+    await window.windowAPI.resizeWindow();
   }
 
   async minimizeWindow(): Promise<void> {
-    (window as any).windowAPI.minimizeWindow();
+    await window.windowAPI.minimizeWindow();
   }
 }
