@@ -10,7 +10,7 @@ TODO
 
 ## Demo Page
 
-TODO
+You can try Grimoire on the [Demo Page](https://i-shinya.github.io/grimoire/).
 
 ## install
 
