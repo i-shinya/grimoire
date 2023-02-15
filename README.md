@@ -12,7 +12,7 @@ TODO
 
 ## デモページ
 
-TODO
+Grimoireの一部機能を [デモページ](https://i-shinya.github.io/grimoire/) で試すことができます。
 
 ## インストール
 
