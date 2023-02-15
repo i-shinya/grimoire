@@ -1,6 +1,7 @@
 import { DirectoryNode } from "../type/directory";
 import { ImageDetail } from "../type/image";
 
+// inject用のkey
 export const DirectoryAPIKey = Symbol("DirectoryAPIKey");
 
 export interface DirectoryAPI {
@@ -9,7 +10,6 @@ export interface DirectoryAPI {
   getImages(path: string): Promise<ImageDetail[]>;
 }
 
-// FIXME global.d.tsの型定義が上手く読めないのでas anyにしている。そのうち修正したい
 export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(): Promise<string> {
     return await (window as any).directoryAPI.openDialog();
