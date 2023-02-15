@@ -1,5 +1,5 @@
 import {
-  getDirectroyNodes,
+  getDirectoryNodes,
   getImages,
   getImageMeta,
   readImage,
@@ -8,8 +8,8 @@ import { ImageDetail } from "../type/image";
 
 describe("directory.ts", () => {
   describe("getDirectroyNodes", () => {
-    it("正常系：ディレクトリノードが取得できること", async () => {
-      const res = await getDirectroyNodes("./testdata/image");
+    it("正常系：ディレクトリノードが取得できること", () => {
+      const res = getDirectoryNodes("./testdata/image");
       expect(res).toMatchObject([
         {
           id: 1,
