@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "vite:demo": "VITE_BUILD_MODE=demo vite",
-    "vite:demo-build": "VITE_BUILD_MODE=demo vue-tsc --noEmit && VITE_BUILD_MODE=demo vite build -base=/grimoire/",
+    "vite:demo-build": "VITE_BUILD_MODE=demo vue-tsc --noEmit && VITE_BUILD_MODE=demo vite build --base=/grimoire/",
     "vite:electron-dev": "VITE_BUILD_MODE=electron vite",
     "vite:electron-build": "VITE_BUILD_MODE=electron vue-tsc --noEmit && VITE_BUILD_MODE=electron vite build",
     "test": "jest"
