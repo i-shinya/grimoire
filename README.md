@@ -1,22 +1,26 @@
-# grimoire
+# Grimoire
 
-Grimoire is a desktop tool for managing AI illustrations.
+Grimoire はAIイラスト管理用のデスクトップアプリです。
 
-Currently only the window version of the app is available.
+現状はWindows版のみ提供しています。
 
-## user guide
+## ユーザガイド
 
 TODO
 
-## install
+## デモページ
 
-Grimoire can be installed from [release page](https://github.com/i-shinya/grimoire/releases)
+TODO
+
+## インストール
+
+Grimoireは [release page](https://github.com/i-shinya/grimoire/releases) からインストール可能です。
 
 ---
 
-# for Developer
+# 開発用
 
-## test
+## テスト
 
 ```shell
 npm run test
@@ -40,9 +44,9 @@ npm run electron:debug
 
 ### windows
 
-The artifact is output to `release/win`.
+ビルド成果物は`release/win`に出力されます。
 
-We use docker for builds so as not to affect the build environment.
+ローカルビルドでは環境の影響を受けないようにdocker内でビルドするようにしています。
 
 ```shell
 docker compose up --build
