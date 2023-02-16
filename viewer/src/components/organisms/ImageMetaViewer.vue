@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, watch } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { AreaVisibilityKey, ImageKey, PropertyKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import Property from "../atoms/Property.vue";
@@ -15,22 +15,18 @@ const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
   throw new Error("failed to inject store from AreaVisibilityKey");
 
-const basePath = ref<string>("");
-const imageDetail = ref<ImageDetail | null>(null);
-const breads = ref<Bread[]>([]);
-
-const setProperty = (state: ImageState) => {
-  basePath.value = state.selectedImageBasePath ?? "";
-  imageDetail.value = state.imageDetail ?? null;
-
-  breads.value = basePath.value.split("/").map((val, index) => {
+const basePath = computed(() => imageStore.state.selectedImageBasePath ?? "");
+const imageDetail = computed(() => imageStore.state.imageDetail ?? null);
+const breads = computed(() => {
+  let result = basePath.value.split("/").map((val, index) => {
     return { id: index, text: val };
   });
-  breads.value.push({
-    id: breads.value.length,
+  result.push({
+    id: result.length,
     text: imageDetail.value?.label ?? "",
   });
-};
+  return result;
+});
 
 const copyToEditor = () => {
   if (imageDetail.value?.meta) {
@@ -38,18 +34,6 @@ const copyToEditor = () => {
     areaVisibilityStore.showEditorArea();
   }
 };
-
-onMounted(() => {
-  const state = imageStore.state;
-  setProperty(state);
-});
-watch(
-  () => imageStore.state,
-  (state, prevState) => {
-    setProperty(state);
-  },
-  { deep: true }
-);
 </script>
 
 <template>
