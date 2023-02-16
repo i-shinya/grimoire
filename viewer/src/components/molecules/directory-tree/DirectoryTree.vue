@@ -85,6 +85,7 @@ const selectImage = async (node: DirectoryNode) => {
             icon="fa-solid fa-angle-down"
             @click="switchChildVisible()"
           />
+          <font-awesome-icon class="file-type-icon" icon="fa-solid fa-folder" />
           <div class="filename" @click="selectDirectory(node)">
             <div>{{ node.label }}</div>
           </div>
@@ -107,6 +108,16 @@ const selectImage = async (node: DirectoryNode) => {
       <template v-if="isDirectoryOrImageFile(node)">
         <div class="filename-area">
           <div class="filename-row">
+            <font-awesome-icon
+              v-if="node.isDirectory"
+              class="file-type-icon"
+              icon="fa-solid fa-folder"
+            />
+            <font-awesome-icon
+              v-else
+              class="file-type-icon"
+              icon="fa-regular fa-image"
+            />
             <div class="filename" @click="selectImage(node)">
               {{ node.label }}
             </div>
@@ -119,7 +130,7 @@ const selectImage = async (node: DirectoryNode) => {
 
 <style lang="scss" scoped>
 .directory-tree {
-  font-size: 15px;
+  font-size: 14px;
   .filename-area {
     display: flex;
 
@@ -131,6 +142,12 @@ const selectImage = async (node: DirectoryNode) => {
 
       .arrow-icon {
         cursor: pointer;
+        flex-grow: 0;
+        padding-right: 8px;
+      }
+
+      .file-type-icon {
+        font-size: 12px;
         flex-grow: 0;
         padding-right: 8px;
       }

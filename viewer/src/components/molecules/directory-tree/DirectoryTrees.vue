@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="directory-tree">
+  <div class="directory-trees">
     <template v-for="node in nodes" :key="node.id">
       <DirectoryTree :node="node"></DirectoryTree>
     </template>
@@ -16,8 +16,8 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.directory-tree {
-  font-size: 15px;
+.directory-trees {
+  font-size: 14px;
   .filename-area {
     display: flex;
     padding-top: 6px;
