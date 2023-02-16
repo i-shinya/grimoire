@@ -26,12 +26,14 @@ import {
   faArrowRotateRight,
   faList,
   faMinus,
+  faFolder,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
   faSquare,
   faWindowMinimize,
   faCircleUp,
+  faImage,
 } from "@fortawesome/free-regular-svg-icons";
 import {
   DirectoryAPI,
@@ -65,7 +67,9 @@ library.add(
   faPlus,
   faMinus,
   faArrowRotateRight,
-  faList
+  faList,
+  faFolder,
+  faImage
 );
 
 let directoryAPI: DirectoryAPI;
