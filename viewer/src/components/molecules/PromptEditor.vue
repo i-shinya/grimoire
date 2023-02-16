@@ -32,7 +32,7 @@ const emphasis = (index: number) => {
 };
 
 const restraint = (index: number) => {
-  prompts.value[index].emphasis = prompts.value[index].emphasis + 1;
+  prompts.value[index].emphasis = prompts.value[index].emphasis - 1;
   emits("send-val", prompts.value);
 };
 

@@ -7,6 +7,7 @@ export interface ImageDetail {
 }
 
 export class Metadata {
+  provider?: string;
   positive?: string; // Description
   // 以下はCommentの値
   negative?: string; // uc
@@ -19,6 +20,10 @@ export class Metadata {
 
   public static build(metadata: any): Metadata {
     const meta = new Metadata();
+    // Softwareがある場合はproviderを設定
+    if (metadata.Software) {
+      meta.provider = metadata.Software;
+    }
     // Descriptionがある場合はポジティブプロンプトを設定
     if (metadata.Description) {
       meta.positive = metadata.Description;

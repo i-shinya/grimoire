@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted } from "vue";
+import { inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
 import { useToast } from "vuestic-ui";
 
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
+
+const emphasisSymbols = ["{}", "()"] as const;
+const restraintSymbols = ["[]"] as const;
+const emphasisSymbol = ref<"{}" | "()">("{}");
+const restraintSymbol = ref<"[]">("[]");
 
 const { init, close, closeAll } = useToast();
 const copyToClipboard = (input: string, flyText: string) => {
@@ -29,11 +34,11 @@ const copyToClipboard = (input: string, flyText: string) => {
 
 const editorShortcutKey = (event: KeyboardEvent) => {
   if (event.code === "KeyC" && event.ctrlKey && !event.shiftKey) {
-    if (!propertyStore.displayPostive()) {
+    if (!propertyStore.displayPositive()) {
       return;
     }
     copyToClipboard(
-      propertyStore.displayPostive(),
+      propertyStore.displayPositive(),
       `Copy "Positive Prompt" to Clipboard!!`
     );
   } else if (event.code === "KeyC" && event.ctrlKey && event.shiftKey) {
@@ -47,9 +52,27 @@ const editorShortcutKey = (event: KeyboardEvent) => {
   }
 };
 
+const changeEmphasis = (value: "{}" | "()") => {
+  propertyStore.updateEmphasisSymbol(value);
+};
+const changeRestraint = (value: "[]") => {
+  propertyStore.updateRestraintSymbol(value);
+};
+
 onMounted(() => {
   document.addEventListener("keydown", editorShortcutKey);
+  emphasisSymbol.value = propertyStore.state.emphasisSymbolType;
+  restraintSymbol.value = propertyStore.state.restraintSymbolType;
 });
+watch(
+  () => propertyStore.state,
+  (state, prevState) => {
+    emphasisSymbol.value = state.emphasisSymbolType;
+    restraintSymbol.value = state.restraintSymbolType;
+  },
+  { deep: true }
+);
+
 onBeforeUnmount(() => {
   document.removeEventListener("keydown", editorShortcutKey);
 });
@@ -57,11 +80,34 @@ onBeforeUnmount(() => {
 
 <template>
   <div id="meta-editor-area">
+    <div class="radio-area mb-3">
+      <p class="check-label ml-2 mr-4 pb-1">Emphasis</p>
+      <va-radio
+        color="#268AFF"
+        v-for="(option, index) in emphasisSymbols"
+        :key="index"
+        v-model="emphasisSymbol"
+        :option="option"
+        @update:model-value="changeEmphasis"
+      />
+    </div>
+    <div class="radio-area mb-4">
+      <p class="check-label ml-2 mr-4 pb-1">Restraint</p>
+      <va-radio
+        color="#268AFF"
+        v-for="(option, index) in restraintSymbols"
+        :key="index"
+        v-model="restraintSymbol"
+        :option="option"
+        @update:model-value="changeRestraint"
+      />
+    </div>
+
     <Property
       class="mb-4"
       label="Positive Prompt"
       shortcutText="press Ctrl + C"
-      :value="propertyStore.displayPostive()"
+      :value="propertyStore.displayPositive()"
     ></Property>
     <Property
       class="mb-4"
@@ -96,6 +142,15 @@ onBeforeUnmount(() => {
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: #acb2c7;
+  }
+
+  .radio-area {
+    display: flex;
+    align-items: flex-end;
+
+    .check-label {
+      width: 72px;
+    }
   }
 
   .meta-row {

@@ -28,14 +28,14 @@ const copyPrompt = (prompts: any) =>
   }) ?? [];
 
 onMounted(() => {
-  positive.value = copyPrompt(propertyStore.state.postitive);
+  positive.value = copyPrompt(propertyStore.state.positive);
   negative.value = copyPrompt(propertyStore.state.negative);
 });
 
 watch(
   () => propertyStore.state,
   (state, prevState) => {
-    positive.value = copyPrompt(state.postitive);
+    positive.value = copyPrompt(state.positive);
     negative.value = copyPrompt(state.negative);
   },
   { deep: true }
