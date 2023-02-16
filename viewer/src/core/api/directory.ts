@@ -78,6 +78,7 @@ export class DirectoryDemoAPI implements DirectoryAPI {
       buffer: Buffer.from("ai-image_1.png"), // 現状bufferは使用していないので適当
       dataUrl: aiImage1,
       meta: {
+        provider: "NovelAI",
         positive:
           "masterpiece, best quality, masterpiece, best quality, masterpiece, best quality, {{{{ancient mechanical monster}}}}, {{{clockwork}}}, manipulate time,  {{antique watch}},  {{glass strips}}, {floating glass fragments}, {{colorful refraction}}, {beautiful detailed sky}, {{dark intense shadows}}, {{cinematic lighting}}, {{overexposure}}",
         negative:
@@ -96,6 +97,7 @@ export class DirectoryDemoAPI implements DirectoryAPI {
       buffer: Buffer.from("ai-image_2.png"), // 現状bufferは使用していないので適当
       dataUrl: aiImage2,
       meta: {
+        provider: "NovelAI",
         positive: "masterpiece, best quality, bahamut, final fantasy",
         negative:
           "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
