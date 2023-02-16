@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, watch } from "vue";
+import { inject, ref, onMounted, watch, computed } from "vue";
 import { PropertyKey } from "../../store/key";
 import { Prompt } from "../../store/property";
 import PromptEditor from "../molecules/PromptEditor.vue";
 
 const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
-
-const positive = ref<Prompt[]>([]);
-const negative = ref<Prompt[]>([]);
 
 const receivePositive = (prompt: Prompt[]) => {
   propertyStore.updatePositive(prompt);
@@ -27,19 +24,8 @@ const copyPrompt = (prompts: any) =>
     };
   }) ?? [];
 
-onMounted(() => {
-  positive.value = copyPrompt(propertyStore.state.positive);
-  negative.value = copyPrompt(propertyStore.state.negative);
-});
-
-watch(
-  () => propertyStore.state,
-  (state, prevState) => {
-    positive.value = copyPrompt(state.positive);
-    negative.value = copyPrompt(state.negative);
-  },
-  { deep: true }
-);
+const positive = computed(() => copyPrompt(propertyStore.state.positive));
+const negative = computed(() => copyPrompt(propertyStore.state.negative));
 </script>
 
 <template>

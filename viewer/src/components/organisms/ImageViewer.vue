@@ -13,30 +13,18 @@ const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
   throw new Error("failed to inject store from AreaVisibilityKey");
 
-const selectPath = ref<string>("");
-const images = ref<ImageDetail[]>([]);
-const breads = ref<Bread[]>([]);
-
-onMounted(() => {
-  selectPath.value = directoryStore.state.selectedDirectoryPath ?? "";
+const selectPath = computed(
+  () => directoryStore.state.selectedDirectoryPath ?? ""
+);
+const images = computed(
   // TODO ここreadonlyでバグるかも
-  images.value =
-    directoryStore.state.imageDetails?.map((detail) => detail) ?? []; // statesがreadonlyのためコピー
-  breads.value = selectPath.value.split("/").map((val, index) => {
-    return { id: index, text: val };
-  });
-});
-watch(
-  () => directoryStore.state,
-  (state, prevState) => {
-    selectPath.value = state.selectedDirectoryPath ?? "";
-    // TODO ここreadonlyでバグるかも
-    images.value = state.imageDetails?.map((detail) => detail) ?? []; // statesがreadonlyのためコピー
-    breads.value = selectPath.value.split("/").map((val, index) => {
+  () => directoryStore.state.imageDetails?.map((detail) => detail) ?? []
+);
+const breads = computed(
+  () =>
+    selectPath.value.split("/").map((val, index) => {
       return { id: index, text: val };
-    });
-  },
-  { deep: true }
+    }) ?? []
 );
 
 const selectImage = (image: ImageDetail) => {

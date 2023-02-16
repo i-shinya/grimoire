@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
 import { useToast } from "vuestic-ui";
@@ -9,8 +9,6 @@ if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 
 const emphasisSymbols = ["{}", "()"] as const;
 const restraintSymbols = ["[]"] as const;
-const emphasisSymbol = ref<"{}" | "()">("{}");
-const restraintSymbol = ref<"[]">("[]");
 
 const { init, close, closeAll } = useToast();
 const copyToClipboard = (input: string, flyText: string) => {
@@ -59,20 +57,12 @@ const changeRestraint = (value: "[]") => {
   propertyStore.updateRestraintSymbol(value);
 };
 
+const emphasisSymbol = computed(() => propertyStore.state.emphasisSymbolType);
+const restraintSymbol = computed(() => propertyStore.state.restraintSymbolType);
+
 onMounted(() => {
   document.addEventListener("keydown", editorShortcutKey);
-  emphasisSymbol.value = propertyStore.state.emphasisSymbolType;
-  restraintSymbol.value = propertyStore.state.restraintSymbolType;
 });
-watch(
-  () => propertyStore.state,
-  (state, prevState) => {
-    emphasisSymbol.value = state.emphasisSymbolType;
-    restraintSymbol.value = state.restraintSymbolType;
-  },
-  { deep: true }
-);
-
 onBeforeUnmount(() => {
   document.removeEventListener("keydown", editorShortcutKey);
 });

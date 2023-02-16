@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { getBaseDirName, getDirectoryName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
@@ -14,11 +14,6 @@ if (!directoryAPI) {
   throw new Error("failed to inject api from directoryAPI");
 }
 
-// 選択しているディレクトリのベースパス
-const baseDir = ref<string | null>(null);
-// 選択しているディレクトリ名
-const directoryName = ref<string | null>(null);
-
 const directoryNodes = ref<DirectoryNode[]>([]);
 
 const openDirectory = async () => {
@@ -27,8 +22,6 @@ const openDirectory = async () => {
     return;
   }
   directoryStore.setOpenDirectory(path);
-  directoryName.value = getDirectoryName(path)!!;
-  baseDir.value = getBaseDirName(path)!!;
 
   directoryNodes.value = await directoryAPI.showDirectories(path);
 };
@@ -41,11 +34,15 @@ const reloadDirectoryTree = async () => {
   }
 };
 
+const directoryName = computed(() => {
+  return getDirectoryName(directoryStore.state?.openDirectoryPath ?? "");
+});
+const baseDir = computed(() =>
+  getBaseDirName(directoryStore.state?.openDirectoryPath ?? "")
+);
+
 onMounted(async () => {
   if (directoryStore.state.openDirectoryPath) {
-    directoryName.value = getDirectoryName(
-      directoryStore.state.openDirectoryPath
-    )!!;
     directoryNodes.value = await directoryAPI.showDirectories(
       directoryStore.state.openDirectoryPath
     );
