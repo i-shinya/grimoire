@@ -2,7 +2,7 @@
 
 Grimoire is a desktop application for managing AI illustrations.
 
-Currently only the window version is available.
+Currently, only support Nodel AI prompt and, only the window version application is available.
 
 ## user guide
 
