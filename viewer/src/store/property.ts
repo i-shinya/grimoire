@@ -8,21 +8,28 @@ export interface Prompt {
 }
 
 interface PropertyState {
-  postitive: Prompt[];
+  emphasisSymbolType: EmphasisSymbolType;
+  restraintSymbolType: RestraintSymbolType;
+  positive: Prompt[];
   negative: Prompt[];
   meta: Omit<Metadata, "positive" | "negative">;
 }
 
-// TODO Stable Diffusionの場合は強調が()なのでこれを考慮する必要あり
 // 強調・マイナス強調の記号
-const emphasisStartSymbol = "{";
-const emphasisEndSymbol = "}";
-const restraintStartSymbol = "[";
-const restraintEndSymbol = "]";
+type EmphasisSymbolType = "{}" | "()";
+type RestraintSymbolType = "[]";
+const getEmphasisStartSymbol = (type: EmphasisSymbolType) =>
+  type === "()" ? "(" : "{";
+const getEmphasisEndSymbol = (type: EmphasisSymbolType) =>
+  type === "()" ? ")" : "}";
+const getRestraintStartSymbol = (type: RestraintSymbolType) => "[";
+const getRestraintEndSymbol = (type: RestraintSymbolType) => "]";
 
 export default function propertyStore() {
   const state: PropertyState = reactive({
-    postitive: [],
+    emphasisSymbolType: "{}",
+    restraintSymbolType: "[]",
+    positive: [],
     negative: [],
     meta: new Metadata(),
   });
@@ -34,18 +41,24 @@ export default function propertyStore() {
     let result: string = spell;
     if (emphasis > 0) {
       for (let i = 0; i < emphasis; i++) {
-        result = emphasisStartSymbol + result + emphasisEndSymbol;
+        result =
+          getEmphasisStartSymbol(state.emphasisSymbolType) +
+          result +
+          getEmphasisEndSymbol(state.emphasisSymbolType);
       }
     } else {
       for (let i = 0; i > emphasis; i--) {
-        result = restraintStartSymbol + result + restraintEndSymbol;
+        result =
+          getRestraintStartSymbol(state.restraintSymbolType) +
+          result +
+          getRestraintEndSymbol(state.restraintSymbolType);
       }
     }
     return result;
   };
 
-  const displayPostive = () => {
-    return state.postitive
+  const displayPositive = () => {
+    return state.positive
       .map((val) => {
         return addEmphasisSymbol(val.spell, val.emphasis);
       })
@@ -60,15 +73,15 @@ export default function propertyStore() {
       .join(", ");
   };
 
-  const analizeSpell = (prompt: string): Prompt[] => {
+  const analyzeSpell = (prompt: string): Prompt[] => {
     const texts = prompt.split(",");
     return texts.map((text, index): Prompt => {
       let spell: string = text.trim();
       let emphasis: number = 0;
       // 強調表現{}が先頭末尾にある場合emphasisをインクリメント
       while (
-        spell.startsWith(emphasisStartSymbol) &&
-        spell.endsWith(emphasisEndSymbol)
+        spell.startsWith(getEmphasisStartSymbol(state.emphasisSymbolType)) &&
+        spell.endsWith(getEmphasisEndSymbol(state.emphasisSymbolType))
       ) {
         spell = spell.slice(1).slice(0, -1);
         emphasis++;
@@ -76,8 +89,8 @@ export default function propertyStore() {
 
       // マイナス強調表現[]が先頭末尾にある場合emphasisをデクリメント
       while (
-        spell.startsWith(restraintStartSymbol) &&
-        spell.endsWith(restraintEndSymbol)
+        spell.startsWith(getRestraintStartSymbol(state.restraintSymbolType)) &&
+        spell.endsWith(getRestraintEndSymbol(state.restraintSymbolType))
       ) {
         spell = spell.slice(1).slice(0, -1);
         emphasis--;
@@ -91,37 +104,50 @@ export default function propertyStore() {
   // ディレクトリツリーで選択
   const copyProperty = (meta: Metadata) => {
     state.meta = meta;
-    state.postitive = analizeSpell(meta.positive ?? "");
-    state.negative = analizeSpell(meta.negative ?? "");
+    // TODO 記号の種類増えたら分岐を追加
+    if (meta.provider === "NovelAI") {
+      state.emphasisSymbolType = "{}";
+      state.restraintSymbolType = "[]";
+    } else {
+      state.emphasisSymbolType = "()";
+      state.restraintSymbolType = "[]";
+    }
+    state.positive = analyzeSpell(meta.positive ?? "");
+    state.negative = analyzeSpell(meta.negative ?? "");
   };
 
-  const updatePositive = (postitive: Omit<Prompt[], "id">) => {
-    const res = postitive.map((v, index) => {
+  const updatePositive = (positive: Omit<Prompt[], "id">) => {
+    state.positive = positive.map((v, index) => {
       return {
         id: index, // indexを元にidを再設定する
         spell: v.spell,
         emphasis: v.emphasis,
       };
     });
-    state.postitive = res;
   };
   const updateNegative = (negative: Omit<Prompt[], "id">) => {
-    const res = negative.map((v, index) => {
+    state.negative = negative.map((v, index) => {
       return {
         id: index, // indexを元にidを再設定する
         spell: v.spell,
         emphasis: v.emphasis,
       };
     });
-    state.negative = res;
+  };
+
+  const updateEmphasisSymbol = (type: EmphasisSymbolType) => {
+    state.emphasisSymbolType = type;
+  };
+  const updateRestraintSymbol = (type: RestraintSymbolType) => {
+    state.restraintSymbolType = type;
   };
 
   // 現状使ってないけどそのうち使いそう
   const setValue = (val: { label: string; value: string }) => {
     if (val.label === "Positive Prompt") {
-      state.postitive = analizeSpell(val.value ?? "");
+      state.positive = analyzeSpell(val.value ?? "");
     } else if (val.label === "Negative Prompt") {
-      state.negative = analizeSpell(val.value ?? "");
+      state.negative = analyzeSpell(val.value ?? "");
     } else if (val.label === "Negative Prompt") {
       state.meta.steps = val.value;
     } else if (val.label === "Scale") {
@@ -140,10 +166,12 @@ export default function propertyStore() {
   return {
     state: readonly(state), // 読み取りしかできないようにする
     copyProperty,
-    displayPostive,
+    displayPositive,
     displayNegative,
     updatePositive,
     updateNegative,
+    updateEmphasisSymbol,
+    updateRestraintSymbol,
   };
 }
 export type PropertyStore = ReturnType<typeof propertyStore>;

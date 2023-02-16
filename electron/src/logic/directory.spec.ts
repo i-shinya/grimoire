@@ -70,6 +70,7 @@ describe("directory.ts", () => {
     it("正常系：メタデータが取得できること", async () => {
       const res = await getImageMeta("./testdata/image/novel-ai-image_1.png");
       expect(res).toMatchObject({
+        provider: "NovelAI",
         positive:
           "masterpiece, best quality, masterpiece, best quality, masterpiece, best quality, {{{{ancient mechanical monster}}}}, {{{clockwork}}}, manipulate time,  {{antique watch}},  {{glass strips}}, {floating glass fragments}, {{colorful refraction}}, {beautiful detailed sky}, {{dark intense shadows}}, {{cinematic lighting}}, {{overexposure}}",
         negative:

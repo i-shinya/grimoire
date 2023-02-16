@@ -56,7 +56,11 @@ onMounted(async () => {
 <template>
   <div class="directory-area">
     <div class="directory-button-area row justify-center">
-      <va-button size="medium" class="directory-button" @click="openDirectory"
+      <va-button
+        color="#1A3CC4"
+        size="medium"
+        class="directory-button"
+        @click="openDirectory"
         >Open Directory</va-button
       >
     </div>

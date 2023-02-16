@@ -115,8 +115,5 @@ export const readImage = (path: string): Buffer => {
  * @returns
  */
 export const getImageMeta = async (path: string): Promise<Metadata> => {
-  return exifr.parse(path).then((metadata: any) => {
-    const meta = Metadata.build(metadata);
-    return meta;
-  });
+  return exifr.parse(path).then((metadata: any) => Metadata.build(metadata));
 };
