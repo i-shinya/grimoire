@@ -30,6 +30,10 @@ export default function areaVisibilityStore() {
     state.showImageArea = !state.showImageArea;
   };
 
+  const showImageAres = () => {
+    state.showImageArea = true;
+  };
+
   const showImageMetaViewer = () => {
     state.showImageMetaViewer = true;
   };
@@ -47,6 +51,7 @@ export default function areaVisibilityStore() {
     changeDirectoryVisibility,
     changeEditorVisibility,
     changeImageArea,
+    showImageAres,
     showImageMetaViewer,
     showEditorArea,
     showPromptEditor,

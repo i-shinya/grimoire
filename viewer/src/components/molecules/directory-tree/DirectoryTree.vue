@@ -42,6 +42,7 @@ const selectDirectory = async (node: DirectoryNode) => {
     .getImages(`${node.basePath}/${node.label}`)
     .then((res) => directoryStore.setImageDetails(res));
   directoryStore.selectDirectory(`${node.basePath}/${node.label}`);
+  areaVisibilityStore.showImageAres();
 };
 
 // ディレクトリor画像ファイルであることを確認
@@ -59,6 +60,7 @@ const selectImage = async (node: DirectoryNode) => {
     if (!imageDetails || imageDetails.length === 0) {
       return;
     }
+    areaVisibilityStore.showImageAres();
     areaVisibilityStore.showImageMetaViewer();
     imageStore.selectImage(node.basePath, imageDetails[0]);
   });
