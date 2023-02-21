@@ -241,10 +241,10 @@ watch(
             </div>
           </div>
         </div>
-        <div class="close-icon ml-2">
+        <div class="delete-icon ml-2">
           <font-awesome-icon
             class="clickable"
-            icon="fa-solid fa-minus"
+            icon="fa-solid fa-trash-can"
             @click="deletePrompt(index)"
           />
         </div>
@@ -329,13 +329,13 @@ watch(
         }
       }
 
-      .close-icon {
+      .delete-icon {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 20px;
         width: 20px;
-        font-size: 18px;
+        font-size: 14px;
       }
     }
 

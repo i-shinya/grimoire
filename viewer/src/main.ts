@@ -25,8 +25,8 @@ import {
   faPlus,
   faArrowRotateRight,
   faList,
-  faMinus,
   faFolder,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -65,11 +65,11 @@ library.add(
   faArrowUpWideShort,
   faArrowDownWideShort,
   faPlus,
-  faMinus,
   faArrowRotateRight,
   faList,
   faFolder,
-  faImage
+  faImage,
+  faTrashCan
 );
 
 let directoryAPI: DirectoryAPI;

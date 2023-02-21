@@ -57,6 +57,10 @@ const changeRestraint = (value: "[]") => {
   propertyStore.updateRestraintSymbol(value);
 };
 
+const clearMeta = () => {
+  propertyStore.clearProperty();
+};
+
 const emphasisSymbol = computed(() => propertyStore.state.emphasisSymbolType);
 const restraintSymbol = computed(() => propertyStore.state.restraintSymbolType);
 
@@ -70,27 +74,41 @@ onBeforeUnmount(() => {
 
 <template>
   <div id="meta-editor-area">
-    <div class="radio-area mb-3">
-      <p class="check-label ml-2 mr-4 pb-1">Emphasis</p>
-      <va-radio
-        color="#268AFF"
-        v-for="(option, index) in emphasisSymbols"
-        :key="index"
-        v-model="emphasisSymbol"
-        :option="option"
-        @update:model-value="changeEmphasis"
-      />
+    <div class="editor-config-area">
+      <div class="radio-area">
+        <div class="radio-row mb-2">
+          <p class="check-label ml-2 mr-4 pb-1">Emphasis</p>
+          <va-radio
+            color="#268AFF"
+            v-for="(option, index) in emphasisSymbols"
+            :key="index"
+            v-model="emphasisSymbol"
+            :option="option"
+            @update:model-value="changeEmphasis"
+          />
+        </div>
+        <div class="radio-row">
+          <p class="check-label ml-2 mr-4 pb-1">Restraint</p>
+          <va-radio
+            color="#268AFF"
+            v-for="(option, index) in restraintSymbols"
+            :key="index"
+            v-model="restraintSymbol"
+            :option="option"
+            @update:model-value="changeRestraint"
+          />
+        </div>
+      </div>
+      <div class="clear-icon">
+        <font-awesome-icon
+          class="clickable"
+          icon="fa-solid fa-trash-can"
+          @click="clearMeta()"
+        />
+      </div>
     </div>
-    <div class="radio-area mb-4">
-      <p class="check-label ml-2 mr-4 pb-1">Restraint</p>
-      <va-radio
-        color="#268AFF"
-        v-for="(option, index) in restraintSymbols"
-        :key="index"
-        v-model="restraintSymbol"
-        :option="option"
-        @update:model-value="changeRestraint"
-      />
+    <div class="mt-4 mb-4">
+      <va-divider />
     </div>
 
     <Property
@@ -134,12 +152,23 @@ onBeforeUnmount(() => {
     background: #acb2c7;
   }
 
-  .radio-area {
+  .editor-config-area {
     display: flex;
-    align-items: flex-end;
+    justify-content: space-between;
 
-    .check-label {
-      width: 72px;
+    .radio-area {
+      .radio-row {
+        display: flex;
+        align-items: flex-end;
+
+        .check-label {
+          width: 72px;
+        }
+      }
+    }
+    .clear-icon {
+      padding-top: 8px;
+      padding-right: 8px;
     }
   }
 
