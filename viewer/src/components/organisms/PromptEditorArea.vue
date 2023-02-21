@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, watch, computed } from "vue";
+import { inject, computed } from "vue";
 import { PropertyKey } from "../../store/key";
 import { Prompt } from "../../store/property";
 import PromptEditor from "../molecules/PromptEditor.vue";
@@ -36,6 +36,8 @@ const negative = computed(() => copyPrompt(propertyStore.state.negative));
           class="mb-4"
           label="Positive Prompt"
           :prompt="positive"
+          :emphasisSymbolType="propertyStore.state.emphasisSymbolType"
+          :restraintSymbolType="propertyStore.state.restraintSymbolType"
           @send-val="receivePositive"
         ></PromptEditor>
       </pane>
@@ -44,6 +46,8 @@ const negative = computed(() => copyPrompt(propertyStore.state.negative));
           class="mb-4"
           label="Negative Prompt"
           :prompt="negative"
+          :emphasisSymbolType="propertyStore.state.emphasisSymbolType"
+          :restraintSymbolType="propertyStore.state.restraintSymbolType"
           @send-val="receiveNegative"
         ></PromptEditor>
       </pane>
