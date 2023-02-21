@@ -142,6 +142,15 @@ export default function propertyStore() {
     state.restraintSymbolType = type;
   };
 
+  const clearProperty = () => {
+    // stateの中身を初期値に戻す
+    state.emphasisSymbolType = "{}";
+    state.restraintSymbolType = "[]";
+    state.positive = [];
+    state.negative = [];
+    state.meta = new Metadata();
+  };
+
   // 現状使ってないけどそのうち使いそう
   const setValue = (val: { label: string; value: string }) => {
     if (val.label === "Positive Prompt") {
@@ -165,6 +174,7 @@ export default function propertyStore() {
 
   return {
     state: readonly(state), // 読み取りしかできないようにする
+    clearProperty,
     copyProperty,
     displayPositive,
     displayNegative,
