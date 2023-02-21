@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, inject, onBeforeUnmount, onMounted } from "vue";
 import Property from "../atoms/Property.vue";
 import { PropertyKey } from "../../store/key";
 import { useToast } from "vuestic-ui";

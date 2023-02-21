@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { nextTick, ref, onMounted, watch } from "vue";
 import { Prompt } from "../../store/property";
-import Input from "../atoms/Input.vue";
+import PromptInput from "../atoms/PromptInput.vue";
+import {
+  analyzeSpell,
+  EmphasisSymbolType,
+  RestraintSymbolType,
+} from "../../core/prompt";
 
 const props = defineProps<{
   label: "Positive Prompt" | "Negative Prompt";
   prompt: Prompt[];
+  emphasisSymbolType: EmphasisSymbolType;
+  restraintSymbolType: RestraintSymbolType;
 }>();
 
 const emits = defineEmits<{
@@ -21,9 +28,43 @@ const setEditorRowRefs = (el: any): void => {
   editorRowRefs.push(el);
 };
 
-const receiveVal = (index: number, val: { label: string; value: string }) => {
-  prompts.value[index].spell = val.value;
+const getNextId = (): number => {
+  return prompts.value.length !== 0
+    ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
+    : 1;
+};
+
+const receiveVal = (index: number, val: string) => {
+  const values = val.split(",");
+  const length = values.length;
+  values.forEach((value, i) => {
+    const spell = analyzeSpell(
+      value,
+      props.emphasisSymbolType,
+      props.restraintSymbolType
+    );
+    if (i === 0) {
+      // カンマ区切りじゃなかったらそのまま上書き
+      prompts.value[index].spell = spell.spell;
+      prompts.value[index].emphasis = spell.emphasis;
+    } else {
+      prompts.value.splice(index + i, 0, {
+        id: getNextId(),
+        spell: spell.spell,
+        emphasis: spell.emphasis,
+      });
+    }
+  });
+
   emits("send-val", prompts.value);
+
+  // 最後の列にフォーカスする
+  nextTick(() => {
+    // 手動入力を想定、その場合は次の行をフォーカス
+    if (length === 2) {
+      focusInput(index + 1);
+    }
+  });
 };
 
 const emphasis = (index: number) => {
@@ -50,11 +91,7 @@ const focusInput = (target: number) => {
 };
 
 const addPrompt = () => {
-  const nextId =
-    prompts.value.length !== 0
-      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
-      : 1;
-  prompts.value.push({ id: nextId, spell: "", emphasis: 0 });
+  prompts.value.push({ id: getNextId(), spell: "", emphasis: 0 });
   emits("send-val", prompts.value);
 
   // 最後の列にフォーカスする
@@ -64,11 +101,11 @@ const addPrompt = () => {
 };
 
 const addNextPrompt = (index: number) => {
-  const nextId =
-    prompts.value.length !== 0
-      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
-      : 1;
-  prompts.value.splice(index + 1, 0, { id: nextId, spell: "", emphasis: 0 });
+  prompts.value.splice(index + 1, 0, {
+    id: getNextId(),
+    spell: "",
+    emphasis: 0,
+  });
   emits("send-val", prompts.value);
 
   nextTick(() => {
@@ -77,11 +114,7 @@ const addNextPrompt = (index: number) => {
 };
 
 const addBeforePrompt = (index: number) => {
-  const nextId =
-    prompts.value.length !== 0
-      ? prompts.value.map((val) => val.id).reduce((a, b) => Math.max(a, b)) + 1
-      : 1;
-  prompts.value.splice(index, 0, { id: nextId, spell: "", emphasis: 0 });
+  prompts.value.splice(index, 0, { id: getNextId(), spell: "", emphasis: 0 });
   emits("send-val", prompts.value);
 
   nextTick(() => {
@@ -209,13 +242,12 @@ watch(
               @click="moveToDown(index)"
             />
           </div>
-          <Input
+          <PromptInput
             class="prompt-input mr-3"
-            :label="null"
             :value="item.spell"
-            @send-val="(v: any) => receiveVal(index, v)"
-            @key-down="(v: any) => inputKeyDown(index, v)"
-          ></Input>
+            @send-val="(v: string) => receiveVal(index, v)"
+            @key-down="(e: KeyboardEvent) => inputKeyDown(index, e)"
+          ></PromptInput>
           <div class="emphasis-area">
             <font-awesome-icon
               class="clickable mr-2"

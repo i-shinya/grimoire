@@ -1,5 +1,14 @@
 import { reactive, readonly } from "vue";
 import { Metadata } from "../core/type/image";
+import {
+  analyzeSpell,
+  EmphasisSymbolType,
+  getEmphasisEndSymbol,
+  getEmphasisStartSymbol,
+  getRestraintEndSymbol,
+  getRestraintStartSymbol,
+  RestraintSymbolType,
+} from "../core/prompt";
 
 export interface Prompt {
   id: number;
@@ -14,16 +23,6 @@ interface PropertyState {
   negative: Prompt[];
   meta: Omit<Metadata, "positive" | "negative">;
 }
-
-// 強調・マイナス強調の記号
-type EmphasisSymbolType = "{}" | "()";
-type RestraintSymbolType = "[]";
-const getEmphasisStartSymbol = (type: EmphasisSymbolType) =>
-  type === "()" ? "(" : "{";
-const getEmphasisEndSymbol = (type: EmphasisSymbolType) =>
-  type === "()" ? ")" : "}";
-const getRestraintStartSymbol = (type: RestraintSymbolType) => "[";
-const getRestraintEndSymbol = (type: RestraintSymbolType) => "]";
 
 export default function propertyStore() {
   const state: PropertyState = reactive({
@@ -73,31 +72,15 @@ export default function propertyStore() {
       .join(", ");
   };
 
-  const analyzeSpell = (prompt: string): Prompt[] => {
+  const analyzePrompt = (prompt: string): Prompt[] => {
     const texts = prompt.split(",");
     return texts.map((text, index): Prompt => {
-      let spell: string = text.trim();
-      let emphasis: number = 0;
-      // 強調表現{}が先頭末尾にある場合emphasisをインクリメント
-      while (
-        spell.startsWith(getEmphasisStartSymbol(state.emphasisSymbolType)) &&
-        spell.endsWith(getEmphasisEndSymbol(state.emphasisSymbolType))
-      ) {
-        spell = spell.slice(1).slice(0, -1);
-        emphasis++;
-      }
-
-      // マイナス強調表現[]が先頭末尾にある場合emphasisをデクリメント
-      while (
-        spell.startsWith(getRestraintStartSymbol(state.restraintSymbolType)) &&
-        spell.endsWith(getRestraintEndSymbol(state.restraintSymbolType))
-      ) {
-        spell = spell.slice(1).slice(0, -1);
-        emphasis--;
-      }
-
-      spell = spell.trim();
-      return { id: index++, spell, emphasis };
+      const spell = analyzeSpell(
+        text,
+        state.emphasisSymbolType,
+        state.restraintSymbolType
+      );
+      return { id: index++, ...spell };
     });
   };
 
@@ -112,8 +95,8 @@ export default function propertyStore() {
       state.emphasisSymbolType = "()";
       state.restraintSymbolType = "[]";
     }
-    state.positive = analyzeSpell(meta.positive ?? "");
-    state.negative = analyzeSpell(meta.negative ?? "");
+    state.positive = analyzePrompt(meta.positive ?? "");
+    state.negative = analyzePrompt(meta.negative ?? "");
   };
 
   const updatePositive = (positive: Omit<Prompt[], "id">) => {
@@ -154,9 +137,9 @@ export default function propertyStore() {
   // 現状使ってないけどそのうち使いそう
   const setValue = (val: { label: string; value: string }) => {
     if (val.label === "Positive Prompt") {
-      state.positive = analyzeSpell(val.value ?? "");
+      state.positive = analyzePrompt(val.value ?? "");
     } else if (val.label === "Negative Prompt") {
-      state.negative = analyzeSpell(val.value ?? "");
+      state.negative = analyzePrompt(val.value ?? "");
     } else if (val.label === "Negative Prompt") {
       state.meta.steps = val.value;
     } else if (val.label === "Scale") {
