@@ -229,19 +229,19 @@ watch(
             />
             <div class="emphasis">
               <template v-if="item.emphasis >= 0">
-                <div>{}</div>
-                <div>&times;</div>
-                <div>{{ item.emphasis }}</div>
+                <span class="pr-1">{}</span>
+                <span class="pr-1">&times;</span>
+                <span>{{ item.emphasis }}</span>
               </template>
               <template v-else>
-                <div>[]</div>
-                <div>&times;</div>
-                <div>{{ -item.emphasis }}</div>
+                <span class="pr-1">[]</span>
+                <span class="pr-1">&times;</span>
+                <span>{{ -item.emphasis }}</span>
               </template>
             </div>
           </div>
         </div>
-        <div class="delete-icon ml-2">
+        <div class="delete-icon ml-1">
           <font-awesome-icon
             class="clickable"
             icon="fa-solid fa-trash-can"
@@ -306,9 +306,16 @@ watch(
         padding-right: 4px;
         align-items: center;
         flex-grow: 1;
+
+        // 子要素がフォーカスされていたら
+        &:focus-within {
+          background-color: rgb(73, 70, 70);
+        }
+
         .prompt-input {
           flex-grow: 1;
         }
+
         .emphasis-area {
           display: flex;
           flex-grow: 0;
