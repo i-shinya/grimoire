@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
     <div class="editor-config-area">
       <div class="radio-area">
         <div class="radio-row mb-2">
-          <p class="check-label ml-2 mr-4 pb-1">Emphasis</p>
+          <p class="check-label ml-2 mr-4 pb-1">emphasis</p>
           <va-radio
             color="#268AFF"
             v-for="(option, index) in emphasisSymbols"
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
           />
         </div>
         <div class="radio-row">
-          <p class="check-label ml-2 mr-4 pb-1">Restraint</p>
+          <p class="check-label ml-2 mr-4 pb-1">restraint</p>
           <va-radio
             color="#268AFF"
             v-for="(option, index) in restraintSymbols"
@@ -162,7 +162,8 @@ onBeforeUnmount(() => {
         align-items: flex-end;
 
         .check-label {
-          width: 72px;
+          width: 100px;
+          font-style: italic;
         }
       }
     }
