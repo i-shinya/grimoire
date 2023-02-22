@@ -3,7 +3,7 @@ import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
   label: string;
-  shortcutText: string | null;
+  shortcutText: string | null; // ショートカットが設定される場合の説明
   value: number | string | undefined;
 }>();
 
