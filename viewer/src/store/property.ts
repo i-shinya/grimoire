@@ -91,6 +91,9 @@ export default function propertyStore() {
     if (meta.provider === "NovelAI") {
       state.emphasisSymbolType = "{}";
       state.restraintSymbolType = "[]";
+    } else if (meta.provider === "StableDiffusion") {
+      state.emphasisSymbolType = "()";
+      state.restraintSymbolType = "[]";
     } else {
       state.emphasisSymbolType = "()";
       state.restraintSymbolType = "[]";
