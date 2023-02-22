@@ -58,7 +58,15 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
           <div :class="isSelected(item) ? 'is-selected-image' : ''">
-            <va-image :src="item.dataUrl" :contain="true" :ratio="0.75" />
+            <va-image
+              :src="item.dataUrl"
+              :contain="true"
+              :ratio="
+                isNaN(item.meta.width / item.meta.height)
+                  ? 0.75
+                  : item.meta.width / item.meta.height
+              "
+            />
           </div>
           <div class="image-label">{{ item.label }}</div>
         </div>

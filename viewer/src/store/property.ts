@@ -138,12 +138,13 @@ export default function propertyStore() {
   };
 
   // 現状使ってないけどそのうち使いそう
+  // TODO 使うときは動作確認ちゃんとする
   const setValue = (val: { label: string; value: string }) => {
     if (val.label === "Positive Prompt") {
       state.positive = analyzePrompt(val.value ?? "");
     } else if (val.label === "Negative Prompt") {
       state.negative = analyzePrompt(val.value ?? "");
-    } else if (val.label === "Negative Prompt") {
+    } else if (val.label === "Steps") {
       state.meta.steps = val.value;
     } else if (val.label === "Scale") {
       state.meta.scale = val.value;
@@ -155,6 +156,8 @@ export default function propertyStore() {
       state.meta.strength = val.value;
     } else if (val.label === "Noise") {
       state.meta.noise = val.value;
+    } else if (val.label === "Model") {
+      state.meta.model = val.value;
     }
   };
 
