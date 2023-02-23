@@ -55,4 +55,4 @@ docker compose up --build
 ## SNS
 
 i-shinya (@ishinya4)
-https://twitter.com/home
+https://twitter.com/IT41394313
