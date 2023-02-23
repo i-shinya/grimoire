@@ -45,11 +45,6 @@ const selectDirectory = async (node: DirectoryNode) => {
   areaVisibilityStore.showImageAres();
 };
 
-// ディレクトリor画像ファイルであることを確認
-const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
-  return node.isDirectory || isImageExtension(node.label);
-});
-
 const selectImage = async (node: DirectoryNode) => {
   await directoryAPI.getImages(node.basePath).then((res) => {
     directoryStore.setImageDetails(res);
@@ -65,6 +60,18 @@ const selectImage = async (node: DirectoryNode) => {
     imageStore.selectImage(node.basePath, imageDetails[0]);
   });
 };
+
+// ディレクトリor画像ファイルであることを確認
+const isDirectoryOrImageFile = computed(() => (node: DirectoryNode) => {
+  return node.isDirectory || isImageExtension(node.label);
+});
+
+const isSelected = computed(() => (node: DirectoryNode) => {
+  return (
+    `${node.basePath}/${node.label}` ===
+    directoryStore.state.selectedDirectoryPath
+  );
+});
 </script>
 
 <template>
@@ -88,7 +95,11 @@ const selectImage = async (node: DirectoryNode) => {
             @click="switchChildVisible()"
           />
           <font-awesome-icon class="file-type-icon" icon="fa-solid fa-folder" />
-          <div class="filename" @click="selectDirectory(node)">
+          <div
+            class="filename"
+            :class="isSelected(node) ? 'is-selected' : ''"
+            @click="selectDirectory(node)"
+          >
             <div>{{ node.label }}</div>
           </div>
         </div>
@@ -120,7 +131,11 @@ const selectImage = async (node: DirectoryNode) => {
               class="file-type-icon"
               icon="fa-regular fa-image"
             />
-            <div class="filename" @click="selectImage(node)">
+            <div
+              class="filename"
+              :class="isSelected(node) ? 'is-selected' : ''"
+              @click="selectImage(node)"
+            >
               {{ node.label }}
             </div>
           </div>
@@ -160,6 +175,11 @@ const selectImage = async (node: DirectoryNode) => {
         padding-top: 6px;
         padding-bottom: 6px;
         white-space: nowrap;
+
+        &.is-selected {
+          color: #d1ca9a;
+          font-weight: bold;
+        }
       }
     }
   }
