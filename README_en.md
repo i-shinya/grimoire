@@ -6,15 +6,15 @@ Currently, only support Nodel AI prompt and, only the window version application
 
 ## user guide
 
-TODO
+You can see how to use Grimoire in [Wiki Page](https://github.com/i-shinya/grimoire/wiki/Girmoire-User-Guide).
 
 ## Demo Page
 
 You can try Grimoire on the [Demo Page](https://i-shinya.github.io/grimoire/).
 
-## install
+## download
 
-Grimoire can be installed from [release page](https://github.com/i-shinya/grimoire/releases)
+Grimoire can be downloaded from [release page](https://github.com/i-shinya/grimoire/releases)
 
 ---
 
@@ -51,3 +51,8 @@ We use docker for builds so as not to affect the build environment.
 ```shell
 docker compose up --build
 ```
+
+## SNS
+
+i-shinya (@ishinya4)
+https://twitter.com/IT41394313

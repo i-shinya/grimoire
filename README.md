@@ -8,15 +8,15 @@ Grimoire はAIイラスト管理用のデスクトップアプリです。
 
 ## ユーザガイド
 
-TODO
+Grimoireの使い方は [Wiki](https://github.com/i-shinya/grimoire/wiki/Girmoire-User-Guide) から確認できます。
 
 ## デモページ
 
 Grimoireの一部機能を [デモページ](https://i-shinya.github.io/grimoire/) で試すことができます。
 
-## インストール
+## ダウンロード
 
-Grimoireは [release page](https://github.com/i-shinya/grimoire/releases) からインストール可能です。
+Grimoireは [release page](https://github.com/i-shinya/grimoire/releases) からダウンロード可能です。
 
 ---
 
@@ -53,3 +53,8 @@ npm run electron:debug
 ```shell
 docker compose up --build
 ```
+
+## SNS
+
+i-shinya (@ishinya4)
+https://twitter.com/IT41394313
