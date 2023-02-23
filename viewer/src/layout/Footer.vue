@@ -2,7 +2,7 @@
 
 <template>
   <div id="footer">
-    <p class="footer-text">© 2023 darc.work</p>
+    <p class="footer-text">© 2023 darq</p>
   </div>
 </template>
 

@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
         />
       </div>
     </div>
-    <div class="mt-4 mb-4">
+    <div class="mt-2 mb-2">
       <va-divider />
     </div>
 
