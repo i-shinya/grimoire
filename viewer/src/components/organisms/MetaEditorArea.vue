@@ -31,7 +31,7 @@ const copyToClipboard = (input: string, flyText: string) => {
 };
 
 const editorShortcutKey = (event: KeyboardEvent) => {
-  if (event.code === "KeyC" && event.ctrlKey && !event.shiftKey) {
+  if (event.code === "KeyC" && event.altKey && !event.shiftKey) {
     if (!propertyStore.displayPositive()) {
       return;
     }
@@ -39,7 +39,7 @@ const editorShortcutKey = (event: KeyboardEvent) => {
       propertyStore.displayPositive(),
       `Copy "Positive Prompt" to Clipboard!!`
     );
-  } else if (event.code === "KeyC" && event.ctrlKey && event.shiftKey) {
+  } else if (event.code === "KeyC" && event.altKey && event.shiftKey) {
     if (!propertyStore.displayNegative()) {
       return;
     }
@@ -114,12 +114,12 @@ onBeforeUnmount(() => {
     <Property
       class="mb-4"
       label="Positive Prompt"
-      shortcutText="press Ctrl + C"
+      shortcutText="press Alt + C"
       :value="propertyStore.displayPositive()"
     ></Property>
     <Property
       class="mb-4"
-      shortcutText="press Ctrl + Shift+ C"
+      shortcutText="press Alt + Shift+ C"
       label="Negative Prompt"
       :value="propertyStore.displayNegative()"
     ></Property>
