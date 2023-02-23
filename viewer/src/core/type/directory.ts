@@ -2,7 +2,7 @@
 export class DirectoryNode {
   public id: number; // 適当に採番してつけるかも
   public label: string; // ディレクトリ or ファイル名
-  public basePath: string;
+  public basePath: string; // 親ディレクトリ名
   public isDirectory: boolean;
   public children?: DirectoryNode[];
 

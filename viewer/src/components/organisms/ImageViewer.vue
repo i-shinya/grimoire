@@ -57,17 +57,12 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <div class="image-area" @click="selectImage(item)">
-          <div :class="isSelected(item) ? 'is-selected-image' : ''">
-            <va-image
-              :src="item.dataUrl"
-              :contain="true"
-              :ratio="
-                isNaN(item.meta.width / item.meta.height)
-                  ? 0.75
-                  : item.meta.width / item.meta.height
-              "
-            />
-          </div>
+          <img
+            class="image"
+            :class="isSelected(item) ? 'is-selected-image' : ''"
+            :src="item.dataUrl"
+            :draggable="true"
+          />
           <div class="image-label">{{ item.label }}</div>
         </div>
       </template>
@@ -117,14 +112,20 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
 
     .image-area {
       color: white;
-      max-width: 240px;
-      min-width: 240px;
       max-height: 30%;
       padding: 8px;
       cursor: pointer;
+      max-width: 240px;
+      min-width: 240px;
 
-      .is-selected-image {
-        border: 2px solid rgb(150, 161, 109);
+      .image {
+        height: auto;
+        max-width: 224px;
+        min-width: 224px;
+
+        &.is-selected-image {
+          border: 2px solid rgb(150, 161, 109);
+        }
       }
       .image-label {
         padding-top: 4px;
