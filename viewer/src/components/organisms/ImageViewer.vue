@@ -3,6 +3,7 @@ import { computed, inject, ref, watch, onMounted } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
+import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -12,6 +13,10 @@ if (!imageStore) throw new Error("failed to inject store from ImageKey");
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
   throw new Error("failed to inject store from AreaVisibilityKey");
+const directoryAPI = inject<DirectoryAPI>(DirectoryAPIKey);
+if (!directoryAPI) {
+  throw new Error("failed to inject api from directoryAPI");
+}
 
 const selectPath = computed(
   () => directoryStore.state.selectedDirectoryPath ?? ""
@@ -32,8 +37,13 @@ const selectImage = (image: ImageDetail) => {
   areaVisibilityStore.showImageMetaViewer();
 };
 
+// 画像一覧の更新
 const reloadDirectoryTree = async () => {
-  await directoryStore.selectDirectory(selectPath.value);
+  if (selectPath.value) {
+    await directoryAPI
+      .getImages(selectPath.value)
+      .then((res) => directoryStore.setImageDetails(res));
+  }
 };
 
 const isSelected = computed(() => (image: ImageDetail): boolean => {
