@@ -47,6 +47,12 @@ const editorShortcutKey = (event: KeyboardEvent) => {
       propertyStore.displayNegative(),
       `Copy "Negative Prompt" to Clipboard!!`
     );
+  } else if (event.code === "KeyZ" && event.ctrlKey) {
+    // 履歴機能: 元に戻す
+    propertyStore.returnHistory();
+  } else if (event.code === "KeyY" && event.ctrlKey) {
+    // 履歴機能: 進める
+    propertyStore.forwardHistory();
   }
 };
 

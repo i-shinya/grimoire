@@ -14,6 +14,7 @@ import {
   defaultHeight,
   defaultWidth,
 } from "./logic/window";
+import install, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev";
 const isDebug = process.env.npm_lifecycle_event === "app:debug";
@@ -36,6 +37,10 @@ function createWindow() {
     // devの場合はローカルサーバーからページを取得
     mainWindow.loadURL("http://localhost:3000");
     if (isDebug) {
+      install(VUEJS_DEVTOOLS).catch((err) => {
+        console.log(err);
+        throw new Error("failed to install vue devtools");
+      });
       mainWindow.webContents.openDevTools();
     }
   } else {

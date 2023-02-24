@@ -205,15 +205,14 @@ const inputKeyDown = (index: number, event: KeyboardEvent) => {
   }
 };
 
-onMounted(() => {
-  prompts.value = props.prompt ?? [];
-});
 watch(
   () => props.prompt,
   (state) => {
+    // 配列の内容に変化が無い場合は何もしない
     prompts.value = state;
     editorRowRefs = [];
-  }
+  },
+  { immediate: true, deep: true }
 );
 </script>
 

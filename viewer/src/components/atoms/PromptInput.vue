@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps<{
   value: string;
@@ -18,17 +18,16 @@ const pressKey = (event: KeyboardEvent) => {
 
 const changeValue = (e: Event) => {
   const target = e.target as HTMLInputElement;
+  if (val.value === target.value) return; // props側から更新されたらchangeイベントを発火しない
   emits("send-val", target.value);
 };
 
-onMounted(() => {
-  val.value = props.value ?? "";
-});
 watch(
   () => props.value,
-  (state, _) => {
+  (state) => {
     val.value = state ?? "";
-  }
+  },
+  { immediate: true }
 );
 </script>
 

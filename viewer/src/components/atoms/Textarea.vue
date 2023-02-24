@@ -14,17 +14,15 @@ const emits = defineEmits<{
   (e: "send-val", val: { label: string; value: string }): void;
 }>();
 
-onMounted(() => {
-  val.value = props.value ?? "";
-});
 watch(
   () => props.value,
   (state, prevState) => {
     val.value = state ?? "";
-  }
+  },
+  { immediate: true }
 );
 
-watch(val, (state, prevState) => {
+watch(val, (state) => {
   emits("send-val", { label: props.label, value: state });
 });
 

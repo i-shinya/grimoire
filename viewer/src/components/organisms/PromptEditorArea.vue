@@ -8,9 +8,17 @@ const propertyStore = inject(PropertyKey);
 if (!propertyStore) throw new Error("failed to inject store from PropertyKey");
 
 const receivePositive = (prompt: Prompt[]) => {
+  if (JSON.stringify(propertyStore.state.positive) === JSON.stringify(prompt)) {
+    return;
+  }
+  // TODO 履歴の更新の仕方を考える
   propertyStore.updatePositive(prompt);
 };
 const receiveNegative = (prompt: Prompt[]) => {
+  if (JSON.stringify(propertyStore.state.negative) === JSON.stringify(prompt)) {
+    return;
+  }
+  // TODO 履歴の更新の仕方を考える
   propertyStore.updateNegative(prompt);
 };
 
