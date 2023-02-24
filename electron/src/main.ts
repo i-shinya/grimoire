@@ -1,11 +1,12 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail } from "./type/image";
+import { ImageDetail, ImageIndex } from "./type/image";
 import {
   getDirectoryNodes,
-  getImages,
   openDirectoryDialog,
+  listImageIndex,
+  getImages,
 } from "./logic/directory";
 import {
   closeWindow,
@@ -57,14 +58,25 @@ function createWindow() {
       return getDirectoryNodes(path);
     }
   );
+  // ディレクトリ内のファイルインデックスを取得する
+  ipcMain.handle(
+    "list-image-index",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      path: string
+    ): Promise<ImageIndex[]> => {
+      return listImageIndex(path);
+    }
+  );
   // ディレクトリ内のファイルを取得する
   ipcMain.handle(
     "get-images",
     async (
       _e: Electron.IpcMainInvokeEvent,
-      path: string
+      basePath: string,
+      imageIndex: ImageIndex[]
     ): Promise<ImageDetail[]> => {
-      return getImages(path);
+      return getImages(basePath, imageIndex);
     }
   );
 

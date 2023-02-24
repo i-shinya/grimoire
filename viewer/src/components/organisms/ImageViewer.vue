@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
-import { ImageDetail } from "../../core/type/image";
+import { ImageDetail, ImageIndex } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 
@@ -40,9 +40,18 @@ const selectImage = (image: ImageDetail) => {
 // 画像一覧の更新
 const reloadDirectoryTree = async () => {
   if (selectPath.value) {
-    await directoryAPI
-      .getImages(selectPath.value, areaVisibilityStore)
-      .then((res) => directoryStore.setImageDetails(res));
+    areaVisibilityStore.showLoading();
+    directoryAPI
+      .listImageIndex(selectPath.value)
+      .then((imageIndex: ImageIndex[]) => {
+        // TODO 配列を100件に分割して並列で取得する
+        directoryAPI
+          .getImages(selectPath.value, imageIndex)
+          .then((res) => directoryStore.setImageDetails(res));
+      })
+      .finally(() => {
+        areaVisibilityStore.hiddenLoading();
+      });
   }
 };
 

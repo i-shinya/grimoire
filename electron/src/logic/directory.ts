@@ -7,7 +7,7 @@ import { dialog, BrowserWindow } from "electron";
 import exifr from "exifr";
 
 import { DirectoryNode } from "../type/directory";
-import { ImageDetail, Metadata } from "../type/image";
+import { ImageDetail, ImageIndex, Metadata } from "../type/image";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow
@@ -65,12 +65,45 @@ class FileIdCounter {
   }
 }
 
+// ディレクトリ配下のファイル一覧を取得する
+export const listImageIndex = async (path: string): Promise<ImageIndex[]> => {
+  return fs
+    .readdirSync(path, { withFileTypes: true })
+    .filter((dirent: fs.Dirent) => {
+      return dirent.isFile() && isImageExtension(dirent.name);
+    })
+    .map((dirent: fs.Dirent, index: number) => {
+      return {
+        index,
+        label: dirent.name,
+      };
+    });
+};
+
+// 対象の画像一覧を取得する
+export const getImages = async (basepath: string, imageIndex: ImageIndex[]) => {
+  return await Promise.all(
+    imageIndex.map(async (image: ImageIndex) => {
+      // TODO サムネイル画像だから圧縮した方が良いかも
+      const buffer = readImage(`${basepath}/${image.label}`);
+      const meta = await getImageMeta(`${basepath}/${image.label}`);
+      return {
+        id: image.index,
+        label: image.label,
+        dataUrl: "data:image/png;base64," + buffer.toString("base64"),
+        meta: meta,
+      };
+    })
+  );
+};
+
 /**
  * 画像データが取得できる
+ * NOTE: 性能的に使用できなさそうなので廃止予定
  * @param path ディレクトリパス
  * @returns
  */
-export const getImages = async (path: string): Promise<ImageDetail[]> => {
+export const getAllImages = async (path: string): Promise<ImageDetail[]> => {
   const dirents = fs
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent: fs.Dirent) => {
