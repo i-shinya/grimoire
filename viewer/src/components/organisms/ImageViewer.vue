@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
-import { ImageDetail } from "../../core/type/image";
+import { ImageDetail, ImageIndex } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
+import { divideArray } from "../../core/array";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -40,9 +41,23 @@ const selectImage = (image: ImageDetail) => {
 // 画像一覧の更新
 const reloadDirectoryTree = async () => {
   if (selectPath.value) {
-    await directoryAPI
-      .getImages(selectPath.value, areaVisibilityStore)
-      .then((res) => directoryStore.setImageDetails(res));
+    areaVisibilityStore.showLoading();
+    directoryAPI
+      .listImageIndex(selectPath.value)
+      .then(async (imageIndex: ImageIndex[]) => {
+        directoryStore.setImageDetails([]);
+        // 配列を100件に分割して並列で取得する
+        const indexes = divideArray(imageIndex, 100);
+        await Promise.all(
+          indexes.map(async (list) => {
+            const images = await directoryAPI.getImages(selectPath.value, list);
+            directoryStore.pushImageDetails(images);
+          })
+        );
+      })
+      .finally(() => {
+        areaVisibilityStore.hiddenLoading();
+      });
   }
 };
 

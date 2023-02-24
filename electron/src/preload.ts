@@ -1,6 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail } from "./type/image";
+import { ImageDetail, ImageIndex } from "./type/image";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -21,8 +21,15 @@ contextBridge.exposeInMainWorld("directoryAPI", {
     const res = ipcRenderer.invoke("get-directory-nodes", path);
     return res as Promise<DirectoryNode[]>;
   },
-  getImages: (path: string): Promise<ImageDetail[]> => {
-    const res = ipcRenderer.invoke("get-images", path);
+  listImageIndex: (path: string): Promise<ImageIndex[]> => {
+    const res = ipcRenderer.invoke("list-image-index", path);
+    return res as Promise<ImageIndex[]>;
+  },
+  getImages: (
+    basePath: string,
+    imageIndex: ImageIndex[]
+  ): Promise<ImageDetail[]> => {
+    const res = ipcRenderer.invoke("get-images", basePath, imageIndex);
     return res as Promise<ImageDetail[]>;
   },
 });

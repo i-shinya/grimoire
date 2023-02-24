@@ -1,10 +1,11 @@
 import { DirectoryNode } from "./src/core/type/directory";
-import { ImageDetail } from "./src/core/type/image";
+import { ImageDetail, ImageIndex } from "./src/core/type/image";
 
 interface WindowDirectoryAPI {
   openDialog(): Promise<string>;
   showDirectories(path: string): Promise<DirectoryNode[]>;
-  getImages(path: string): Promise<ImageDetail[]>;
+  listImageIndex(path: string): Promise<ImageIndex[]>;
+  getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
 }
 
 interface WindowAccessAPI {

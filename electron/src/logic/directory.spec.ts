@@ -1,10 +1,12 @@
 import {
   getDirectoryNodes,
-  getImages,
+  getAllImages,
   getImageMeta,
   readImage,
+  listImageIndex,
+  getImages,
 } from "./directory";
-import { ImageDetail } from "../type/image";
+import { ImageDetail, ImageIndex } from "../type/image";
 
 describe("directory.ts", () => {
   describe("getDirectroyNodes", () => {
@@ -78,12 +80,37 @@ describe("directory.ts", () => {
     });
   });
 
+  describe("listImagesIndex", () => {
+    it("正常系：画像がインデックス一覧が取得できること", async () => {
+      let res: ImageIndex[] = [];
+      try {
+        res = await listImageIndex("./testdata/image");
+      } catch (error) {
+        fail;
+      }
+      expect(res.length).toBe(6);
+    });
+  });
+
   describe("getImages", () => {
+    it("正常系：画像が取得できること", async () => {
+      const req = [{ index: 1, label: "novel-ai-image_1.png" }];
+      let res: ImageDetail[] = [];
+      try {
+        res = await getImages("./testdata/image", req);
+      } catch (error) {
+        fail;
+      }
+      expect(res.length).toBe(1);
+    });
+  });
+
+  describe("getAllImages", () => {
     it("正常系：画像が取得できること", async () => {
       // エラーが起きないことだけ確認
       let res: ImageDetail[] = [];
       try {
-        res = await getImages("./testdata/image");
+        res = await getAllImages("./testdata/image");
       } catch (error) {
         fail;
       }

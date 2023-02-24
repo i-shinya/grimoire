@@ -1,3 +1,8 @@
+export interface ImageIndex {
+  index: number;
+  label: string;
+}
+
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名

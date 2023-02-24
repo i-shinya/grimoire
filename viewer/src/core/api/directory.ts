@@ -1,5 +1,5 @@
 import { DirectoryNode } from "../type/directory";
-import { ImageDetail } from "../type/image";
+import { ImageDetail, ImageIndex } from "../type/image";
 import aiImage1 from "../../../assets/ai-image_1.png";
 import aiImage2 from "../../../assets/ai-image_2.png";
 
@@ -12,7 +12,8 @@ export interface DirectoryAPI {
     path: string,
     areaVisibilityStore: any
   ): Promise<DirectoryNode[]>;
-  getImages(path: string, areaVisibilityStore: any): Promise<ImageDetail[]>;
+  listImageIndex(path: string): Promise<ImageIndex[]>;
+  getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
 }
 
 export class DirectoryNodeAPI implements DirectoryAPI {
@@ -47,17 +48,20 @@ export class DirectoryNodeAPI implements DirectoryAPI {
       });
   }
 
-  async getImages(path: string, loadingStore: any): Promise<ImageDetail[]> {
-    loadingStore.showLoading();
+  async listImageIndex(path: string): Promise<ImageIndex[]> {
+    return await window.directoryAPI.listImageIndex(path);
+  }
+
+  async getImages(
+    path: string,
+    imageIndex: ImageIndex[]
+  ): Promise<ImageDetail[]> {
     return await window.directoryAPI
-      .getImages(path)
+      .getImages(path, imageIndex)
       .catch((err) => {
         // 雑にalert表示
         alert(err.message);
         return [];
-      })
-      .finally(() => {
-        loadingStore.hiddenLoading();
       });
   }
 }
@@ -107,7 +111,14 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     ];
   }
 
-  async getImages(path: string, loadingStore: any): Promise<ImageDetail[]> {
+  async listImageIndex(path: string): Promise<ImageIndex[]> {
+    return [{ index: 1, label: "ai-image_1.png" }];
+  }
+
+  async getImages(
+    basePath: string,
+    imageIndex: ImageIndex[]
+  ): Promise<ImageDetail[]> {
     const imageDetail1 = {
       id: 1,
       label: "ai-image_1.png",
@@ -144,9 +155,9 @@ export class DirectoryDemoAPI implements DirectoryAPI {
       },
     };
 
-    if (path === "/grimoire/demo/directory1") {
+    if (basePath === "/grimoire/demo/directory1") {
       return [imageDetail1, imageDetail2];
-    } else if (path === "/grimoire/demo/directory2/sub-directory") {
+    } else if (basePath === "/grimoire/demo/directory2/sub-directory") {
       return [imageDetail1];
     } else {
       return [];

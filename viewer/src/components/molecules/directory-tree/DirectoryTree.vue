@@ -7,6 +7,8 @@ import { DirectoryNode } from "../../../core/type/directory";
 import { isImageExtension } from "../../../core/image";
 import DirectoryTrees from "./DirectoryTrees.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../../core/api/directory";
+import { ImageIndex } from "../../../core/type/image";
+import { divideArray } from "../../../core/array";
 
 // NOTE: 基本atomicとmoleculesからstoreは操作しないが、ツリーは階層が深いためこちらのみ許容する
 const directoryStore = inject(DirectoryKey);
@@ -38,29 +40,57 @@ const switchChildVisible = () => {
 
 // store経由でイベントを発火する
 const selectDirectory = async (node: DirectoryNode) => {
-  // TODO バッチ取得に変える
-  await directoryAPI
-    .getImages(`${node.basePath}/${node.label}`, areaVisibilityStore)
-    .then((res) => directoryStore.setImageDetails(res));
-  directoryStore.selectDirectory(`${node.basePath}/${node.label}`);
+  areaVisibilityStore.showLoading();
+  const basePath = `${node.basePath}/${node.label}`;
+  directoryAPI
+    .listImageIndex(basePath)
+    .then(async (imageIndex: ImageIndex[]) => {
+      directoryStore.setImageDetails([]);
+      // 配列を100件に分割して並列で取得する
+      const indexes = divideArray(imageIndex, 100);
+      await Promise.all(
+        indexes.map(async (list) => {
+          const images = await directoryAPI.getImages(basePath, list);
+          directoryStore.pushImageDetails(images);
+        })
+      );
+    })
+    .finally(() => {
+      areaVisibilityStore.hiddenLoading();
+    });
+  directoryStore.selectDirectory(basePath);
   areaVisibilityStore.showImageAres();
 };
 
 const selectImage = async (node: DirectoryNode) => {
-  await directoryAPI
-    .getImages(node.basePath, areaVisibilityStore)
-    .then((res) => {
-      directoryStore.setImageDetails(res);
-      directoryStore.selectDirectory(node.basePath);
+  areaVisibilityStore.showLoading();
+  directoryAPI
+    .listImageIndex(node.basePath)
+    .then(async (imageIndex: ImageIndex[]) => {
+      directoryStore.setImageDetails([]);
+      // 配列を100件に分割して並列で取得する
+      const indexes = divideArray(imageIndex, 100);
+      await Promise.all(
+        indexes.map(async (list) => {
+          const images = await directoryAPI.getImages(node.basePath, list);
+          directoryStore.pushImageDetails(images);
+        })
+      );
 
       // 選択画像を抽出してストアに格納
-      const imageDetails = res.filter((detail) => detail.label === node.label);
+      directoryStore.selectDirectory(node.basePath);
+      const imageDetails = directoryStore.state.imageDetails?.filter(
+        (detail) => detail.label === node.label
+      );
       if (!imageDetails || imageDetails.length === 0) {
         return;
       }
       areaVisibilityStore.showImageAres();
       areaVisibilityStore.showImageMetaViewer();
       imageStore.selectImage(node.basePath, imageDetails[0]);
+    })
+    .finally(() => {
+      areaVisibilityStore.hiddenLoading();
     });
 };
 
