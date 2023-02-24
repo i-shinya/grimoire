@@ -26,12 +26,20 @@ export default function directoryStore() {
   const setImageDetails = (imageDetails: ImageDetail[]) => {
     state.imageDetails = imageDetails;
   };
+  const pushImageDetails = (imageDetails: ImageDetail[]) => {
+    if (state.imageDetails) {
+      state.imageDetails = state.imageDetails.concat(imageDetails);
+    } else {
+      state.imageDetails = imageDetails;
+    }
+  };
 
   return {
     state: readonly(state), // 読み取りしかできないようにする
     selectDirectory,
     setOpenDirectory,
     setImageDetails,
+    pushImageDetails,
   };
 }
 export type DirectoryStore = ReturnType<typeof directoryStore>;

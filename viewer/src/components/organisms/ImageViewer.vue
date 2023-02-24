@@ -4,6 +4,7 @@ import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail, ImageIndex } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
+import { divideArray } from "../../core/array";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -43,11 +44,16 @@ const reloadDirectoryTree = async () => {
     areaVisibilityStore.showLoading();
     directoryAPI
       .listImageIndex(selectPath.value)
-      .then((imageIndex: ImageIndex[]) => {
-        // TODO 配列を100件に分割して並列で取得する
-        directoryAPI
-          .getImages(selectPath.value, imageIndex)
-          .then((res) => directoryStore.setImageDetails(res));
+      .then(async (imageIndex: ImageIndex[]) => {
+        directoryStore.setImageDetails([]);
+        // 配列を100件に分割して並列で取得する
+        const indexes = divideArray(imageIndex, 100);
+        await Promise.all(
+          indexes.map(async (list) => {
+            const images = await directoryAPI.getImages(selectPath.value, list);
+            directoryStore.pushImageDetails(images);
+          })
+        );
       })
       .finally(() => {
         areaVisibilityStore.hiddenLoading();

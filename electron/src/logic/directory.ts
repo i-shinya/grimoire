@@ -85,6 +85,7 @@ export const getImages = async (basepath: string, imageIndex: ImageIndex[]) => {
   return await Promise.all(
     imageIndex.map(async (image: ImageIndex) => {
       // TODO サムネイル画像だから圧縮した方が良いかも
+      // TODO ファイル取得とメタデータ取得も並列で動かすようにしてもいいかも
       const buffer = readImage(`${basepath}/${image.label}`);
       const meta = await getImageMeta(`${basepath}/${image.label}`);
       return {
