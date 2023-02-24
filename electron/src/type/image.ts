@@ -1,8 +1,7 @@
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名
-  buffer: Buffer; // バイナリも一応持ってみているけどいらない気がする
-  dataUrl: string;
+  dataUrl: string; // 画像のdataURL
   meta: Metadata;
 }
 

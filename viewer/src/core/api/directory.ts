@@ -2,9 +2,6 @@ import { DirectoryNode } from "../type/directory";
 import { ImageDetail } from "../type/image";
 import aiImage1 from "../../../assets/ai-image_1.png";
 import aiImage2 from "../../../assets/ai-image_2.png";
-import { Buffer } from "buffer";
-// @ts-ignore
-window.Buffer = Buffer;
 
 // inject用のkey
 export const DirectoryAPIKey = Symbol("DirectoryAPIKey");
@@ -75,7 +72,6 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail1 = {
       id: 1,
       label: "ai-image_1.png",
-      buffer: Buffer.from("ai-image_1.png"), // 現状bufferは使用していないので適当
       dataUrl: aiImage1,
       meta: {
         provider: "NovelAI",
@@ -94,7 +90,6 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail2 = {
       id: 2,
       label: "ai-image_2.png",
-      buffer: Buffer.from("ai-image_2.png"), // 現状bufferは使用していないので適当
       dataUrl: aiImage2,
       meta: {
         provider: "NovelAI",
