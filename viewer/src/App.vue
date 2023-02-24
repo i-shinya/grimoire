@@ -32,7 +32,10 @@ provide(AreaVisibilityKey, areaVisibleStore);
 <template>
   <div id="app-page">
     <Header class="header"></Header>
-    <va-inner-loading :loading="areaVisibleStore.state.showLoading">
+    <va-inner-loading
+      class="loading-area"
+      :loading="areaVisibleStore.state.showLoading"
+    >
       <div class="content-area">
         <SideMenu></SideMenu>
         <splitpanes class="size-variable-area">
@@ -90,6 +93,12 @@ provide(AreaVisibilityKey, areaVisibleStore);
   max-height: 100vh;
   width: 100vw;
   background-color: rgb(34, 34, 34);
+
+  .loading-area {
+    margin-top: var.$header-height;
+    height: calc(100vh - #{var.$header-height} - #{var.$footer-height});
+    width: calc(100vw - #{var.$sidebar-width});
+  }
 
   .content-area {
     display: flex;
