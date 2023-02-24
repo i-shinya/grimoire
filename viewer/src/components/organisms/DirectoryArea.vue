@@ -3,7 +3,7 @@ import { computed, inject, onMounted, ref } from "vue";
 import { getBaseDirName, getDirectoryName } from "../../core/path";
 import { DirectoryNode } from "../../core/type/directory";
 import DirectoryTree from "../molecules/directory-tree/DirectoryTrees.vue";
-import { DirectoryKey } from "../../store/key";
+import { AreaVisibilityKey, DirectoryKey } from "../../store/key";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 
 const directoryStore = inject(DirectoryKey);
@@ -13,23 +13,31 @@ const directoryAPI = inject<DirectoryAPI>(DirectoryAPIKey);
 if (!directoryAPI) {
   throw new Error("failed to inject api from directoryAPI");
 }
+const areaVisibilityStore = inject(AreaVisibilityKey);
+if (!areaVisibilityStore) {
+  throw new Error("failed to inject store from AreaVisibilityKey");
+}
 
 const directoryNodes = ref<DirectoryNode[]>([]);
 
 const openDirectory = async () => {
-  const path: string = await directoryAPI.openDialog();
+  const path: string = await directoryAPI.openDialog(areaVisibilityStore);
   if (!path) {
     return;
   }
   directoryStore.setOpenDirectory(path);
 
-  directoryNodes.value = await directoryAPI.showDirectories(path);
+  directoryNodes.value = await directoryAPI.showDirectories(
+    path,
+    areaVisibilityStore
+  );
 };
 
 const reloadDirectoryTree = async () => {
   if (directoryStore.state.openDirectoryPath) {
     directoryNodes.value = await directoryAPI.showDirectories(
-      directoryStore.state.openDirectoryPath
+      directoryStore.state.openDirectoryPath,
+      areaVisibilityStore
     );
   }
 };
@@ -44,7 +52,8 @@ const baseDir = computed(() =>
 onMounted(async () => {
   if (directoryStore.state.openDirectoryPath) {
     directoryNodes.value = await directoryAPI.showDirectories(
-      directoryStore.state.openDirectoryPath
+      directoryStore.state.openDirectoryPath,
+      areaVisibilityStore
     );
   }
 });

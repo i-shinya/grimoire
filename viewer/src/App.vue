@@ -32,49 +32,51 @@ provide(AreaVisibilityKey, areaVisibleStore);
 <template>
   <div id="app-page">
     <Header class="header"></Header>
-    <div class="content-area">
-      <SideMenu></SideMenu>
-      <splitpanes class="size-variable-area">
-        <pane
-          v-if="areaVisibleStore.state.showDirectoryArea"
-          min-size="10"
-          size="14"
-        >
-          <DirectoryArea></DirectoryArea>
-        </pane>
-        <pane>
-          <splitpanes horizontal>
-            <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
-              <splitpanes>
-                <pane size="40" min-size="20">
-                  <MetaEditorArea></MetaEditorArea>
-                </pane>
-                <pane
-                  v-if="areaVisibleStore.state.showPromptEditor"
-                  min-size="20"
-                >
-                  <PromptEditorArea></PromptEditorArea>
-                </pane>
-              </splitpanes>
-            </pane>
-            <pane v-if="areaVisibleStore.state.showImageArea">
-              <splitpanes>
-                <pane min-size="20" size="60">
-                  <ImageViewer></ImageViewer>
-                </pane>
-                <pane
-                  v-if="areaVisibleStore.state.showImageMetaViewer"
-                  min-size="20"
-                  size="40"
-                >
-                  <ImageMetaViewer></ImageMetaViewer>
-                </pane>
-              </splitpanes>
-            </pane>
-          </splitpanes>
-        </pane>
-      </splitpanes>
-    </div>
+    <va-inner-loading :loading="areaVisibleStore.state.showLoading">
+      <div class="content-area">
+        <SideMenu></SideMenu>
+        <splitpanes class="size-variable-area">
+          <pane
+            v-if="areaVisibleStore.state.showDirectoryArea"
+            min-size="10"
+            size="14"
+          >
+            <DirectoryArea></DirectoryArea>
+          </pane>
+          <pane>
+            <splitpanes horizontal>
+              <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
+                <splitpanes>
+                  <pane size="40" min-size="20">
+                    <MetaEditorArea></MetaEditorArea>
+                  </pane>
+                  <pane
+                    v-if="areaVisibleStore.state.showPromptEditor"
+                    min-size="20"
+                  >
+                    <PromptEditorArea></PromptEditorArea>
+                  </pane>
+                </splitpanes>
+              </pane>
+              <pane v-if="areaVisibleStore.state.showImageArea">
+                <splitpanes>
+                  <pane min-size="20" size="60">
+                    <ImageViewer></ImageViewer>
+                  </pane>
+                  <pane
+                    v-if="areaVisibleStore.state.showImageMetaViewer"
+                    min-size="20"
+                    size="40"
+                  >
+                    <ImageMetaViewer></ImageMetaViewer>
+                  </pane>
+                </splitpanes>
+              </pane>
+            </splitpanes>
+          </pane>
+        </splitpanes>
+      </div>
+    </va-inner-loading>
     <Footer></Footer>
   </div>
 </template>
@@ -131,5 +133,10 @@ provide(AreaVisibilityKey, areaVisibleStore);
 
 .va-breadcrumb-item {
   white-space: nowrap;
+}
+
+.inner-loading__overlay:after {
+  background-color: #919192;
+  opacity: 0.2 !important;
 }
 </style>

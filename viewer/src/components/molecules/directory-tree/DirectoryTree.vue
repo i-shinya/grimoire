@@ -40,26 +40,28 @@ const switchChildVisible = () => {
 const selectDirectory = async (node: DirectoryNode) => {
   // TODO バッチ取得に変える
   await directoryAPI
-    .getImages(`${node.basePath}/${node.label}`)
+    .getImages(`${node.basePath}/${node.label}`, areaVisibilityStore)
     .then((res) => directoryStore.setImageDetails(res));
   directoryStore.selectDirectory(`${node.basePath}/${node.label}`);
   areaVisibilityStore.showImageAres();
 };
 
 const selectImage = async (node: DirectoryNode) => {
-  await directoryAPI.getImages(node.basePath).then((res) => {
-    directoryStore.setImageDetails(res);
-    directoryStore.selectDirectory(node.basePath);
+  await directoryAPI
+    .getImages(node.basePath, areaVisibilityStore)
+    .then((res) => {
+      directoryStore.setImageDetails(res);
+      directoryStore.selectDirectory(node.basePath);
 
-    // 選択画像を抽出してストアに格納
-    const imageDetails = res.filter((detail) => detail.label === node.label);
-    if (!imageDetails || imageDetails.length === 0) {
-      return;
-    }
-    areaVisibilityStore.showImageAres();
-    areaVisibilityStore.showImageMetaViewer();
-    imageStore.selectImage(node.basePath, imageDetails[0]);
-  });
+      // 選択画像を抽出してストアに格納
+      const imageDetails = res.filter((detail) => detail.label === node.label);
+      if (!imageDetails || imageDetails.length === 0) {
+        return;
+      }
+      areaVisibilityStore.showImageAres();
+      areaVisibilityStore.showImageMetaViewer();
+      imageStore.selectImage(node.basePath, imageDetails[0]);
+    });
 };
 
 // ディレクトリor画像ファイルであることを確認

@@ -6,6 +6,7 @@ interface AreaVisibilityState {
   showEditorArea: boolean;
   showImageMetaViewer: boolean;
   showPromptEditor: boolean;
+  showLoading: boolean;
 }
 
 export default function areaVisibilityStore() {
@@ -17,6 +18,7 @@ export default function areaVisibilityStore() {
     // 現状はエディター部分が表示されている時は常に表示
     // 今後もいらなかったらフラグを削除しても良さそう
     showPromptEditor: true,
+    showLoading: false,
   });
 
   const changeDirectoryVisibility = () => {
@@ -46,6 +48,14 @@ export default function areaVisibilityStore() {
     state.showPromptEditor = true;
   };
 
+  const showLoading = () => {
+    state.showLoading = true;
+  };
+
+  const hiddenLoading = () => {
+    state.showLoading = false;
+  };
+
   return {
     state: readonly(state), // 読み取りしかできないようにする
     changeDirectoryVisibility,
@@ -55,6 +65,8 @@ export default function areaVisibilityStore() {
     showImageMetaViewer,
     showEditorArea,
     showPromptEditor,
+    showLoading,
+    hiddenLoading,
   };
 }
 export type AreaVisibilityStore = ReturnType<typeof areaVisibilityStore>;

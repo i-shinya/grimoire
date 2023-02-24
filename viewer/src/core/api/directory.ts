@@ -7,32 +7,71 @@ import aiImage2 from "../../../assets/ai-image_2.png";
 export const DirectoryAPIKey = Symbol("DirectoryAPIKey");
 
 export interface DirectoryAPI {
-  openDialog(): Promise<string>;
-  showDirectories(path: string): Promise<DirectoryNode[]>;
-  getImages(path: string): Promise<ImageDetail[]>;
+  openDialog(loadingStore: any): Promise<string>;
+  showDirectories(
+    path: string,
+    areaVisibilityStore: any
+  ): Promise<DirectoryNode[]>;
+  getImages(path: string, areaVisibilityStore: any): Promise<ImageDetail[]>;
 }
 
 export class DirectoryNodeAPI implements DirectoryAPI {
-  async openDialog(): Promise<string> {
-    return await window.directoryAPI.openDialog();
+  async openDialog(loadingStore: any): Promise<string> {
+    loadingStore.showLoading();
+    return await window.directoryAPI
+      .openDialog()
+      .catch((err) => {
+        // 雑にalert表示
+        alert(err.message);
+        return "";
+      })
+      .finally(() => {
+        loadingStore.hiddenLoading();
+      });
   }
 
-  async showDirectories(path: string): Promise<DirectoryNode[]> {
-    return await window.directoryAPI.showDirectories(path);
+  async showDirectories(
+    path: string,
+    loadingStore: any
+  ): Promise<DirectoryNode[]> {
+    loadingStore.showLoading();
+    return await window.directoryAPI
+      .showDirectories(path)
+      .catch((err) => {
+        // 雑にalert表示
+        alert(err.message);
+        return [];
+      })
+      .finally(() => {
+        loadingStore.hiddenLoading();
+      });
   }
 
-  async getImages(path: string): Promise<ImageDetail[]> {
-    return await window.directoryAPI.getImages(path);
+  async getImages(path: string, loadingStore: any): Promise<ImageDetail[]> {
+    loadingStore.showLoading();
+    return await window.directoryAPI
+      .getImages(path)
+      .catch((err) => {
+        // 雑にalert表示
+        alert(err.message);
+        return [];
+      })
+      .finally(() => {
+        loadingStore.hiddenLoading();
+      });
   }
 }
 
 export class DirectoryDemoAPI implements DirectoryAPI {
-  async openDialog(): Promise<string> {
+  async openDialog(loadingStore: any): Promise<string> {
     // 適当なパスを返す
     return "/grimoire/demo";
   }
 
-  async showDirectories(path: string): Promise<DirectoryNode[]> {
+  async showDirectories(
+    path: string,
+    loadingStore: any
+  ): Promise<DirectoryNode[]> {
     return [
       new DirectoryNode(1, "directory1", "/grimoire/demo", true, [
         new DirectoryNode(
@@ -68,7 +107,7 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     ];
   }
 
-  async getImages(path: string): Promise<ImageDetail[]> {
+  async getImages(path: string, loadingStore: any): Promise<ImageDetail[]> {
     const imageDetail1 = {
       id: 1,
       label: "ai-image_1.png",

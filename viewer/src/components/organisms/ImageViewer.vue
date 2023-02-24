@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, onMounted } from "vue";
+import { computed, inject } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -41,7 +41,7 @@ const selectImage = (image: ImageDetail) => {
 const reloadDirectoryTree = async () => {
   if (selectPath.value) {
     await directoryAPI
-      .getImages(selectPath.value)
+      .getImages(selectPath.value, areaVisibilityStore)
       .then((res) => directoryStore.setImageDetails(res));
   }
 };
