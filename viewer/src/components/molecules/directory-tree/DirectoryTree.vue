@@ -38,6 +38,7 @@ const switchChildVisible = () => {
 
 // store経由でイベントを発火する
 const selectDirectory = async (node: DirectoryNode) => {
+  // TODO バッチ取得に変える
   await directoryAPI
     .getImages(`${node.basePath}/${node.label}`)
     .then((res) => directoryStore.setImageDetails(res));

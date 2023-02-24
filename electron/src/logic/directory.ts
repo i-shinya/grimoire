@@ -78,12 +78,12 @@ export const getImages = async (path: string): Promise<ImageDetail[]> => {
     });
   return await Promise.all(
     dirents.map(async (dirent: fs.Dirent, index: number) => {
+      // TODO サムネイル画像だから圧縮した方が良いかも
       const buffer = readImage(`${path}/${dirent.name}`);
       const meta = await getImageMeta(`${path}/${dirent.name}`);
       return {
         id: index,
         label: dirent.name,
-        buffer: buffer,
         dataUrl: "data:image/png;base64," + buffer.toString("base64"),
         meta: meta,
       };
