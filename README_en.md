@@ -2,7 +2,7 @@
 
 Grimoire is a desktop application for managing AI illustrations.
 
-Currently, only support Nodel AI prompt and, only the window version application is available.
+Currently, only support Nodel AI prompt (StableDiffusion support is incomplete) and, only the window version application is available.
 
 ## user guide
 
@@ -54,5 +54,14 @@ docker compose up --build
 
 ## SNS
 
+#### Twitter（for engineering）
 i-shinya (@ishinya4)
+https://twitter.com/ishinya4
+
+#### Twitter（for game or hobby）
+Sora (@IT41394313)
 https://twitter.com/IT41394313
+
+#### Misskey
+sora (@sora_it@misskey.io)
+https://misskey.io/@sora_it
