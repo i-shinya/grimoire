@@ -130,7 +130,7 @@ export const getAllImages = async (path: string): Promise<ImageDetail[]> => {
  * @param filename
  */
 export const isImageExtension = (filename: string): boolean => {
-  const allowExtensions = ".(jpeg|jpg|png|bmp|gif|JPEG|JPG|PNG|BMP|GIF)$";
+  const allowExtensions = ".(jpeg|jpg|png|JPEG|JPG|PNG)$";
   return !!filename.match(allowExtensions);
 };
 
@@ -148,6 +148,6 @@ export const readImage = (path: string): Buffer => {
  * @param path ファイルパス
  * @returns
  */
-export const getImageMeta = async (path: string): Promise<Metadata> => {
+export const getImageMeta = async (path: string): Promise<Metadata | null> => {
   return exifr.parse(path).then((metadata: any) => Metadata.build(metadata));
 };

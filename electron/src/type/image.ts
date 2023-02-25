@@ -7,7 +7,7 @@ export interface ImageDetail {
   id: number;
   label: string; // ファイル名
   dataUrl: string; // 画像のdataURL
-  meta: Metadata;
+  meta: Metadata | null;
 }
 
 export class Metadata {
@@ -25,7 +25,10 @@ export class Metadata {
   noise?: string;
   model?: string; // StableDiffusionで選択したモデル
 
-  public static build(metadata: any): Metadata {
+  public static build(metadata: any): Metadata | null {
+    if (!metadata) {
+      return null;
+    }
     // Softwareがある場合はproviderを設定
     if (metadata.Software) {
       return this.buildNovelAiMeta(metadata);

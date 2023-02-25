@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch } from "vue";
+import { computed, inject } from "vue";
 import { AreaVisibilityKey, ImageKey, PropertyKey } from "../../store/key";
-import { ImageDetail } from "../../core/type/image";
 import Property from "../atoms/Property.vue";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
-import { onMounted } from "vue";
-import { ImageState } from "../../store/image";
 
 const imageStore = inject(ImageKey);
 if (!imageStore) throw new Error("failed to inject store from ImageKey");
@@ -40,7 +37,7 @@ const copyToEditor = () => {
   <div id="image-meta-viewer">
     <div class="image-meta-viewer" v-if="imageDetail">
       <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
-      <div class="meta-area">
+      <div class="meta-area" v-if="imageDetail.meta">
         <div class="copy-button mb-4" @click="copyToEditor">
           <font-awesome-icon
             class="copy-to-editor-icon mr-2"
@@ -110,6 +107,10 @@ const copyToEditor = () => {
           v-if="imageDetail.meta.model"
         ></Property>
       </div>
+      <div class="no-meta-area" v-else>
+        <font-awesome-icon class="no-meta-icon mr-3" icon="fa-solid fa-ban" />
+        <p class="no-meta-text">no metadata</p>
+      </div>
     </div>
   </div>
 </template>
@@ -153,6 +154,22 @@ const copyToEditor = () => {
         cursor: pointer;
         justify-content: center;
         background-color: rgb(37, 18, 18);
+      }
+    }
+
+    .no-meta-area {
+      display: flex;
+      justify-content: center;
+
+      .no-meta-icon {
+        font-size: 18px;
+        color: #ae2121;
+      }
+
+      .no-meta-text {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ae2121;
       }
     }
   }

@@ -27,6 +27,7 @@ import {
   faList,
   faFolder,
   faTrashCan,
+  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -69,7 +70,8 @@ library.add(
   faList,
   faFolder,
   faImage,
-  faTrashCan
+  faTrashCan,
+  faBan
 );
 
 let directoryAPI: DirectoryAPI;
