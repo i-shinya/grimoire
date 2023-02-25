@@ -7,7 +7,7 @@ export interface ImageDetail {
   id: number;
   label: string; // ファイル名
   dataUrl: string;
-  meta: Metadata;
+  meta: Metadata | null;
 }
 
 export class Metadata {

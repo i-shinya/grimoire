@@ -22,6 +22,7 @@ describe("directory.ts", () => {
             {
               id: 1,
               basePath: "./testdata/image/nest-dir",
+              children: undefined,
               label: "novel-ai-image_3.png",
               isDirectory: false,
             },
@@ -30,47 +31,54 @@ describe("directory.ts", () => {
         {
           id: 2,
           basePath: "./testdata/image",
-          label: "not-image.txt",
+          label: "no-meta.jpeg",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 3,
           basePath: "./testdata/image",
-          label: "novel-ai-image_1.png",
+          label: "not-image.txt",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 4,
           basePath: "./testdata/image",
-          label: "novel-ai-image_2.png",
+          label: "novel-ai-image_1.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 5,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_1_has-negative.png",
+          label: "novel-ai-image_2.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 6,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_2_has-positive.png",
+          label: "stable-diffusion-image_1_has-negative.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 7,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_3_has-positive-and-negative.png",
+          label: "stable-diffusion-image_2_has-positive.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 8,
+          basePath: "./testdata/image",
+          label: "stable-diffusion-image_3_has-positive-and-negative.png",
+          isDirectory: false,
+          children: undefined,
+        },
+        {
+          id: 9,
           basePath: "./testdata/image",
           label: "stable-diffusion-image_4_no-positive-and-negative.png",
           isDirectory: false,
@@ -88,7 +96,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(6);
+      expect(res.length).toBe(7);
     });
   });
 
@@ -114,7 +122,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(6);
+      expect(res.length).toBe(7);
     });
   });
 
@@ -218,6 +226,13 @@ describe("directory.ts", () => {
           seed: "3209139373",
           scale: "7",
         });
+      });
+    });
+
+    describe("その他", () => {
+      it("メタデータが無い画像", async () => {
+        const res = await getImageMeta("./testdata/image/no-meta.jpeg");
+        expect(res).toBeNull();
       });
     });
   });
