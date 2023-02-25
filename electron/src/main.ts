@@ -8,13 +8,7 @@ import {
   listImageIndex,
   getImages,
 } from "./logic/directory";
-import {
-  closeWindow,
-  maximizeWindow,
-  minimizeWindow,
-  defaultHeight,
-  defaultWidth,
-} from "./logic/window";
+import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev";
@@ -23,8 +17,8 @@ const isDebug = process.env.npm_lifecycle_event === "app:debug";
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: defaultWidth,
-    height: defaultHeight,
+    width: 1600,
+    height: 900,
     // falseにするとフレームを全部消せる
     // ヘッダーとかをdraga可能にしないとウィンドウ移動できなくなるので注意
     frame: false,
@@ -45,6 +39,7 @@ function createWindow() {
       mainWindow.webContents.openDevTools();
     }
   } else {
+    mainWindow.maximize();
     // dev以外の場合はファイルからページを取得
     mainWindow.loadFile(join(__dirname, "./index.html"));
   }
