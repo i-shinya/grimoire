@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provide } from "vue";
-import SideMenu from "./components/organisms/SideMenu.vue";
+import SideMenu from "./layout/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
 import ImageViewer from "./components/organisms/ImageViewer.vue";
@@ -78,6 +78,7 @@ provide(AreaVisibilityKey, areaVisibleStore);
             </splitpanes>
           </pane>
         </splitpanes>
+        <SideMenu></SideMenu>
       </div>
       <Footer></Footer>
     </va-inner-loading>

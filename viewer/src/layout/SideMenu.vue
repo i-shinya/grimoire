@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject } from "vue";
-import SideMenuIcon from "../atoms/SideMenuIcon.vue";
-import { AreaVisibilityKey } from "../../store/key";
+import SideMenuIcon from "../components/atoms/SideMenuIcon.vue";
+import { AreaVisibilityKey } from "../store/key";
 
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore)
@@ -46,7 +46,7 @@ const showImageViewer = () => {
 </template>
 
 <style lang="scss" scoped>
-@use "../../variables.scss" as var;
+@use "../variables" as var;
 
 .side-menu {
   background-color: rgb(73, 73, 73);

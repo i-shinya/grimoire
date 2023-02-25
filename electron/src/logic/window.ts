@@ -1,8 +1,4 @@
-import { tsThisType } from "@babel/types";
 import { BrowserWindow } from "electron";
-
-export const defaultWidth = 1600;
-export const defaultHeight = 900;
 
 // windowを閉じる
 export const closeWindow = (window: BrowserWindow) => {
