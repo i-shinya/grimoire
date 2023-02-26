@@ -11,6 +11,7 @@ const updateCategory = ref<FavoriteCategory>();
 
 const emits = defineEmits<{
   (e: "send-val", category: FavoriteCategory): void;
+  (e: "delete-category"): void;
 }>();
 
 const showChild = ref<boolean>(false);
@@ -29,9 +30,28 @@ const updateChild = (index: number, value: CategoryChild) => {
   emits("send-val", updateCategory.value!!);
 };
 
-// TODO childの追加
+// childの追加
+const addChild = () => {
+  const nextId =
+    updateCategory.value!!.children.length !== 0
+      ? updateCategory
+          .value!!.children.map((val) => val.id)
+          .reduce((a, b) => Math.max(a, b)) + 1
+      : 1;
+  updateCategory.value!!.children.push({ id: nextId, label: "", value: "" });
+  emits("send-val", updateCategory.value!!);
+  showChild.value = true;
+};
 
-// TODO categoryの削除
+// categoryの削除
+const deleteCategory = () => {
+  emits("delete-category");
+};
+
+const deleteChild = (index: number) => {
+  updateCategory.value!!.children.splice(index, 1);
+  emits("send-val", updateCategory.value!!);
+};
 
 watch(
   () => props.category,
@@ -58,10 +78,20 @@ watch(
         @click="switchChildVisible()"
       />
       <input
-        class="category-input"
+        class="category-input mr-2"
         :value="updateCategory.label"
         @input="updateCategoryLabel"
         spellcheck="false"
+      />
+      <font-awesome-icon
+        class="clickable plus-icon mr-2"
+        icon="fa-solid fa-plus"
+        @click="addChild"
+      />
+      <font-awesome-icon
+        class="clickable"
+        icon="fa-solid fa-trash-can"
+        @click="deleteCategory"
       />
     </div>
     <template v-if="showChild">
@@ -69,6 +99,7 @@ watch(
         <EditCategoryChild
           :child="child"
           @send-val="(v: CategoryChild) => updateChild(index, v)"
+          @delete-child="deleteChild(index)"
         ></EditCategoryChild>
       </template>
     </template>
@@ -98,10 +129,9 @@ watch(
       color: white;
       cursor: pointer;
       flex-grow: 1;
-      padding-top: 6px;
-      padding-bottom: 6px;
+      padding: 4px 4px;
       white-space: nowrap;
-      background-color: transparent;
+      background-color: #515050;
       border: none;
 
       &:focus {

@@ -4,6 +4,7 @@ import { AreaVisibilityKey } from "../../store/key";
 import FavoriteCategory from "../molecules/FavoriteCategory.vue";
 import { Favorite } from "../../core/type/favorite";
 import EditFavoriteCategory from "../molecules/EditFavoriteCategory.vue";
+import AddButton from "../atoms/AddButton.vue";
 
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore) {
@@ -33,7 +34,26 @@ const cancel = () => {
   isEdit.value = false;
 };
 
-// TODO カテゴリの追加
+// カテゴリの追加
+const addCategory = () => {
+  console.log("hogeohge");
+  const nextId =
+    editingFavorite.value!!.categories.length !== 0
+      ? editingFavorite
+          .value!!.categories.map((val) => val.id)
+          .reduce((a, b) => Math.max(a, b)) + 1
+      : 1;
+  editingFavorite.value.categories.push({
+    id: nextId,
+    label: "",
+    children: [],
+  });
+};
+
+// カテゴリの削除
+const deleteCategory = (index: number) => {
+  editingFavorite.value.categories.splice(index, 1);
+};
 
 const favorite = ref<Favorite>({
   categories: [
@@ -76,7 +96,10 @@ const favorite = ref<Favorite>({
         />
         <div>Edit Favorite</div>
       </div>
-      <div class="edit-button-area mb-3" v-else>Editing Favorite</div>
+      <div class="edit-button-area mb-3 clickable" @click="save" v-else>
+        <font-awesome-icon class="mr-2" icon="fa-solid fa-floppy-disk" />
+        <div>Save Favorite</div>
+      </div>
     </div>
     <div class="categories-area">
       <template v-if="!isEdit">
@@ -92,10 +115,17 @@ const favorite = ref<Favorite>({
           <EditFavoriteCategory
             :category="category"
             @send-val="(v: FavoriteCategory) => updateCategory(index, v)"
+            @delete-category="deleteCategory(index)"
           ></EditFavoriteCategory>
         </template>
+        <AddButton
+          class="add-category-button mt-3"
+          :showText="true"
+          text="Add Category"
+          @click="addCategory"
+        ></AddButton>
         <div class="button-area mt-3">
-          <div class="cancel-button clickable mr-4" @click="cancel">cancel</div>
+          <div class="cancel-button clickable mr-2" @click="cancel">cancel</div>
           <div class="save-button clickable" @click="save">
             <font-awesome-icon class="mr-2" icon="fa-solid fa-floppy-disk" />
             <p class="save-button-text">save</p>
@@ -116,6 +146,7 @@ const favorite = ref<Favorite>({
   padding-top: 16px;
   padding-left: 8px;
   padding-right: 8px;
+  font-size: 15px;
 
   .edit-button-area {
     display: flex;
@@ -123,13 +154,14 @@ const favorite = ref<Favorite>({
     padding: 4px;
     justify-content: center;
     user-select: none;
-
-    .edit-icon {
-      font-size: 16px;
-    }
+    background-color: #24253c;
   }
 
   .categories-area {
+    .add-category-button {
+      background-color: rgb(48, 48, 48);
+    }
+
     .button-area {
       display: flex;
       justify-content: space-around;
@@ -138,6 +170,9 @@ const favorite = ref<Favorite>({
         border: 1px solid white;
         flex-grow: 1;
         text-align: center;
+        padding: 1px;
+        border-radius: 10px;
+        color: #cacaca;
       }
 
       .save-button {
@@ -145,6 +180,9 @@ const favorite = ref<Favorite>({
         border: 1px solid white;
         flex-grow: 1;
         justify-content: center;
+        padding: 1px;
+        background-color: #24253c;
+        border-radius: 10px;
       }
     }
   }

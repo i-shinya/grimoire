@@ -45,7 +45,7 @@ const copyClipBoard = () => {
         {{ child.label }}
       </p>
     </div>
-    <p class="child-value mt-3" v-if="showValue" @click="changeValueVisibility">
+    <p class="child-value mt-3" v-if="showValue">
       {{ child.value }}
     </p>
   </div>
@@ -60,6 +60,7 @@ const copyClipBoard = () => {
     display: flex;
 
     .child-label {
+      width: 100%;
       user-select: none;
     }
   }
