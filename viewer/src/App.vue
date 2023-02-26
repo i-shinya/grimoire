@@ -18,6 +18,8 @@ import {
   PropertyKey,
 } from "./store/key";
 import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
+import RightSideMenu from "./layout/RightSideMenu.vue";
+import RightSideArea from "./components/organisms/RightSideArea.vue";
 
 const dirStore = directoryStore();
 const imgStore = imageStore();
@@ -75,10 +77,27 @@ provide(AreaVisibilityKey, areaVisibleStore);
                   </pane>
                 </splitpanes>
               </pane>
+              <pane v-if="false">
+                <splitpanes horizontal>
+                  <pane min-size="20" size="60">
+                    <ImageViewer></ImageViewer>
+                  </pane>
+                  <pane
+                    v-if="areaVisibleStore.state.showImageMetaViewer"
+                    min-size="20"
+                    size="40"
+                  >
+                    <ImageMetaViewer></ImageMetaViewer>
+                  </pane>
+                </splitpanes>
+              </pane>
             </splitpanes>
           </pane>
+          <RightSideArea
+            v-if="areaVisibleStore.state.rightSideVisibilityState.showArea"
+          ></RightSideArea>
         </splitpanes>
-        <SideMenu></SideMenu>
+        <RightSideMenu></RightSideMenu>
       </div>
       <Footer></Footer>
     </va-inner-loading>
@@ -100,7 +119,9 @@ provide(AreaVisibilityKey, areaVisibleStore);
     margin-top: var.$header-height;
     .size-variable-area {
       height: calc(100vh - #{var.$header-height} - #{var.$footer-height});
-      width: calc(100vw - #{var.$sidebar-width});
+      width: calc(
+        100vw - #{var.$left-sidemenu-width} - #{var.$right-sidemenu-width}
+      );
     }
   }
 }

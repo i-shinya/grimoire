@@ -7,6 +7,12 @@ interface AreaVisibilityState {
   showImageMetaViewer: boolean;
   showPromptEditor: boolean;
   showLoading: boolean;
+  rightSideVisibilityState: RightSideVisibilityState;
+}
+
+interface RightSideVisibilityState {
+  showArea: boolean;
+  showFavoritePromptFrame: boolean;
 }
 
 export default function areaVisibilityStore() {
@@ -19,6 +25,10 @@ export default function areaVisibilityStore() {
     // 今後もいらなかったらフラグを削除しても良さそう
     showPromptEditor: true,
     showLoading: false,
+    rightSideVisibilityState: {
+      showArea: false,
+      showFavoritePromptFrame: false,
+    },
   });
 
   const changeDirectoryVisibility = () => {
@@ -56,17 +66,29 @@ export default function areaVisibilityStore() {
     state.showLoading = false;
   };
 
+  const changeRightSideVisibility = () => {
+    state.rightSideVisibilityState.showArea =
+      !state.rightSideVisibilityState.showArea;
+  };
+
+  const changeFavoritePromptFrame = () => {
+    state.rightSideVisibilityState.showFavoritePromptFrame =
+      !state.rightSideVisibilityState.showFavoritePromptFrame;
+  };
+
   return {
     state: readonly(state), // 読み取りしかできないようにする
     changeDirectoryVisibility,
     changeEditorVisibility,
     changeImageArea,
+    changeRightSideVisibility,
     showImageAres,
     showImageMetaViewer,
     showEditorArea,
     showPromptEditor,
     showLoading,
     hiddenLoading,
+    changeFavoritePromptFrame,
   };
 }
 export type AreaVisibilityStore = ReturnType<typeof areaVisibilityStore>;
