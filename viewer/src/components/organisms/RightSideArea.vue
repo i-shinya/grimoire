@@ -139,7 +139,7 @@ const favorite = ref<Favorite>({
 <style lang="scss" scoped>
 .right-side-area {
   height: 100%;
-  width: 240px;
+  width: 100%;
   background-color: rgb(48, 48, 48);
   overflow-x: auto;
   overflow-y: auto;
@@ -147,6 +147,29 @@ const favorite = ref<Favorite>({
   padding-left: 8px;
   padding-right: 8px;
   font-size: 15px;
+
+  /* スクロール幅 */
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+  /* スクロール背景 */
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: rgba(110, 108, 108, 0.2);
+  }
+  /* ドラック部 */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #c2c2c2;
+  }
+  &:hover {
+    /* スクロール幅 */
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+  }
 
   .edit-button-area {
     display: flex;

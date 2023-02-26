@@ -49,53 +49,61 @@ provide(AreaVisibilityKey, areaVisibleStore);
             <DirectoryArea></DirectoryArea>
           </pane>
           <pane>
-            <splitpanes horizontal>
-              <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
-                <splitpanes>
-                  <pane size="40" min-size="20">
-                    <MetaEditorArea></MetaEditorArea>
-                  </pane>
-                  <pane
-                    v-if="areaVisibleStore.state.showPromptEditor"
-                    min-size="20"
-                  >
-                    <PromptEditorArea></PromptEditorArea>
-                  </pane>
-                </splitpanes>
-              </pane>
-              <pane v-if="areaVisibleStore.state.showImageArea">
-                <splitpanes>
-                  <pane min-size="20" size="60">
-                    <ImageViewer></ImageViewer>
-                  </pane>
-                  <pane
-                    v-if="areaVisibleStore.state.showImageMetaViewer"
-                    min-size="20"
-                    size="40"
-                  >
-                    <ImageMetaViewer></ImageMetaViewer>
-                  </pane>
-                </splitpanes>
-              </pane>
-              <pane v-if="false">
+            <splitpanes>
+              <pane>
                 <splitpanes horizontal>
-                  <pane min-size="20" size="60">
-                    <ImageViewer></ImageViewer>
+                  <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
+                    <splitpanes>
+                      <pane size="40" min-size="20">
+                        <MetaEditorArea></MetaEditorArea>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showPromptEditor"
+                        min-size="20"
+                      >
+                        <PromptEditorArea></PromptEditorArea>
+                      </pane>
+                    </splitpanes>
                   </pane>
-                  <pane
-                    v-if="areaVisibleStore.state.showImageMetaViewer"
-                    min-size="20"
-                    size="40"
-                  >
-                    <ImageMetaViewer></ImageMetaViewer>
+                  <pane v-if="areaVisibleStore.state.showImageArea">
+                    <splitpanes>
+                      <pane min-size="20" size="60">
+                        <ImageViewer></ImageViewer>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showImageMetaViewer"
+                        min-size="20"
+                        size="40"
+                      >
+                        <ImageMetaViewer></ImageMetaViewer>
+                      </pane>
+                    </splitpanes>
+                  </pane>
+                  <pane v-if="false">
+                    <splitpanes horizontal>
+                      <pane min-size="20" size="60">
+                        <ImageViewer></ImageViewer>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showImageMetaViewer"
+                        min-size="20"
+                        size="40"
+                      >
+                        <ImageMetaViewer></ImageMetaViewer>
+                      </pane>
+                    </splitpanes>
                   </pane>
                 </splitpanes>
+              </pane>
+              <pane
+                v-if="areaVisibleStore.state.rightSideVisibilityState.showArea"
+                size="20"
+                min-size="14"
+              >
+                <RightSideArea></RightSideArea>
               </pane>
             </splitpanes>
           </pane>
-          <RightSideArea
-            v-if="areaVisibleStore.state.rightSideVisibilityState.showArea"
-          ></RightSideArea>
         </splitpanes>
         <RightSideMenu></RightSideMenu>
       </div>
