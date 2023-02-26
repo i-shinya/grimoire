@@ -1,3 +1,7 @@
+export interface Favorite {
+  categories: FavoriteCategory[];
+}
+
 export interface FavoriteCategory {
   id: number;
   label: string;

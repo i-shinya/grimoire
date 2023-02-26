@@ -45,11 +45,7 @@ const copyClipBoard = () => {
         {{ child.label }}
       </p>
     </div>
-    <p
-      class="child-value mt-3 ml-1"
-      v-if="showValue"
-      @click="changeValueVisibility"
-    >
+    <p class="child-value mt-3" v-if="showValue" @click="changeValueVisibility">
       {{ child.value }}
     </p>
   </div>
@@ -69,9 +65,9 @@ const copyClipBoard = () => {
   }
 
   .child-value {
-    padding: 3px;
+    padding: 4px 2px;
     border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 4px;
   }
 }
 </style>
