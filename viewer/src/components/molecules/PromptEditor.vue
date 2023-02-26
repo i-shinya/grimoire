@@ -7,6 +7,7 @@ import {
   EmphasisSymbolType,
   RestraintSymbolType,
 } from "../../core/prompt";
+import AddButton from "../atoms/AddButton.vue";
 
 const props = defineProps<{
   label: "Positive Prompt" | "Negative Prompt";
@@ -281,12 +282,12 @@ watch(
           />
         </div>
       </div>
-      <div class="plus-button clickable mt-3" @click="addPrompt">
-        <font-awesome-icon class="plus-icon mr-3" icon="fa-solid fa-plus" />
-        <p class="shortcut-text" v-if="prompts.length !== 0">
-          click or press EnterKey
-        </p>
-      </div>
+      <AddButton
+        class="mt-3"
+        :showText="prompts.length !== 0"
+        text="click or press EnterKey"
+        @click="addPrompt"
+      ></AddButton>
     </div>
   </div>
 </template>

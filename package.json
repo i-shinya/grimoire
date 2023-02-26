@@ -21,6 +21,5 @@
   "workspaces": [
     "electron",
     "viewer"
-  ],
-  "dependencies": {}
+  ]
 }

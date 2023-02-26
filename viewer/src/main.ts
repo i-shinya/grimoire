@@ -29,6 +29,7 @@ import {
   faTrashCan,
   faBan,
   faStar,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -73,7 +74,8 @@ library.add(
   faImage,
   faTrashCan,
   faBan,
-  faStar
+  faStar,
+  faPenToSquare
 );
 
 let directoryAPI: DirectoryAPI;

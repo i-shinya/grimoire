@@ -32,7 +32,7 @@ defineProps<{
   node: DirectoryNode;
 }>();
 
-const showChild = ref<Boolean>(false);
+const showChild = ref<boolean>(false);
 
 const switchChildVisible = () => {
   showChild.value = !showChild.value;

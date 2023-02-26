@@ -28,7 +28,7 @@ watch(val, (state, prevState) => {
   emits("send-val", { label: props.label, value: state });
 });
 
-const { init, close, closeAll } = useToast();
+const { init } = useToast();
 
 const copyClipBoard = () => {
   const text = props.value?.toString() ?? "";
