@@ -136,6 +136,7 @@ onMounted(async () => {
   max-height: 100vh;
   width: 100vw;
   background-color: rgb(34, 34, 34);
+  overflow: hidden;
 
   .content-area {
     display: flex;
