@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { CategoryChild, FavoriteCategory } from "../../core/type/favorite";
+import { CategoryChild, PromptCategory } from "../../core/type/favorite";
 import EditCategoryChild from "../atoms/EditCategoryChild.vue";
 
 const props = defineProps<{
-  category: FavoriteCategory;
+  category: PromptCategory;
 }>();
 
-const updateCategory = ref<FavoriteCategory>();
+const updateCategory = ref<PromptCategory>();
 
 const emits = defineEmits<{
-  (e: "send-val", category: FavoriteCategory): void;
+  (e: "send-val", category: PromptCategory): void;
   (e: "delete-category"): void;
 }>();
 

@@ -2,7 +2,7 @@
 import { inject, ref } from "vue";
 import { AreaVisibilityKey, FavoritePromptKey } from "../../store/key";
 import FavoriteCategory from "../molecules/FavoriteCategory.vue";
-import { FavoritePrompt } from "../../core/type/favorite";
+import { FavoritePrompt, PromptCategory } from "../../core/type/favorite";
 import EditFavoriteCategory from "../molecules/EditFavoriteCategory.vue";
 import AddButton from "../atoms/AddButton.vue";
 import { StoreAPIKey } from "../../core/api/store";
@@ -45,7 +45,7 @@ const doEdit = () => {
   isEdit.value = true;
 };
 
-const updateCategory = (index: number, category: FavoriteCategory) => {
+const updateCategory = (index: number, category: PromptCategory) => {
   editingFavorite.value.categories[index] = category;
 };
 
@@ -134,7 +134,7 @@ const deleteCategory = (index: number) => {
         >
           <EditFavoriteCategory
             :category="category"
-            @send-val="(v: FavoriteCategory) => updateCategory(index, v)"
+            @send-val="(v: PromptCategory) => updateCategory(index, v)"
             @delete-category="deleteCategory(index)"
           ></EditFavoriteCategory>
         </template>
