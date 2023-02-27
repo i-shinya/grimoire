@@ -9,7 +9,6 @@ import {
   getImages,
 } from "./logic/directory";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
-import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import { getFavoritePrompt, saveFavoritePrompt } from "./logic/store";
 import { FavoritePrompt } from "./type/favorite";
 
@@ -34,7 +33,10 @@ function createWindow() {
     // devの場合はローカルサーバーからページを取得
     mainWindow.loadURL("http://localhost:3000");
     if (isDebug) {
-      install(VUEJS3_DEVTOOLS).catch((err) => {
+      // NOTE: テストで読み込むとエラーになるので分岐内でrequireするようにしている
+      const install = require("electron-devtools-installer");
+      const { VUEJS3_DEVTOOLS } = require("electron-devtools-installer");
+      install.default(VUEJS3_DEVTOOLS).catch((err: unknown) => {
         console.log(err);
         throw new Error("failed to install VUEJS3_DEVTOOLS");
       });
