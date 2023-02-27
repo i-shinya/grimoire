@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FavoriteCategory } from "../../core/type/favorite";
+import { PromptCategory } from "../../core/type/favorite";
 import CategoryChild from "../atoms/CategoryChild.vue";
 
 defineProps<{
-  category: FavoriteCategory;
+  category: PromptCategory;
 }>();
 
 const showChild = ref<boolean>(false);

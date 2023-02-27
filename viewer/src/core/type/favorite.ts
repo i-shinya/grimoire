@@ -1,8 +1,8 @@
 export interface FavoritePrompt {
-  categories: FavoriteCategory[];
+  categories: PromptCategory[];
 }
 
-export interface FavoriteCategory {
+export interface PromptCategory {
   id: number;
   label: string;
   children: CategoryChild[];
