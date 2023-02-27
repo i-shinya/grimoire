@@ -1,6 +1,7 @@
 import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "./type/directory";
 import { ImageDetail, ImageIndex } from "./type/image";
+import { FavoritePrompt } from "./type/favorite";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -38,4 +39,13 @@ contextBridge.exposeInMainWorld("windowAPI", {
   closeWindow: () => ipcRenderer.invoke("close-window"),
   resizeWindow: () => ipcRenderer.invoke("resize-window"),
   minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
+});
+
+contextBridge.exposeInMainWorld("storeAPI", {
+  saveFavoritePrompt: (favorite: FavoritePrompt) =>
+    ipcRenderer.invoke("save-favorite-prompt", favorite),
+  getFavoritePrompt: (): Promise<FavoritePrompt | null> => {
+    const res = ipcRenderer.invoke("get-favorite-prompt");
+    return res as Promise<FavoritePrompt | null>;
+  },
 });

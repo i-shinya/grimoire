@@ -2,9 +2,11 @@ import { DirectoryNode } from "../type/directory";
 import { ImageDetail, ImageIndex } from "../type/image";
 import aiImage1 from "../../../assets/ai-image_1.png";
 import aiImage2 from "../../../assets/ai-image_2.png";
+import { InjectionKey } from "vue";
 
 // inject用のkey
-export const DirectoryAPIKey = Symbol("DirectoryAPIKey");
+export const DirectoryAPIKey: InjectionKey<DirectoryAPI> =
+  Symbol("DirectoryAPIKey");
 
 export interface DirectoryAPI {
   openDialog(loadingStore: any): Promise<string>;
@@ -15,7 +17,6 @@ export interface DirectoryAPI {
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
 }
-
 export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(loadingStore: any): Promise<string> {
     loadingStore.showLoading();

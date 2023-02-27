@@ -21,14 +21,12 @@ const changeValue = (e: Event) => {
   emits("send-val", target.value);
 };
 
-onMounted(() => {
-  val.value = props.value ?? "";
-});
 watch(
   () => props.value,
   (state, _) => {
     val.value = state ?? "";
-  }
+  },
+  { immediate: true, deep: true }
 );
 </script>
 

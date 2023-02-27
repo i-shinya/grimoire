@@ -9,7 +9,7 @@ import {
 import { ImageDetail, ImageIndex } from "../type/image";
 
 describe("directory.ts", () => {
-  describe("getDirectroyNodes", () => {
+  describe("getDirectoryNodes", () => {
     it("正常系：ディレクトリノードが取得できること", () => {
       const res = getDirectoryNodes("./testdata/image");
       expect(res).toMatchObject([

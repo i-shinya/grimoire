@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide } from "vue";
+import { inject, onMounted, provide } from "vue";
 import SideMenu from "./layout/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
@@ -14,19 +14,36 @@ import areaVisibilityStore from "./store/area-visibility";
 import {
   AreaVisibilityKey,
   DirectoryKey,
+  FavoritePromptKey,
   ImageKey,
   PropertyKey,
 } from "./store/key";
 import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
+import RightSideMenu from "./layout/RightSideMenu.vue";
+import RightSideArea from "./components/organisms/RightSideArea.vue";
+import favoritePromptState from "./store/favorite-prompt";
+import { StoreAPIKey } from "./core/api/store";
 
 const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
 const areaVisibleStore = areaVisibilityStore();
+const favoriteStore = favoritePromptState();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
 provide(AreaVisibilityKey, areaVisibleStore);
+provide(FavoritePromptKey, favoriteStore);
+
+const storeAPI = inject(StoreAPIKey);
+if (!storeAPI) {
+  throw new Error("failed to inject storeAPI from StoreAPIKey");
+}
+
+onMounted(async () => {
+  const res = await storeAPI.getFavoritePrompt();
+  favoriteStore.setFavoritePrompt(res);
+});
 </script>
 
 <template>
@@ -47,38 +64,63 @@ provide(AreaVisibilityKey, areaVisibleStore);
             <DirectoryArea></DirectoryArea>
           </pane>
           <pane>
-            <splitpanes horizontal>
-              <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
-                <splitpanes>
-                  <pane size="40" min-size="20">
-                    <MetaEditorArea></MetaEditorArea>
+            <splitpanes>
+              <pane>
+                <splitpanes horizontal>
+                  <pane v-if="areaVisibleStore.state.showEditorArea" size="45">
+                    <splitpanes>
+                      <pane size="40" min-size="20">
+                        <MetaEditorArea></MetaEditorArea>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showPromptEditor"
+                        min-size="20"
+                      >
+                        <PromptEditorArea></PromptEditorArea>
+                      </pane>
+                    </splitpanes>
                   </pane>
-                  <pane
-                    v-if="areaVisibleStore.state.showPromptEditor"
-                    min-size="20"
-                  >
-                    <PromptEditorArea></PromptEditorArea>
+                  <pane v-if="areaVisibleStore.state.showImageArea">
+                    <splitpanes>
+                      <pane min-size="20" size="60">
+                        <ImageViewer></ImageViewer>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showImageMetaViewer"
+                        min-size="20"
+                        size="40"
+                      >
+                        <ImageMetaViewer></ImageMetaViewer>
+                      </pane>
+                    </splitpanes>
+                  </pane>
+                  <pane v-if="false">
+                    <splitpanes horizontal>
+                      <pane min-size="20" size="60">
+                        <ImageViewer></ImageViewer>
+                      </pane>
+                      <pane
+                        v-if="areaVisibleStore.state.showImageMetaViewer"
+                        min-size="20"
+                        size="40"
+                      >
+                        <ImageMetaViewer></ImageMetaViewer>
+                      </pane>
+                    </splitpanes>
                   </pane>
                 </splitpanes>
               </pane>
-              <pane v-if="areaVisibleStore.state.showImageArea">
-                <splitpanes>
-                  <pane min-size="20" size="60">
-                    <ImageViewer></ImageViewer>
-                  </pane>
-                  <pane
-                    v-if="areaVisibleStore.state.showImageMetaViewer"
-                    min-size="20"
-                    size="40"
-                  >
-                    <ImageMetaViewer></ImageMetaViewer>
-                  </pane>
-                </splitpanes>
+              <pane
+                v-if="areaVisibleStore.state.rightSideVisibilityState.showArea"
+                size="20"
+                min-size="14"
+              >
+                <RightSideArea></RightSideArea>
               </pane>
             </splitpanes>
           </pane>
         </splitpanes>
-        <SideMenu></SideMenu>
+        <RightSideMenu></RightSideMenu>
       </div>
       <Footer></Footer>
     </va-inner-loading>
@@ -100,7 +142,9 @@ provide(AreaVisibilityKey, areaVisibleStore);
     margin-top: var.$header-height;
     .size-variable-area {
       height: calc(100vh - #{var.$header-height} - #{var.$footer-height});
-      width: calc(100vw - #{var.$sidebar-width});
+      width: calc(
+        100vw - #{var.$left-sidemenu-width} - #{var.$right-sidemenu-width}
+      );
     }
   }
 }

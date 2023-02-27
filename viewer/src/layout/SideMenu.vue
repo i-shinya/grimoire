@@ -53,7 +53,7 @@ const showImageViewer = () => {
   .icon-area {
     display: block;
     padding-top: 8px;
-    width: var.$sidebar-width;
+    width: var.$left-sidemenu-width;
     resize: both;
   }
 }
