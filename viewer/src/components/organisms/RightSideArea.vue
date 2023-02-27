@@ -1,21 +1,47 @@
 <script setup lang="ts">
-import { inject, reactive, ref } from "vue";
-import { AreaVisibilityKey } from "../../store/key";
+import { inject, ref } from "vue";
+import { AreaVisibilityKey, FavoritePromptKey } from "../../store/key";
 import FavoriteCategory from "../molecules/FavoriteCategory.vue";
-import { Favorite } from "../../core/type/favorite";
+import { FavoritePrompt } from "../../core/type/favorite";
 import EditFavoriteCategory from "../molecules/EditFavoriteCategory.vue";
 import AddButton from "../atoms/AddButton.vue";
+import { StoreAPIKey } from "../../core/api/store";
 
 const areaVisibilityStore = inject(AreaVisibilityKey);
 if (!areaVisibilityStore) {
   throw new Error("failed to inject store from AreaVisibilityKey");
 }
+const favoritePromptStore = inject(FavoritePromptKey);
+if (!favoritePromptStore) {
+  throw new Error("failed to inject store from favoritePromptStore");
+}
+const storeAPI = inject(StoreAPIKey);
+if (!storeAPI) {
+  throw new Error("failed to inject storeAPI from StoreAPIKey");
+}
 
 const isEdit = ref(false);
-const editingFavorite = ref<Favorite>({ categories: [] });
+const editingFavorite = ref<FavoritePrompt>({ categories: [] });
 
 const doEdit = () => {
-  editingFavorite.value = favorite.value;
+  // store.stateはreadonlyなのでコピー
+  editingFavorite.value = {
+    categories: favoritePromptStore.state.favorite.categories.map(
+      (category) => {
+        return {
+          id: category.id,
+          label: category.label,
+          children: category.children.map((child) => {
+            return {
+              id: child.id,
+              label: child.label,
+              value: child.value,
+            };
+          }),
+        };
+      }
+    ),
+  };
   isEdit.value = true;
 };
 
@@ -23,9 +49,27 @@ const updateCategory = (index: number, category: FavoriteCategory) => {
   editingFavorite.value.categories[index] = category;
 };
 
-const save = () => {
-  // TODO ストアに保存
-  favorite.value = editingFavorite.value;
+const save = async () => {
+  // configへの保存
+  const copy = {
+    categories: editingFavorite.value.categories.map((category) => {
+      return {
+        id: category.id,
+        label: category.label,
+        children: category.children.map((child) => {
+          return {
+            id: child.id,
+            label: child.label,
+            value: child.value,
+          };
+        }),
+      };
+    }),
+  };
+  await storeAPI.saveFavoritePrompt(copy);
+
+  // storeへの保存
+  favoritePromptStore.setFavoritePrompt(copy);
   isEdit.value = false;
 };
 
@@ -36,7 +80,6 @@ const cancel = () => {
 
 // カテゴリの追加
 const addCategory = () => {
-  console.log("hogeohge");
   const nextId =
     editingFavorite.value!!.categories.length !== 0
       ? editingFavorite
@@ -54,32 +97,6 @@ const addCategory = () => {
 const deleteCategory = (index: number) => {
   editingFavorite.value.categories.splice(index, 1);
 };
-
-const favorite = ref<Favorite>({
-  categories: [
-    {
-      id: 1,
-      label: "絵柄",
-      children: [
-        { id: 1, label: "アニメ調", value: "anime screen" },
-        {
-          id: 2,
-          label: "いい感じの",
-          value:
-            "masterpiece, best quality, masterpiece, best quality, masterpiece, best quality",
-        },
-      ],
-    },
-    {
-      id: 2,
-      label: "背景",
-      children: [
-        { id: 1, label: "東京", value: "Tokyo, city" },
-        { id: 2, label: "child2", value: "hogehoge2" },
-      ],
-    },
-  ],
-});
 </script>
 
 <template>
@@ -103,7 +120,10 @@ const favorite = ref<Favorite>({
     </div>
     <div class="categories-area">
       <template v-if="!isEdit">
-        <template v-for="category in favorite.categories" :key="category.id">
+        <template
+          v-for="category in favoritePromptStore.state.favorite.categories"
+          :key="category.id"
+        >
           <FavoriteCategory :category="category"></FavoriteCategory>
         </template>
       </template>
@@ -124,7 +144,7 @@ const favorite = ref<Favorite>({
           text="Add Category"
           @click="addCategory"
         ></AddButton>
-        <div class="button-area mt-3">
+        <div class="button-area mt-4">
           <div class="cancel-button clickable mr-2" @click="cancel">cancel</div>
           <div class="save-button clickable" @click="save">
             <font-awesome-icon class="mr-2" icon="fa-solid fa-floppy-disk" />
@@ -140,12 +160,12 @@ const favorite = ref<Favorite>({
 .right-side-area {
   height: 100%;
   width: 100%;
-  background-color: rgb(48, 48, 48);
+  background-color: #222222;
   overflow-x: auto;
   overflow-y: auto;
   padding-top: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 6px;
+  padding-right: 6px;
   font-size: 15px;
 
   /* スクロール幅 */
@@ -193,7 +213,9 @@ const favorite = ref<Favorite>({
         border: 1px solid white;
         flex-grow: 1;
         text-align: center;
-        padding: 1px;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
         border-radius: 10px;
         color: #cacaca;
       }
@@ -203,7 +225,8 @@ const favorite = ref<Favorite>({
         border: 1px solid white;
         flex-grow: 1;
         justify-content: center;
-        padding: 1px;
+        align-items: center;
+        padding: 4px;
         background-color: #24253c;
         border-radius: 10px;
       }

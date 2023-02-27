@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, reactive, ref } from "vue";
-import { Favorite } from "../../core/type/favorite";
+import { FavoritePrompt } from "../../core/type/favorite";
 
 const props = defineProps<{
-  favorite: Favorite;
+  favorite: FavoritePrompt;
 }>();
 
 const emits = defineEmits<{
-  (e: "save", favorite: Favorite): void;
+  (e: "save", favorite: FavoritePrompt): void;
   (e: "cancel"): void;
 }>();
 
-const inputFavorite = ref<Favorite>();
+const inputFavorite = ref<FavoritePrompt>();
 
 const saveModal = () => {
   emits("save", inputFavorite.value!!);

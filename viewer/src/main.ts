@@ -51,6 +51,12 @@ import {
   WindowDemoAPI,
   WindowNodeAPI,
 } from "./core/api/window";
+import {
+  StoreAPI,
+  StoreAPIKey,
+  StoreDemoAPI,
+  StoreNodeAPI,
+} from "./core/api/store";
 
 // 使用するfont-awesomeアイコンを読み込む
 library.add(
@@ -82,19 +88,23 @@ library.add(
 
 let directoryAPI: DirectoryAPI;
 let windowAPI: WindowAPI;
+let storeAPI: StoreAPI;
 switch (import.meta.env.VITE_BUILD_MODE) {
   case "demo":
     directoryAPI = new DirectoryDemoAPI();
     windowAPI = new WindowDemoAPI();
+    storeAPI = new StoreDemoAPI();
     break;
   case "electron":
     directoryAPI = new DirectoryNodeAPI();
     windowAPI = new WindowNodeAPI();
+    storeAPI = new StoreNodeAPI();
     break;
   default:
     console.log("[WARN] VITE_BUILD_MODE is not found");
     directoryAPI = new DirectoryNodeAPI();
     windowAPI = new WindowNodeAPI();
+    storeAPI = new StoreNodeAPI();
     break;
 }
 
@@ -104,5 +114,6 @@ createApp(App)
   .component("Pane", Pane)
   .provide<DirectoryAPI>(DirectoryAPIKey, directoryAPI)
   .provide<WindowAPI>(WindowAPIKey, windowAPI)
+  .provide<StoreAPI>(StoreAPIKey, storeAPI)
   .use(createVuestic())
   .mount("#app");

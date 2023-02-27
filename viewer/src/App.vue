@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide } from "vue";
+import { inject, onMounted, provide } from "vue";
 import SideMenu from "./layout/SideMenu.vue";
 import Header from "./layout/Header.vue";
 import Footer from "./layout/Footer.vue";
@@ -14,21 +14,36 @@ import areaVisibilityStore from "./store/area-visibility";
 import {
   AreaVisibilityKey,
   DirectoryKey,
+  FavoritePromptKey,
   ImageKey,
   PropertyKey,
 } from "./store/key";
 import PromptEditorArea from "./components/organisms/PromptEditorArea.vue";
 import RightSideMenu from "./layout/RightSideMenu.vue";
 import RightSideArea from "./components/organisms/RightSideArea.vue";
+import favoritePromptState from "./store/favorite-prompt";
+import { StoreAPIKey } from "./core/api/store";
 
 const dirStore = directoryStore();
 const imgStore = imageStore();
 const propStore = propertyStore();
 const areaVisibleStore = areaVisibilityStore();
+const favoriteStore = favoritePromptState();
 provide(DirectoryKey, dirStore);
 provide(ImageKey, imgStore);
 provide(PropertyKey, propStore);
 provide(AreaVisibilityKey, areaVisibleStore);
+provide(FavoritePromptKey, favoriteStore);
+
+const storeAPI = inject(StoreAPIKey);
+if (!storeAPI) {
+  throw new Error("failed to inject storeAPI from StoreAPIKey");
+}
+
+onMounted(async () => {
+  const res = await storeAPI.getFavoritePrompt();
+  favoriteStore.setFavoritePrompt(res);
+});
 </script>
 
 <template>

@@ -64,7 +64,7 @@ watch(
 
 <template>
   <div class="favorite-category">
-    <div class="category-label-row">
+    <div class="category-label-row mb-1">
       <font-awesome-icon
         v-if="!showChild"
         class="arrow-icon"
@@ -131,8 +131,8 @@ watch(
       flex-grow: 1;
       padding: 4px 4px;
       white-space: nowrap;
-      background-color: #515050;
-      border: none;
+      background-color: #363636;
+      border: 1px solid rgb(129, 129, 129);
 
       &:focus {
         background-color: rgb(76, 75, 75);

@@ -1,5 +1,7 @@
 // inject用のkey
-export const WindowAPIKey = Symbol("WindowAPIKey");
+import { InjectionKey } from "vue";
+
+export const WindowAPIKey: InjectionKey<WindowAPI> = Symbol("WindowAPIKey");
 
 export interface WindowAPI {
   closeWindow(): Promise<void>;

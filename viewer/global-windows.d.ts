@@ -14,9 +14,15 @@ interface WindowAccessAPI {
   minimizeWindow(): Promise<void>;
 }
 
+interface WindowStoreAPI {
+  saveFavoritePrompt(favorite: FavoritePrompt): Promise<void>;
+  getFavoritePrompt(): Promise<FavoritePrompt | null>;
+}
+
 declare global {
   interface Window {
     directoryAPI: WindowDirectoryAPI;
     windowAPI: WindowAccessAPI;
+    storeAPI: WindowStoreAPI;
   }
 }

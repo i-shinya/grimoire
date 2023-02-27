@@ -1,6 +1,9 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
+/** @type {import("ts-jest/dist/types").InitialOptionsTsJest} */
 module.exports = {
-  preset: "ts-jest",
+  transform: {
+    "^.+\\.ts$": "ts-jest",
+  },
   testEnvironment: "node",
   testPathIgnorePatterns: ["<rootDir>/dist/"],
+  moduleDirectories: ["dist", "node_modules", "../node_modules"],
 };

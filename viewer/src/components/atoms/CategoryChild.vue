@@ -2,6 +2,7 @@
 import { CategoryChild } from "../../core/type/favorite";
 import { ref } from "vue";
 import { useToast } from "vuestic-ui";
+import Property from "./Property.vue";
 
 const props = defineProps<{
   child: CategoryChild;
@@ -34,20 +35,14 @@ const copyClipBoard = () => {
 </script>
 
 <template>
-  <div class="child-area mb-3">
-    <div class="child-label-row">
-      <font-awesome-icon
-        class="clickable clipboard-icon mr-2"
-        icon="fa-regular fa-copy"
-        @click="copyClipBoard"
-      />
-      <p class="clickable child-label" @click="changeValueVisibility">
-        {{ child.label }}
-      </p>
-    </div>
-    <p class="child-value mt-3" v-if="showValue">
-      {{ child.value }}
-    </p>
+  <div class="child-area">
+    <font-awesome-icon class="star-icon" icon="fa-solid fa-star" />
+    <Property
+      class="mb-2"
+      :label="child.label"
+      :shortcutText="null"
+      :value="child.value"
+    ></Property>
   </div>
 </template>
 
@@ -55,20 +50,11 @@ const copyClipBoard = () => {
 .child-area {
   font-size: 15px;
   padding: 2px;
+  display: flex;
 
-  .child-label-row {
-    display: flex;
-
-    .child-label {
-      width: 100%;
-      user-select: none;
-    }
-  }
-
-  .child-value {
-    padding: 4px 2px;
-    border: 1px solid white;
-    border-radius: 4px;
+  .star-icon {
+    padding-top: 2px;
+    font-size: 11px;
   }
 }
 </style>

@@ -10,6 +10,8 @@ import {
 } from "./logic/directory";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
+import { getFavoritePrompt, saveFavoritePrompt } from "./logic/store";
+import { FavoritePrompt } from "./type/favorite";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev";
 const isDebug = process.env.npm_lifecycle_event === "app:debug";
@@ -44,6 +46,7 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, "./index.html"));
   }
 
+  // ディレクトリ操作
   // ダイアログを表示する
   ipcMain.handle(
     "open-directory-dialog",
@@ -80,6 +83,7 @@ function createWindow() {
     }
   );
 
+  // window操作
   ipcMain.handle(
     "close-window",
     async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
@@ -97,6 +101,22 @@ function createWindow() {
     async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
       minimizeWindow(mainWindow);
     }
+  );
+
+  // ストア操作
+  ipcMain.handle(
+    "save-favorite-prompt",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      favorite: FavoritePrompt
+    ): Promise<void> => {
+      saveFavoritePrompt(favorite);
+    }
+  );
+  ipcMain.handle(
+    "get-favorite-prompt",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<FavoritePrompt | null> =>
+      getFavoritePrompt()
   );
 }
 

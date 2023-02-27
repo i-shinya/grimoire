@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "useDefineForClassFields": true,
-    "module": "CommonJS", // esnextでは動かない
+    "module": "CommonJS", // electronがESMには対応していないようなのでesnextでは動かない
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
@@ -12,8 +12,8 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "outDir": "dist" // coreへの参照が入ったせいで"dist/electron"だとディレクトリ階層が変わってしまった
+    "outDir": "dist"
   },
-  "include": ["src/**/*"], // vueやtsをincludeするとエラーになる
-  "exclude": ["src/**/*.spec.ts"], // vueやtsをincludeするとエラーになる
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts"],
 }
