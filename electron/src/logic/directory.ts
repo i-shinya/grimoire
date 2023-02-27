@@ -36,25 +36,35 @@ export const openDirectoryDialog = (
  */
 export const getDirectoryNodes = (path: string): DirectoryNode[] => {
   const idCounter = new FileIdCounter();
-  return fs
-    .readdirSync(path, { withFileTypes: true })
-    .map((dirent: fs.Dirent): DirectoryNode => {
-      if (dirent.isDirectory()) {
-        const nodes = getDirectoryNodes(`${path}/${dirent.name}`).sort((a, b) =>
-          a.hasChildren() > b.hasChildren() ? -1 : 1
-        );
-        return new DirectoryNode(
-          idCounter.next(),
-          dirent.name,
-          path,
-          true,
-          nodes
-        );
-      } else {
-        return new DirectoryNode(idCounter.next(), dirent.name, path, false);
-      }
-    })
-    .sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1));
+  return (
+    fs
+      .readdirSync(path, { withFileTypes: true })
+      // ファイル名でソート
+      .sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      .map((dirent: fs.Dirent): DirectoryNode => {
+        if (dirent.isDirectory()) {
+          const nodes = getDirectoryNodes(`${path}/${dirent.name}`).sort(
+            (a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1)
+          );
+          return new DirectoryNode(
+            idCounter.next(),
+            dirent.name,
+            path,
+            true,
+            nodes
+          );
+        } else {
+          return new DirectoryNode(idCounter.next(), dirent.name, path, false);
+        }
+      })
+      .sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1))
+  );
 };
 
 class FileIdCounter {
@@ -71,6 +81,13 @@ export const listImageIndex = async (path: string): Promise<ImageIndex[]> => {
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent: fs.Dirent) => {
       return dirent.isFile() && isImageExtension(dirent.name);
+    })
+    .sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      } else {
+        return -1;
+      }
     })
     .map((dirent: fs.Dirent, index: number) => {
       return {
