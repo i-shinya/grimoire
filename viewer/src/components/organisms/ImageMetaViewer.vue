@@ -36,75 +36,83 @@ const copyToEditor = () => {
 <template>
   <div id="image-meta-viewer">
     <div class="image-meta-viewer" v-if="imageDetail">
-      <BreadCrumbs class="breads" :breads="breads"></BreadCrumbs>
-      <div class="meta-area" v-if="imageDetail.meta">
-        <div class="copy-button mb-4" @click="copyToEditor">
+      <div class="sticky-area pt-3 mb-4">
+        <BreadCrumbs class="mb-4" :breads="breads"></BreadCrumbs>
+        <div class="copy-button" @click="copyToEditor">
           <font-awesome-icon
             class="copy-to-editor-icon mr-2"
             icon="fa-regular fa-circle-up"
           />
           <div>Copy to Editor</div>
         </div>
+      </div>
+      <div class="meta-area" v-if="imageDetail.meta">
         <Property
-          class="mb-4"
+          class="mb-3"
+          label="Provider"
+          :shortcutText="null"
+          :value="imageDetail.meta.provider ?? 'sorry, unknown...'"
+        ></Property>
+        <Property
+          class="mb-3"
+          label="Model"
+          :shortcutText="null"
+          :value="imageDetail.meta.model"
+          v-if="imageDetail.meta.model"
+        ></Property>
+        <Property
+          class="mb-3"
           label="Positive Prompt"
           :shortcutText="null"
           :value="imageDetail.meta.positive ?? ''"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Negative Prompt"
           :shortcutText="null"
           :value="imageDetail.meta.negative ?? ''"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Steps"
           :shortcutText="null"
           :value="imageDetail.meta.steps"
           v-if="imageDetail.meta.steps"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Scale"
           :shortcutText="null"
           :value="imageDetail.meta.scale"
           v-if="imageDetail.meta.scale"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Seed"
           :shortcutText="null"
           :value="imageDetail.meta.seed"
           v-if="imageDetail.meta.seed"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Sampler"
           :shortcutText="null"
           :value="imageDetail.meta.sampler"
           v-if="imageDetail.meta.sampler"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Strength"
           :shortcutText="null"
           :value="imageDetail.meta.strength"
           v-if="imageDetail.meta.strength"
         ></Property>
         <Property
-          class="mb-4"
+          class="mb-3"
           label="Noise"
           :shortcutText="null"
           :value="imageDetail.meta.noise"
           v-if="imageDetail.meta.noise"
-        ></Property>
-        <Property
-          class="mb-4"
-          label="Model"
-          :shortcutText="null"
-          :value="imageDetail.meta.model"
-          v-if="imageDetail.meta.model"
         ></Property>
       </div>
       <div class="no-meta-area" v-else>
@@ -122,8 +130,9 @@ const copyToEditor = () => {
   height: 100%;
   width: 100%;
   background-color: rgb(34, 34, 34);
-  padding: 12px;
+  padding: 0 12px 12px 12px;
   overflow: auto;
+  position: relative;
 
   /* スクロール幅 */
   &::-webkit-scrollbar {
@@ -142,11 +151,11 @@ const copyToEditor = () => {
   }
 
   .image-meta-viewer {
-    .breads {
-      margin-bottom: 20px;
-    }
+    .sticky-area {
+      position: sticky;
+      top: 0;
+      background-color: rgb(34, 34, 34);
 
-    .meta-area {
       .copy-button {
         display: flex;
         border: 1px solid rgb(255, 255, 255);
@@ -155,6 +164,9 @@ const copyToEditor = () => {
         justify-content: center;
         background-color: rgb(37, 18, 18);
       }
+    }
+
+    .meta-area {
     }
 
     .no-meta-area {
