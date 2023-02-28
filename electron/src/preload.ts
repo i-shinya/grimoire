@@ -1,6 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail, ImageIndex } from "./type/image";
+import { ImageDetail, ImageIndex, ThumbnailSize } from "./type/image";
 import { FavoritePrompt } from "./type/favorite";
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -47,5 +47,11 @@ contextBridge.exposeInMainWorld("storeAPI", {
   getFavoritePrompt: (): Promise<FavoritePrompt | null> => {
     const res = ipcRenderer.invoke("get-favorite-prompt");
     return res as Promise<FavoritePrompt | null>;
+  },
+  saveThumbnailSize: (size: ThumbnailSize) =>
+    ipcRenderer.invoke("save-thumbnail-size", size),
+  getThumbnailSize: (): Promise<ThumbnailSize | null> => {
+    const res = ipcRenderer.invoke("get-thumbnail-size");
+    return res as Promise<ThumbnailSize | null>;
   },
 });

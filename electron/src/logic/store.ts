@@ -1,9 +1,11 @@
 import ElectronStore from "electron-store";
 import { FavoritePrompt } from "../type/favorite";
+import { ThumbnailSize } from "../type/image";
 
 const store = new ElectronStore();
 
 const FavoritePromptKey = "FavoritePromptKey";
+const ThumbnailSizeKey = "ThumbnailSizeKey";
 /**
  * ファイルの保存先は以下っぽい（開発時はアプリ名がelectron）
  * - windows
@@ -21,4 +23,13 @@ export const saveFavoritePrompt = (favorite: FavoritePrompt) => {
 export const getFavoritePrompt = (): FavoritePrompt | null => {
   const res = store.get(FavoritePromptKey, null);
   return res as FavoritePrompt | null;
+};
+
+export const saveThumbnailSize = (size: ThumbnailSize) => {
+  store.set(ThumbnailSizeKey, size);
+};
+
+export const getThumbnailSize = (): ThumbnailSize | null => {
+  const res = store.get(ThumbnailSizeKey, null);
+  return res as ThumbnailSize | null;
 };

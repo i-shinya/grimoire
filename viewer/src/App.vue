@@ -41,8 +41,13 @@ if (!storeAPI) {
 }
 
 onMounted(async () => {
-  const res = await storeAPI.getFavoritePrompt();
-  favoriteStore.setFavoritePrompt(res);
+  // configを呼び出す処理
+  storeAPI.getFavoritePrompt().then((res) => {
+    favoriteStore.setFavoritePrompt(res);
+  });
+  storeAPI.getThumbnailSize().then((res) => {
+    imgStore.setThumbnailSize(res);
+  });
 });
 </script>
 
