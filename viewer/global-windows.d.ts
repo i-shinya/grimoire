@@ -17,6 +17,8 @@ interface WindowAccessAPI {
 interface WindowStoreAPI {
   saveFavoritePrompt(favorite: FavoritePrompt): Promise<void>;
   getFavoritePrompt(): Promise<FavoritePrompt | null>;
+  saveThumbnailSize(size: ThumbnailSize): Promise<void>;
+  getThumbnailSize(): Promise<ThumbnailSize | null>;
 }
 
 declare global {

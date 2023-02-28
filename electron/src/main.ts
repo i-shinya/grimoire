@@ -1,7 +1,7 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail, ImageIndex } from "./type/image";
+import { ImageDetail, ImageIndex, ThumbnailSize } from "./type/image";
 import {
   getDirectoryNodes,
   openDirectoryDialog,
@@ -10,7 +10,12 @@ import {
 } from "./logic/directory";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
-import { getFavoritePrompt, saveFavoritePrompt } from "./logic/store";
+import {
+  getFavoritePrompt,
+  getThumbnailSize,
+  saveFavoritePrompt,
+  saveThumbnailSize,
+} from "./logic/store";
 import { FavoritePrompt } from "./type/favorite";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev";
@@ -117,6 +122,20 @@ function createWindow() {
     "get-favorite-prompt",
     async (_e: Electron.IpcMainInvokeEvent): Promise<FavoritePrompt | null> =>
       getFavoritePrompt()
+  );
+  ipcMain.handle(
+    "save-thumbnail-size",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      size: ThumbnailSize
+    ): Promise<void> => {
+      saveThumbnailSize(size);
+    }
+  );
+  ipcMain.handle(
+    "get-thumbnail-size",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<ThumbnailSize | null> =>
+      getThumbnailSize()
   );
 }
 

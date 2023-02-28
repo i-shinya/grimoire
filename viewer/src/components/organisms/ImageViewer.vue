@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
-import { ImageDetail, ImageIndex } from "../../core/type/image";
+import { ImageDetail, ImageIndex, ThumbnailSize } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 import { divideArray } from "../../core/array";
-import { ThumbnailSize } from "../../store/image";
+import { StoreAPIKey } from "../../core/api/store";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -18,6 +18,10 @@ if (!areaVisibilityStore)
 const directoryAPI = inject<DirectoryAPI>(DirectoryAPIKey);
 if (!directoryAPI) {
   throw new Error("failed to inject api from directoryAPI");
+}
+const storeAPI = inject(StoreAPIKey);
+if (!storeAPI) {
+  throw new Error("failed to inject api from storeAPI");
 }
 
 const selectImage = (image: ImageDetail) => {
@@ -49,7 +53,8 @@ const reloadDirectoryTree = async () => {
 };
 
 const changeThumbnailSize = (size: ThumbnailSize) => {
-  imageStore.changeThumbnailSize(size);
+  imageStore.setThumbnailSize(size);
+  storeAPI.saveThumbnailSize(size);
 };
 
 const selectPath = computed(

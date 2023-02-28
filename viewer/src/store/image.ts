@@ -1,7 +1,5 @@
 import { reactive, readonly } from "vue";
-import { ImageDetail } from "../core/type/image";
-
-export type ThumbnailSize = "small" | "default" | "big";
+import { ImageDetail, ThumbnailSize } from "../core/type/image";
 
 export interface ImageState {
   selectedImageBasePath: string | null;
@@ -22,13 +20,13 @@ export default function imageStore() {
     state.imageDetail = imageDetail;
   };
 
-  const changeThumbnailSize = (size: ThumbnailSize) => {
+  const setThumbnailSize = (size: ThumbnailSize) => {
     state.thumbnailSize = size;
   };
 
   return {
     state: readonly(state), // 読み取りしかできないようにする
-    changeThumbnailSize,
+    setThumbnailSize,
     selectImage,
   };
 }
