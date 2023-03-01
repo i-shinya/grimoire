@@ -53,7 +53,7 @@ const showChatGpt = async () => {
           text="ChatGPT"
           icon-type="fa-brands fa-chrome"
           :isShow="false"
-          @click="showChatGtp"
+          @click="showChatGpt"
         ></VerticalMenuButton>
       </div>
     </div>
