@@ -6,6 +6,7 @@ interface WindowDirectoryAPI {
   showDirectories(path: string): Promise<DirectoryNode[]>;
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
+  getImageDataUrl(path: string): Promise<string>;
 }
 
 interface WindowAccessAPI {

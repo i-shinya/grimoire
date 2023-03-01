@@ -101,18 +101,20 @@ export const listImageIndex = async (path: string): Promise<ImageIndex[]> => {
 export const getImages = async (basepath: string, imageIndex: ImageIndex[]) => {
   return await Promise.all(
     imageIndex.map(async (image: ImageIndex) => {
-      // TODO サムネイル画像だから圧縮した方が良いかも
-      // TODO ファイル取得とメタデータ取得も並列で動かすようにしてもいいかも
-      const buffer = readImage(`${basepath}/${image.label}`);
+      // TODO メタデータ取得も並列で動かすようにしてもいいかも
       const meta = await getImageMeta(`${basepath}/${image.label}`);
       return {
         id: image.index,
         label: image.label,
-        dataUrl: "data:image/png;base64," + buffer.toString("base64"),
         meta: meta,
       };
     })
   );
+};
+
+export const getImageDataUrl = (path: string): string => {
+  const buffer = readImage(path);
+  return "data:image/png;base64," + buffer.toString("base64");
 };
 
 /**

@@ -7,6 +7,7 @@ import {
   openDirectoryDialog,
   listImageIndex,
   getImages,
+  getImageDataUrl,
 } from "./logic/directory";
 import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
@@ -85,6 +86,13 @@ function createWindow() {
       imageIndex: ImageIndex[]
     ): Promise<ImageDetail[]> => {
       return getImages(basePath, imageIndex);
+    }
+  );
+  // ディレクトリ内のファイルを取得する
+  ipcMain.handle(
+    "get-image-dataurl",
+    async (_e: Electron.IpcMainInvokeEvent, path: string): Promise<string> => {
+      return getImageDataUrl(path);
     }
   );
 

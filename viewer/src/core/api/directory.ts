@@ -16,6 +16,7 @@ export interface DirectoryAPI {
   ): Promise<DirectoryNode[]>;
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
+  getImageDataUrl(path: string): Promise<string>;
 }
 export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(loadingStore: any): Promise<string> {
@@ -64,6 +65,10 @@ export class DirectoryNodeAPI implements DirectoryAPI {
         alert(err.message);
         return [];
       });
+  }
+
+  async getImageDataUrl(path: string): Promise<string> {
+    return await window.directoryAPI.getImageDataUrl(path);
   }
 }
 
@@ -163,5 +168,10 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     } else {
       return [];
     }
+  }
+
+  async getImageDataUrl(path: string): Promise<string> {
+    // TODO path毎に返す値を変更する
+    return aiImage1;
   }
 }

@@ -8,7 +8,6 @@ export interface ImageIndex {
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名
-  dataUrl: string; // 画像のdataURL
   meta: Metadata | null;
 }
 
