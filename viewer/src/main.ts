@@ -57,6 +57,7 @@ import {
   StoreDemoAPI,
   StoreNodeAPI,
 } from "./core/api/store";
+import { faChrome } from "@fortawesome/free-brands-svg-icons";
 
 // 使用するfont-awesomeアイコンを読み込む
 library.add(
@@ -83,7 +84,8 @@ library.add(
   faBan,
   faStar,
   faPenToSquare,
-  faFloppyDisk
+  faFloppyDisk,
+  faChrome
 );
 
 let directoryAPI: DirectoryAPI;

@@ -43,6 +43,8 @@ contextBridge.exposeInMainWorld("windowAPI", {
   closeWindow: () => ipcRenderer.invoke("close-window"),
   resizeWindow: () => ipcRenderer.invoke("resize-window"),
   minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
+  showChildWindow: (url: string) =>
+    ipcRenderer.invoke("show-child-window", url),
 });
 
 contextBridge.exposeInMainWorld("storeAPI", {

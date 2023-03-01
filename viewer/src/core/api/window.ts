@@ -7,6 +7,7 @@ export interface WindowAPI {
   closeWindow(): Promise<void>;
   resizeWindow(): Promise<void>;
   minimizeWindow(): Promise<void>;
+  showChildWindow(url: string): Promise<void>;
 }
 
 export class WindowNodeAPI implements WindowAPI {
@@ -21,6 +22,10 @@ export class WindowNodeAPI implements WindowAPI {
   async minimizeWindow(): Promise<void> {
     await window.windowAPI.minimizeWindow();
   }
+
+  async showChildWindow(url: string): Promise<void> {
+    await window.windowAPI.showChildWindow(url);
+  }
 }
 
 // デモ用は何もしない
@@ -34,6 +39,10 @@ export class WindowDemoAPI implements WindowAPI {
   }
 
   async minimizeWindow(): Promise<void> {
+    return;
+  }
+
+  async showChildWindow(url: string): Promise<void> {
     return;
   }
 }
