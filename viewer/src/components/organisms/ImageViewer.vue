@@ -58,8 +58,8 @@ const changeThumbnailSize = (size: ThumbnailSize) => {
   storeAPI.saveThumbnailSize(size);
 };
 
-const getImage = (path: string) =>
-  directoryAPI.getImageDataUrl(path).then((res) => res);
+const getImage = (filename: string) =>
+  directoryAPI.getImageDataUrl(selectPath.value, filename).then((res) => res);
 
 const selectPath = computed(
   () => directoryStore.state.selectedDirectoryPath ?? ""
@@ -121,7 +121,6 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <Thumbnail
-          :basePath="selectPath"
           :image="item"
           :thumbnailSize="imageStore.state.thumbnailSize"
           :isSelect="isSelected(item)"

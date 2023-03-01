@@ -16,7 +16,7 @@ export interface DirectoryAPI {
   ): Promise<DirectoryNode[]>;
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
-  getImageDataUrl(path: string): Promise<string>;
+  getImageDataUrl(basePath: string, filename: string): Promise<string>;
 }
 export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(loadingStore: any): Promise<string> {
@@ -67,8 +67,8 @@ export class DirectoryNodeAPI implements DirectoryAPI {
       });
   }
 
-  async getImageDataUrl(path: string): Promise<string> {
-    return await window.directoryAPI.getImageDataUrl(path);
+  async getImageDataUrl(basePath: string, filename: string): Promise<string> {
+    return await window.directoryAPI.getImageDataUrl(`${basePath}/${filename}`);
   }
 }
 
@@ -128,7 +128,6 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail1 = {
       id: 1,
       label: "ai-image_1.png",
-      dataUrl: aiImage1,
       meta: {
         provider: "NovelAI",
         positive:
@@ -146,7 +145,6 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail2 = {
       id: 2,
       label: "ai-image_2.png",
-      dataUrl: aiImage2,
       meta: {
         provider: "NovelAI",
         positive: "masterpiece, best quality, bahamut, final fantasy",
@@ -170,8 +168,11 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     }
   }
 
-  async getImageDataUrl(path: string): Promise<string> {
-    // TODO path毎に返す値を変更する
-    return aiImage1;
+  async getImageDataUrl(basePath: string, filename: string): Promise<string> {
+    if (filename === "ai-image_1.png") {
+      return aiImage1;
+    } else {
+      return aiImage2;
+    }
   }
 }

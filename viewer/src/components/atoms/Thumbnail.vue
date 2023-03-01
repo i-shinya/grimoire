@@ -3,11 +3,10 @@ import { computed, inject, onMounted, ref } from "vue";
 import { ImageDetail, ThumbnailSize } from "../../core/type/image";
 
 const props = defineProps<{
-  basePath: string;
   image: ImageDetail;
   thumbnailSize: ThumbnailSize;
   isSelect: boolean;
-  getImage: (path: string) => Promise<string>;
+  getImage: (filename: string) => Promise<string>;
 }>();
 
 const emits = defineEmits<{
@@ -21,7 +20,7 @@ const selectImage = () => {
 };
 
 onMounted(() => {
-  props.getImage(`${props.basePath}/${props.image.label}`).then((res) => {
+  props.getImage(props.image.label).then((res) => {
     dataUrl.value = res;
   });
 });
