@@ -13,6 +13,7 @@ interface WindowAccessAPI {
   closeWindow(): Promise<void>;
   resizeWindow(): Promise<void>;
   minimizeWindow(): Promise<void>;
+  showChildWindow(url: string): Promise<void>;
 }
 
 interface WindowStoreAPI {
