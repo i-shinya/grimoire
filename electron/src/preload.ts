@@ -33,6 +33,10 @@ contextBridge.exposeInMainWorld("directoryAPI", {
     const res = ipcRenderer.invoke("get-images", basePath, imageIndex);
     return res as Promise<ImageDetail[]>;
   },
+  getImageDataUrl: (path: string): Promise<string> => {
+    const res = ipcRenderer.invoke("get-image-dataurl", path);
+    return res as Promise<string>;
+  },
 });
 
 contextBridge.exposeInMainWorld("windowAPI", {

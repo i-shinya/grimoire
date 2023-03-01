@@ -6,6 +6,7 @@ import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 import { divideArray } from "../../core/array";
 import { StoreAPIKey } from "../../core/api/store";
+import Thumbnail from "../atoms/Thumbnail.vue";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -56,6 +57,9 @@ const changeThumbnailSize = (size: ThumbnailSize) => {
   imageStore.setThumbnailSize(size);
   storeAPI.saveThumbnailSize(size);
 };
+
+const getImage = (filename: string) =>
+  directoryAPI.getImageDataUrl(selectPath.value, filename).then((res) => res);
 
 const selectPath = computed(
   () => directoryStore.state.selectedDirectoryPath ?? ""
@@ -116,22 +120,13 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     </div>
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
-        <div
-          class="image-area"
-          :class="imageStore.state.thumbnailSize"
-          @click="selectImage(item)"
-        >
-          <img
-            class="image"
-            :class="[
-              isSelected(item) ? 'is-selected-image' : '',
-              imageStore.state.thumbnailSize,
-            ]"
-            :src="item.dataUrl"
-            :draggable="true"
-          />
-          <div class="image-label">{{ item.label }}</div>
-        </div>
+        <Thumbnail
+          :image="item"
+          :thumbnailSize="imageStore.state.thumbnailSize"
+          :isSelect="isSelected(item)"
+          :getImage="getImage"
+          @selectImage="selectImage"
+        ></Thumbnail>
       </template>
     </div>
   </div>
@@ -207,54 +202,6 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-
-    .image-area {
-      color: white;
-      max-height: 30%;
-      padding: 8px;
-      cursor: pointer;
-
-      // サムネイルサイズ、storeに保存されている値
-      &.small {
-        max-width: 136px;
-        min-width: 136px;
-      }
-      &.default {
-        max-width: 256px;
-        min-width: 256px;
-      }
-      &.big {
-        max-width: 376px;
-        min-width: 376px;
-      }
-
-      .image {
-        height: auto;
-
-        // サムネイルサイズ、storeに保存されている値
-        &.small {
-          max-width: 120px;
-          min-width: 120px;
-        }
-        &.default {
-          max-width: 240px;
-          min-width: 240px;
-        }
-        &.big {
-          max-width: 360px;
-          min-width: 360px;
-        }
-
-        &.is-selected-image {
-          border: 2px solid rgb(150, 161, 109);
-        }
-      }
-      .image-label {
-        padding-top: 4px;
-        font-size: 16px;
-        text-align: center;
-      }
-    }
   }
 }
 </style>
