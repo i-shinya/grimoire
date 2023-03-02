@@ -9,7 +9,12 @@ import {
   getImages,
   getImageDataUrl,
 } from "./logic/directory";
-import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
+import {
+  closeWindow,
+  createChildWindow,
+  maximizeWindow,
+  minimizeWindow,
+} from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import {
   getFavoritePrompt,
@@ -117,6 +122,12 @@ function createWindow() {
     "minimize-window",
     async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
       minimizeWindow(mainWindow);
+    }
+  );
+  ipcMain.handle(
+    "show-child-window",
+    async (_e: Electron.IpcMainInvokeEvent, url: string): Promise<void> => {
+      createChildWindow(mainWindow, url);
     }
   );
 

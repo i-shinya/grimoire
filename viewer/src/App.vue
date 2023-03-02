@@ -165,12 +165,17 @@ onMounted(async () => {
 
 /* splitpanesのスタイル上書き */
 .splitpanes__splitter {
-  min-width: 3px !important;
-  min-height: 3px !important;
-  background: var.$split-bar-color;
+  min-width: 4px !important;
+  min-height: 4px !important;
+  position: relative;
 
-  &:hover {
-    min-width: 3px !important;
+  &::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    min-width: 2px !important;
+    min-height: 2px !important;
+    background: var.$split-bar-color;
   }
 }
 
