@@ -9,12 +9,7 @@ import {
   getImages,
   getImageDataUrl,
 } from "./logic/directory";
-import {
-  closeWindow,
-  createChildWindow,
-  maximizeWindow,
-  minimizeWindow,
-} from "./logic/window";
+import { closeWindow, maximizeWindow, minimizeWindow } from "./logic/window";
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import {
   getFavoritePrompt,
@@ -35,9 +30,13 @@ function createWindow() {
     // falseにするとフレームを全部消せる
     // ヘッダーとかをdraga可能にしないとウィンドウ移動できなくなるので注意
     frame: false,
+    show: false,
     webPreferences: {
       preload: join(__dirname, "./preload.js"),
     },
+  });
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
   });
 
   // Open the DevTools.
@@ -118,12 +117,6 @@ function createWindow() {
     "minimize-window",
     async (_e: Electron.IpcMainInvokeEvent): Promise<void> => {
       minimizeWindow(mainWindow);
-    }
-  );
-  ipcMain.handle(
-    "show-child-window",
-    async (_e: Electron.IpcMainInvokeEvent, url: string): Promise<void> => {
-      createChildWindow(mainWindow, url);
     }
   );
 
