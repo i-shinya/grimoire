@@ -170,7 +170,7 @@ const moveToDown = (index: number) => {
 
 // インプットで入力されたキー入力を判定
 const inputKeyDown = (index: number, event: KeyboardEvent) => {
-  // console.log(val.event);
+  // console.log(event);
   if (event.code === "ArrowDown") {
     if (index === prompts.value.length - 1) {
       // 最後の行だった場合何もしない
@@ -201,8 +201,10 @@ const inputKeyDown = (index: number, event: KeyboardEvent) => {
     } else {
       addNextPrompt(index);
     }
-  } else if (event.code === "Delete") {
-    deletePrompt(index);
+  } else if (event.code === "Backspace") {
+    if (event.ctrlKey) {
+      deletePrompt(index);
+    }
   }
 };
 
