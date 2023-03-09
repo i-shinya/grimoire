@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { FavoritePrompt } from "../../core/type/favorite";
 
 const props = defineProps<{

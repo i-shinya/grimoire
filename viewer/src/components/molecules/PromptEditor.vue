@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, onMounted, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { Prompt } from "../../store/property";
 import PromptInput from "../atoms/PromptInput.vue";
 import {
@@ -201,7 +201,7 @@ const inputKeyDown = (index: number, event: KeyboardEvent) => {
     } else {
       addNextPrompt(index);
     }
-  } else if (event.code === "Backspace") {
+  } else if (event.code === "Delete") {
     if (event.ctrlKey) {
       deletePrompt(index);
     }
