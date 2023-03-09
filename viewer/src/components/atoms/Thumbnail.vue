@@ -29,6 +29,7 @@ onMounted(() => {
 <template>
   <div class="image-area" :class="thumbnailSize" @click="selectImage">
     <img
+      :id="image.label"
       class="image"
       :class="[isSelect ? 'is-selected-image' : '', thumbnailSize]"
       :src="dataUrl"
