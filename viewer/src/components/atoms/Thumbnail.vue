@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { ImageDetail, ThumbnailSize } from "../../core/type/image";
 
 const props = defineProps<{
