@@ -1,4 +1,4 @@
 export const isImageExtension = (filename: string): boolean => {
-  const allowExtensions = ".(jpeg|jpg|png|JPEG|JPG|PNG)$";
+  const allowExtensions = ".(png|PNG)$";
   return !!filename.match(allowExtensions);
 };

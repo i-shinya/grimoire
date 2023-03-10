@@ -31,7 +31,7 @@ describe("directory.ts", () => {
         {
           id: 2,
           basePath: "./testdata/image",
-          label: "no-meta.jpeg",
+          label: "no-meta.png",
           isDirectory: false,
           children: undefined,
         },
@@ -231,7 +231,7 @@ describe("directory.ts", () => {
 
     describe("その他", () => {
       it("メタデータが無い画像", async () => {
-        const res = await getImageMeta("./testdata/image/no-meta.jpeg");
+        const res = await getImageMeta("./testdata/image/no-meta.png");
         expect(res).toBeNull();
       });
     });
