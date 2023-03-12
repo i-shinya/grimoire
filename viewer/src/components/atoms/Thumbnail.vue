@@ -19,7 +19,7 @@ const maxImageSize = computed(() => {
     !props.image.meta.width ||
     !props.image.meta.height
   ) {
-    return "";
+    return "max-height: 80vh;";
   }
 
   const maxWidth =
@@ -68,6 +68,7 @@ onMounted(() => {
   .image {
     height: auto;
     width: 100%;
+    object-fit: contain;
 
     &.is-selected-image {
       border: 2px solid rgb(150, 161, 109);
