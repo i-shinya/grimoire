@@ -1,4 +1,4 @@
-export type ThumbnailSize = "small" | "default" | "big";
+export type ThumbnailSize = "small" | "default" | "large";
 
 export interface ImageIndex {
   index: number;
@@ -9,6 +9,7 @@ export interface ImageDetail {
   id: number;
   label: string; // ファイル名
   meta: Metadata | null;
+  dataUrl?: string; // 画像のdataUrl、初期では取得しない
 }
 
 export class Metadata {

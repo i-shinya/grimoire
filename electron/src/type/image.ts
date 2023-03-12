@@ -1,4 +1,4 @@
-export type ThumbnailSize = "small" | "default" | "big";
+export type ThumbnailSize = "small" | "default" | "large";
 
 export interface ImageIndex {
   index: number;
