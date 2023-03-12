@@ -133,11 +133,12 @@ watch(showModal, (val) => {
 
     .arrow-icon {
       font-size: 20px;
+      padding: 12px;
     }
 
     .main-image {
       max-width: 80vw;
-      max-height: 80vw;
+      max-height: 80vh;
     }
   }
 }
