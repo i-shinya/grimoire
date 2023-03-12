@@ -106,8 +106,9 @@ watch(showModal, (val) => {
           icon="fa-solid fa-angle-left"
           @click="showPreviousImage"
         />
-        <div class="main-image" v-if="mainImage">
+        <div v-if="mainImage">
           <Thumbnail
+            class="main-image"
             :image="mainImage"
             :isSelect="false"
             :getImage="getImage"
@@ -138,7 +139,8 @@ watch(showModal, (val) => {
 
     .main-image {
       max-width: 80vw;
-      max-height: 80vh;
+      width: 80vw;
+      min-width: 80vw;
     }
   }
 }
