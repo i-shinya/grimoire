@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { ImageDetail, ThumbnailSize } from "../../core/type/image";
 
 const props = defineProps<{
@@ -11,6 +11,28 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: "send-data-url", dataUrl: string): void;
 }>();
+
+// 画像のサイズのmax値を計算
+const maxImageSize = computed(() => {
+  if (
+    !props.image.meta ||
+    !props.image.meta.width ||
+    !props.image.meta.height
+  ) {
+    return "";
+  }
+
+  const maxWidth =
+    window.innerWidth * 0.8 > props.image.meta.width
+      ? props.image.meta.width
+      : window.innerWidth * 0.8;
+  const maxHeight =
+    window.innerHeight * 0.8 > props.image.meta.height
+      ? props.image.meta.height
+      : window.innerHeight * 0.8;
+
+  return `max-width: ${maxWidth}px; max-height: ${maxHeight}px;`;
+});
 
 onMounted(() => {
   if (!props.image.dataUrl) {
@@ -30,6 +52,7 @@ onMounted(() => {
       :src="image.dataUrl"
       loading="lazy"
       :draggable="true"
+      :style="maxImageSize"
     />
     <div class="image-label">{{ image.label }}</div>
   </div>
@@ -40,9 +63,10 @@ onMounted(() => {
   padding: 8px;
   cursor: pointer;
   width: 100%;
+  text-align: center;
 
   .image {
-    max-height: 75vh;
+    height: auto;
     width: 100%;
 
     &.is-selected-image {
