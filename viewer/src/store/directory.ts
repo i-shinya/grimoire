@@ -33,12 +33,22 @@ export default function directoryStore() {
       state.imageDetails = imageDetails;
     }
   };
+  const setImageDataUrl = (id: number, dataUrl: string) => {
+    // stateのimageDetailsからidが一致するものを探してdataUrlをセットする
+    if (state.imageDetails) {
+      const imageDetail = state.imageDetails.find((image) => image.id === id);
+      if (imageDetail) {
+        imageDetail.dataUrl = dataUrl;
+      }
+    }
+  };
 
   return {
     state: readonly(state), // 読み取りしかできないようにする
     selectDirectory,
     setOpenDirectory,
     setImageDetails,
+    setImageDataUrl,
     pushImageDetails,
   };
 }

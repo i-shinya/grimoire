@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail, ImageIndex, ThumbnailSize } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -7,6 +7,7 @@ import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 import { divideArray } from "../../core/array";
 import { StoreAPIKey } from "../../core/api/store";
 import Thumbnail from "../atoms/Thumbnail.vue";
+import ImageModal from "../molecules/ImageModal.vue";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -25,9 +26,14 @@ if (!storeAPI) {
   throw new Error("failed to inject api from storeAPI");
 }
 
+const showModal = ref(false);
+
 const selectImage = (image: ImageDetail) => {
   imageStore.selectImage(selectPath.value, image);
   areaVisibilityStore.showImageMetaViewer();
+};
+const receiveDataUrl = (id: number, dataUrl: string) => {
+  directoryStore.setImageDataUrl(id, dataUrl);
 };
 
 // 画像一覧の更新
@@ -81,6 +87,19 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     selectPath.value === imageStore.state.selectedImageBasePath
   );
 });
+
+const getMainImageDetail = computed(() => {
+  if (
+    !directoryStore.state.imageDetails ||
+    directoryStore.state.imageDetails.length === 0
+  )
+    return null;
+  return (
+    directoryStore.state.imageDetails.find(
+      (image) => image.id === imageStore.state.imageDetail?.id
+    ) ?? directoryStore.state.imageDetails[0]
+  );
+});
 </script>
 
 <template>
@@ -93,6 +112,12 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
             class="clickable mr-3 pt-1"
             icon="fa-solid fa-arrow-rotate-right"
             @click="reloadDirectoryTree"
+          />
+
+          <font-awesome-icon
+            class="show-modal-icon clickable"
+            icon="fa-solid fa-images"
+            @click="showModal = true"
           />
 
           <div class="thumbnail-size-icon">
@@ -109,10 +134,10 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
               @click="changeThumbnailSize('default')"
             />
             <font-awesome-icon
-              class="big clickable"
-              :class="imageStore.state.thumbnailSize === 'big' ? 'now' : ''"
+              class="large clickable mr-4"
+              :class="imageStore.state.thumbnailSize === 'large' ? 'now' : ''"
               icon="fa-regular fa-image"
-              @click="changeThumbnailSize('big')"
+              @click="changeThumbnailSize('large')"
             />
           </div>
         </div>
@@ -121,14 +146,24 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     <div class="image-viewer">
       <template v-for="item of images" :key="item.id">
         <Thumbnail
+          class="list-thumbnail"
+          :class="imageStore.state.thumbnailSize"
           :image="item"
-          :thumbnailSize="imageStore.state.thumbnailSize"
           :isSelect="isSelected(item)"
           :getImage="getImage"
-          @selectImage="selectImage"
+          @click="selectImage(item)"
+          @sendDataUrl="(v: string) => receiveDataUrl(item.id, v)"
         ></Thumbnail>
       </template>
     </div>
+    <ImageModal
+      v-if="showModal"
+      :images="directoryStore.state.imageDetails ?? []"
+      :show="showModal"
+      :getImage="getImage"
+      :defaultImage="getMainImageDetail"
+      @hideModal="showModal = false"
+    ></ImageModal>
   </div>
 </template>
 
@@ -174,6 +209,10 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
         align-items: center;
         justify-content: space-between;
 
+        .show-modal-icon {
+          font-size: 20px;
+        }
+
         .thumbnail-size-icon {
           display: flex;
           align-items: center;
@@ -189,7 +228,7 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
           .default {
             font-size: 16px;
           }
-          .big {
+          .large {
             font-size: 18px;
           }
         }
@@ -202,6 +241,25 @@ const isSelected = computed(() => (image: ImageDetail): boolean => {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
+
+    .list-thumbnail {
+      // サムネイルサイズ、storeに保存されている値
+      &.small {
+        max-width: 136px;
+        width: 136px;
+        min-width: 136px;
+      }
+      &.default {
+        max-width: 256px;
+        width: 256px;
+        min-width: 256px;
+      }
+      &.large {
+        max-width: 376px;
+        width: 376px;
+        min-width: 376px;
+      }
+    }
   }
 }
 </style>

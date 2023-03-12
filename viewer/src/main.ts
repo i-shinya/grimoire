@@ -31,6 +31,8 @@ import {
   faStar,
   faPenToSquare,
   faFloppyDisk,
+  faImages,
+  faAngleLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCopy,
@@ -65,6 +67,7 @@ library.add(
   faFolderOpen,
   faMagnifyingGlass,
   faAngleRight,
+  faAngleLeft,
   faAngleDown,
   faAngleUp,
   faCopy,
@@ -85,7 +88,8 @@ library.add(
   faStar,
   faPenToSquare,
   faFloppyDisk,
-  faChrome
+  faChrome,
+  faImages
 );
 
 let directoryAPI: DirectoryAPI;
