@@ -39,9 +39,10 @@ onMounted(() => {
 .image-area {
   padding: 8px;
   cursor: pointer;
+  width: 100%;
 
   .image {
-    height: auto;
+    max-height: 75vh;
     width: 100%;
 
     &.is-selected-image {
