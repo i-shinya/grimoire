@@ -114,25 +114,59 @@ export class Metadata {
       return meta;
     };
 
+    // Negative promptを設定する
+    // paramsはNegative prompt: で始まる要素から最後の要素を除いた要素までの配列を想定
+    const setNegativePrompt = (meta: Metadata, params: string[]): Metadata => {
+      meta.negative = params.join("").replace("Negative prompt: ", "");
+      return meta;
+    };
+
     // parametersにパラメータが格納されているのでそれを取り出す
     if (metadata.parameters) {
       const params = metadata.parameters
         .split("\n")
-        .filter((v: string) => v !== "");
+        .filter((v: string) => v !== "") as string[]; // 空の行は無視
+
+      // 1行しかない場合は共通のパラメータのみを返却
       if (params.length === 1) {
         meta = setCommonParam(meta, params[0]);
-      } else if (params.length === 2) {
-        if (params[0].startsWith("Negative prompt: ")) {
-          meta.negative = params[0].replace("Negative prompt: ", "");
-        } else {
-          meta.positive = params[0];
-        }
-        meta = setCommonParam(meta, params[1]);
-      } else if (params.length >= 3) {
-        meta.positive = params[0];
-        meta.negative = params[1].replace("Negative prompt: ", "");
-        meta = setCommonParam(meta, params[2]);
+        return meta;
       }
+
+      // 最初の要素の最初がNegative prompt: で始まっている場合はポジティブプロンプトが無い
+      if (params[0].startsWith("Negative prompt: ")) {
+        // 最後の行は共通パラメータなのでそれを取得する
+        meta = setCommonParam(meta, params[params.length - 1]);
+        // 最後の行を除いた行を全て連結してNegative promptを設定する
+        meta = setNegativePrompt(meta, params.slice(0, params.length - 1));
+        return meta;
+      }
+
+      // 要素の最初がNegative prompt: で始まっている要素が無い場合はネガティブプロンプトが無い
+      if (!params.some((v: string) => v.startsWith("Negative prompt: "))) {
+        // 最後の行は共通パラメータなのでそれを取得する
+        meta = setCommonParam(meta, params[params.length - 1]);
+        // 最後の行を除いた行を全て連結してPositive promptを設定する
+        meta.positive = params.slice(0, params.length - 1).join("");
+        return meta;
+      }
+
+      // それ以外はPositive promptとNegative promptと共通パラメータがある
+      // 最後の要素は共通パラメータなのでそれを取得する
+      meta = setCommonParam(meta, params[params.length - 1]);
+
+      // 文字列の最初がNegative prompt: で始まっている要素のindexを取得する
+      const negativeIndex = params.findIndex((v: string) =>
+        v.startsWith("Negative prompt: ")
+      );
+      // NegativeIndexより前の要素を全て連結してPositive promptを設定する
+      meta.positive = params.slice(0, negativeIndex).join("");
+
+      // NegativeIndexから最後の要素までを全て連結してNegative promptを設定する
+      meta = setNegativePrompt(
+        meta,
+        params.slice(negativeIndex, params.length - 1)
+      );
     }
     return meta;
   }
