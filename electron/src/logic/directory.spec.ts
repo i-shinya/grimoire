@@ -59,37 +59,77 @@ describe("directory.ts", () => {
         {
           id: 6,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_1_has-negative.png",
+          label: "stable-diffusion-image_01_has-negative.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 7,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_2_has-positive.png",
+          label: "stable-diffusion-image_02_has-positive.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 8,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_3_has-positive-and-negative.png",
+          label: "stable-diffusion-image_03_has-positive-and-negative.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 9,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_4_no-positive-and-negative.png",
+          label: "stable-diffusion-image_04_no-positive-and-negative.png",
           isDirectory: false,
           children: undefined,
         },
         {
           id: 10,
           basePath: "./testdata/image",
-          label: "stable-diffusion-image_5_has-empty-parameter-row.png",
+          label: "stable-diffusion-image_05_has-empty-parameter-row.png",
           isDirectory: false,
           children: undefined,
+        },
+        {
+          basePath: "./testdata/image",
+          children: undefined,
+          id: 11,
+          isDirectory: false,
+          label:
+            "stable-diffusion-image_21_contain-empty-row-in-positive-and-contain-empty-row-in-negative.png",
+        },
+        {
+          basePath: "./testdata/image",
+          children: undefined,
+          id: 12,
+          isDirectory: false,
+          label:
+            "stable-diffusion-image_22_has-negative-contain-empty-row-in-positive.png",
+        },
+        {
+          basePath: "./testdata/image",
+          children: undefined,
+          id: 13,
+          isDirectory: false,
+          label:
+            "stable-diffusion-image_23_no-negative-contain-empty-row-in-positive.png",
+        },
+        {
+          basePath: "./testdata/image",
+          children: undefined,
+          id: 14,
+          isDirectory: false,
+          label:
+            "stable-diffusion-image_24_has-positive-contain-empty-row-in-negative.png",
+        },
+        {
+          basePath: "./testdata/image",
+          children: undefined,
+          id: 15,
+          isDirectory: false,
+          label:
+            "stable-diffusion-image_25_no-positive-contain-empty-row-in-negative.png",
         },
       ]);
     });
@@ -103,7 +143,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(8);
+      expect(res.length).toBe(13);
     });
   });
 
@@ -129,7 +169,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(8);
+      expect(res.length).toBe(13);
     });
   });
 
@@ -169,7 +209,7 @@ describe("directory.ts", () => {
     describe("StableDiffusion", () => {
       it("正常系：画像のメタデータが取得できること（positiveとnegativeを含む）", async () => {
         const res = await getImageMeta(
-          "./testdata/image/stable-diffusion-image_3_has-positive-and-negative.png"
+          "./testdata/image/stable-diffusion-image_03_has-positive-and-negative.png"
         );
         expect(res).toMatchObject({
           width: 512,
@@ -186,7 +226,7 @@ describe("directory.ts", () => {
 
       it("正常系：画像のメタデータが取得できること（positiveを含む、negativeを含まない）", async () => {
         const res = await getImageMeta(
-          "./testdata/image/stable-diffusion-image_2_has-positive.png"
+          "./testdata/image/stable-diffusion-image_02_has-positive.png"
         );
         expect(res).toMatchObject({
           width: 512,
@@ -203,7 +243,7 @@ describe("directory.ts", () => {
 
       it("正常系：画像のメタデータが取得できること（positiveを含まない、negativeを含む）", async () => {
         const res = await getImageMeta(
-          "./testdata/image/stable-diffusion-image_1_has-negative.png"
+          "./testdata/image/stable-diffusion-image_01_has-negative.png"
         );
         expect(res).toMatchObject({
           width: 512,
@@ -220,7 +260,7 @@ describe("directory.ts", () => {
 
       it("正常系：画像のメタデータが取得できること（positiveを含まない、negativeを含まない）", async () => {
         const res = await getImageMeta(
-          "./testdata/image/stable-diffusion-image_4_no-positive-and-negative.png"
+          "./testdata/image/stable-diffusion-image_04_no-positive-and-negative.png"
         );
         expect(res).toMatchObject({
           width: 512,
@@ -237,7 +277,7 @@ describe("directory.ts", () => {
 
       it("正常系：画像のメタデータが取得できること（空のパラメータ行を含む）", async () => {
         const res = await getImageMeta(
-          "./testdata/image/stable-diffusion-image_5_has-empty-parameter-row.png"
+          "./testdata/image/stable-diffusion-image_05_has-empty-parameter-row.png"
         );
         expect(res).toMatchObject({
           width: 512,
@@ -251,6 +291,93 @@ describe("directory.ts", () => {
           sampler: "Euler a",
           seed: "1653005774",
           scale: "7",
+        });
+      });
+
+      describe("正常系：画像のメタデータが取得できること（プロンプトに改行を含む画像）", () => {
+        it("positiveに改行を含み、negativeに改行を含む", async () => {
+          const res = await getImageMeta(
+            "./testdata/image/stable-diffusion-image_21_contain-empty-row-in-positive-and-contain-empty-row-in-negative.png"
+          );
+          expect(res).toMatchObject({
+            width: 512,
+            height: 512,
+            provider: "StableDiffusion",
+            positive: "masterpiece, best quality,girl",
+            negative: "bad hands,bad fingers,",
+            steps: "20",
+            sampler: "Euler a",
+            seed: "3540303468",
+            scale: "7",
+          });
+        });
+
+        it("positiveに改行を含む（negativeを含むが改行は含まない）", async () => {
+          const res = await getImageMeta(
+            "./testdata/image/stable-diffusion-image_22_has-negative-contain-empty-row-in-positive.png"
+          );
+          expect(res).toMatchObject({
+            width: 512,
+            height: 512,
+            provider: "StableDiffusion",
+            positive: "masterpiece, best quality,girl",
+            negative: "bad hands,bad fingers,",
+            steps: "20",
+            sampler: "Euler a",
+            seed: "1115870823",
+            scale: "7",
+          });
+        });
+
+        it("positiveに改行を含む（negativeを含まない）", async () => {
+          const res = await getImageMeta(
+            "./testdata/image/stable-diffusion-image_23_no-negative-contain-empty-row-in-positive.png"
+          );
+          expect(res).toMatchObject({
+            width: 512,
+            height: 512,
+            provider: "StableDiffusion",
+            positive: "masterpiece, best quality,girl",
+            negative: undefined,
+            steps: "20",
+            sampler: "Euler a",
+            seed: "369539708",
+            scale: "7",
+          });
+        });
+
+        it("negativeに改行を含む（positiveを含むが改行は含まない）", async () => {
+          const res = await getImageMeta(
+            "./testdata/image/stable-diffusion-image_24_has-positive-contain-empty-row-in-negative.png"
+          );
+          expect(res).toMatchObject({
+            width: 512,
+            height: 512,
+            provider: "StableDiffusion",
+            positive: "masterpiece, best quality, girl",
+            negative: "bad hands,bad fingers,",
+            steps: "20",
+            sampler: "Euler a",
+            seed: "54489252",
+            scale: "7",
+          });
+        });
+
+        it("negativeに改行を含む（positiveを含まない）", async () => {
+          const res = await getImageMeta(
+            "./testdata/image/stable-diffusion-image_25_no-positive-contain-empty-row-in-negative.png"
+          );
+          expect(res).toMatchObject({
+            width: 512,
+            height: 512,
+            provider: "StableDiffusion",
+            positive: undefined,
+            negative: "bad hands,bad fingers,",
+            steps: "20",
+            sampler: "Euler a",
+            seed: "1007499009",
+            scale: "7",
+          });
         });
       });
     });
