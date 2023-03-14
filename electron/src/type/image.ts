@@ -116,7 +116,9 @@ export class Metadata {
 
     // parametersにパラメータが格納されているのでそれを取り出す
     if (metadata.parameters) {
-      const params = metadata.parameters.split("\n");
+      const params = metadata.parameters
+        .split("\n")
+        .filter((v: string) => v !== "");
       if (params.length === 1) {
         meta = setCommonParam(meta, params[0]);
       } else if (params.length === 2) {
@@ -126,7 +128,7 @@ export class Metadata {
           meta.positive = params[0];
         }
         meta = setCommonParam(meta, params[1]);
-      } else if (params.length === 3) {
+      } else if (params.length >= 3) {
         meta.positive = params[0];
         meta.negative = params[1].replace("Negative prompt: ", "");
         meta = setCommonParam(meta, params[2]);
