@@ -60,10 +60,6 @@ docker compose up --build
 i-shinya (@ishinya4)
 https://twitter.com/ishinya4
 
-#### Twitter（趣味垢）
-Sora (@IT41394313)
-https://twitter.com/IT41394313
-
-#### Misskey
-sora (@sora_it@misskey.io)
-https://misskey.io/@sora_it
+#### Twitter（AIイラスト垢）
+sora (@IT41394313)
+https://twitter.com/IT41879213
