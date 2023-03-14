@@ -84,6 +84,13 @@ describe("directory.ts", () => {
           isDirectory: false,
           children: undefined,
         },
+        {
+          id: 10,
+          basePath: "./testdata/image",
+          label: "stable-diffusion-image_5_has-empty-parameter-row.png",
+          isDirectory: false,
+          children: undefined,
+        },
       ]);
     });
   });
@@ -96,7 +103,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(7);
+      expect(res.length).toBe(8);
     });
   });
 
@@ -122,7 +129,7 @@ describe("directory.ts", () => {
       } catch (error) {
         fail;
       }
-      expect(res.length).toBe(7);
+      expect(res.length).toBe(8);
     });
   });
 
@@ -224,6 +231,25 @@ describe("directory.ts", () => {
           steps: "20",
           sampler: "Euler a",
           seed: "3209139373",
+          scale: "7",
+        });
+      });
+
+      it("正常系：画像のメタデータが取得できること（空のパラメータ行を含む）", async () => {
+        const res = await getImageMeta(
+          "./testdata/image/stable-diffusion-image_5_has-empty-parameter-row.png"
+        );
+        expect(res).toMatchObject({
+          width: 512,
+          height: 512,
+          provider: "StableDiffusion",
+          positive:
+            "masterpiece, best quality, masterpiece, best quality, anime face, ultra detailed face, 1 beautiful girl, 20 years old, silver half up long hair, Sister outfits with little exposure, kneeling down and praying fervently, Church with divine light, {from behind}",
+          negative:
+            "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
+          steps: "20",
+          sampler: "Euler a",
+          seed: "1653005774",
           scale: "7",
         });
       });
