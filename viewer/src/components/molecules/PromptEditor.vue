@@ -47,11 +47,13 @@ const receiveVal = (index: number, val: string) => {
     if (i === 0) {
       // カンマ区切りじゃなかったらそのまま上書き
       prompts.value[index].spell = spell.spell;
-      prompts.value[index].emphasis = spell.emphasis;
+      prompts.value[index].emphasis =
+        prompts.value[index].emphasis + spell.emphasis;
     } else {
+      // カンマ区切りだったら新規行を追加
       prompts.value.splice(index + i, 0, {
         id: getNextId(),
-        spell: spell.spell,
+        spell: spell.spell.trim(), // こっちは明示的にtrimしとく
         emphasis: spell.emphasis,
       });
     }
