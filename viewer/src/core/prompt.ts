@@ -15,26 +15,42 @@ export const analyzeSpell = (
   emphasisSymbolType: EmphasisSymbolType,
   restraintSymbolType: RestraintSymbolType
 ): { spell: string; emphasis: number } => {
-  let spell: string = text.trim();
+  let spell: string = text;
   let emphasis: number = 0;
   // 強調表現{}が先頭末尾にある場合emphasisをインクリメント
   while (
-    spell.startsWith(getEmphasisStartSymbol(emphasisSymbolType)) &&
-    spell.endsWith(getEmphasisEndSymbol(emphasisSymbolType))
+    spell.trim().startsWith(getEmphasisStartSymbol(emphasisSymbolType)) &&
+    spell.trim().endsWith(getEmphasisEndSymbol(emphasisSymbolType))
   ) {
-    spell = spell.slice(1).slice(0, -1);
+    spell = spell.replace(getEmphasisStartSymbol(emphasisSymbolType), "");
+    // 末尾の強調表現を削除
+    spell = spell
+      .split("")
+      .reverse()
+      .join("")
+      .replace(getEmphasisEndSymbol(emphasisSymbolType), "")
+      .split("")
+      .reverse()
+      .join("");
     emphasis++;
   }
 
   // マイナス強調表現[]が先頭末尾にある場合emphasisをデクリメント
   while (
-    spell.startsWith(getRestraintStartSymbol(restraintSymbolType)) &&
-    spell.endsWith(getRestraintEndSymbol(restraintSymbolType))
+    spell.trim().startsWith(getRestraintStartSymbol(restraintSymbolType)) &&
+    spell.trim().endsWith(getRestraintEndSymbol(restraintSymbolType))
   ) {
-    spell = spell.slice(1).slice(0, -1);
+    spell = spell.replace(getRestraintStartSymbol(restraintSymbolType), "");
+    // 末尾の強調表現を削除
+    spell = spell
+      .split("")
+      .reverse()
+      .join("")
+      .replace(getRestraintStartSymbol(restraintSymbolType), "")
+      .split("")
+      .reverse()
+      .join("");
     emphasis--;
   }
-
-  spell = spell.trim();
   return { spell, emphasis };
 };

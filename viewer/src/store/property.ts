@@ -80,7 +80,11 @@ export default function propertyStore() {
         state.emphasisSymbolType,
         state.restraintSymbolType
       );
-      return { id: index++, ...spell };
+      return {
+        id: index++,
+        spell: spell.spell.trim(),
+        emphasis: spell.emphasis,
+      };
     });
   };
 
