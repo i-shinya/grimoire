@@ -152,6 +152,7 @@ const getMainImageDetail = computed(() => {
           :isSelect="isSelected(item)"
           :getImage="getImage"
           @click="selectImage(item)"
+          @dblclick="showModal = true"
           @sendDataUrl="(v: string) => receiveDataUrl(item.id, v)"
         ></Thumbnail>
       </template>
