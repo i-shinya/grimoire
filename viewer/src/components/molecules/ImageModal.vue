@@ -96,7 +96,7 @@ watch(showModal, (val) => {
   <va-modal
     ref="modal"
     v-model="showModal"
-    max-width="1980px"
+    max-width="84vw"
     :hide-default-actions="true"
   >
     <div class="modal-content">

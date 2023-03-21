@@ -85,30 +85,13 @@ onMounted(async () => {
                       </pane>
                     </splitpanes>
                   </pane>
-                  <pane v-if="areaVisibleStore.state.showImageArea">
+                  <pane v-if="true">
                     <splitpanes>
                       <pane min-size="20" size="60">
                         <ImageViewer></ImageViewer>
                       </pane>
-                      <pane
-                        v-if="areaVisibleStore.state.showImageMetaViewer"
-                        min-size="20"
-                        size="40"
-                      >
-                        <ImageMetaViewer></ImageMetaViewer>
-                      </pane>
-                    </splitpanes>
-                  </pane>
-                  <pane v-if="false">
-                    <splitpanes horizontal>
-                      <pane min-size="20" size="60">
-                        <ImageViewer></ImageViewer>
-                      </pane>
-                      <pane
-                        v-if="areaVisibleStore.state.showImageMetaViewer"
-                        min-size="20"
-                        size="40"
-                      >
+                      <!--画像選択した時に一覧が動くのうざかったから常に表示にした-->
+                      <pane v-if="true" min-size="20" size="40">
                         <ImageMetaViewer></ImageMetaViewer>
                       </pane>
                     </splitpanes>
