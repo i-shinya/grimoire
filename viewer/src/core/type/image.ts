@@ -8,6 +8,7 @@ export interface ImageIndex {
 export interface ImageDetail {
   id: number;
   label: string; // ファイル名
+  createdUnitTimeMs: number; // ファイル作成時間ミリ秒（実測値: 1676377114354.0051、1676377114までが日時）
   meta: Metadata | null;
   dataUrl?: string; // 画像のdataUrl、初期では取得しない
 }

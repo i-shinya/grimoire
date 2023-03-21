@@ -98,14 +98,19 @@ export const listImageIndex = async (path: string): Promise<ImageIndex[]> => {
 };
 
 // 対象の画像一覧を取得する
-export const getImages = async (basepath: string, imageIndex: ImageIndex[]) => {
+export const getImages = async (
+  basepath: string,
+  imageIndex: ImageIndex[]
+): Promise<ImageDetail[]> => {
   return await Promise.all(
     imageIndex.map(async (image: ImageIndex) => {
-      // TODO メタデータ取得も並列で動かすようにしてもいいかも
+      // TODO 性能悪くなったらstatとメタデータ取得も並列で動かすようにしてもいいかも
+      const res = fs.statSync(`${basepath}/${image.label}`);
       const meta = await getImageMeta(`${basepath}/${image.label}`);
       return {
         id: image.index,
         label: image.label,
+        createdUnitTimeMs: res.birthtime.getTime(),
         meta: meta,
       };
     })
@@ -115,33 +120,6 @@ export const getImages = async (basepath: string, imageIndex: ImageIndex[]) => {
 export const getImageDataUrl = (path: string): string => {
   const buffer = readImage(path);
   return "data:image/png;base64," + buffer.toString("base64");
-};
-
-/**
- * 画像データが取得できる
- * NOTE: 性能的に使用できなさそうなので廃止予定
- * @param path ディレクトリパス
- * @returns
- */
-export const getAllImages = async (path: string): Promise<ImageDetail[]> => {
-  const dirents = fs
-    .readdirSync(path, { withFileTypes: true })
-    .filter((dirent: fs.Dirent) => {
-      return dirent.isFile() && isImageExtension(dirent.name);
-    });
-  return await Promise.all(
-    dirents.map(async (dirent: fs.Dirent, index: number) => {
-      // TODO サムネイル画像だから圧縮した方が良いかも
-      const buffer = readImage(`${path}/${dirent.name}`);
-      const meta = await getImageMeta(`${path}/${dirent.name}`);
-      return {
-        id: index,
-        label: dirent.name,
-        dataUrl: "data:image/png;base64," + buffer.toString("base64"),
-        meta: meta,
-      };
-    })
-  );
 };
 
 /**

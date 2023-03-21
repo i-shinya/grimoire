@@ -1,6 +1,5 @@
 import {
   getDirectoryNodes,
-  getAllImages,
   getImageMeta,
   readImage,
   listImageIndex,
@@ -22,9 +21,9 @@ describe("directory.ts", () => {
             {
               id: 1,
               basePath: "./testdata/image/nest-dir",
-              children: undefined,
               label: "novel-ai-image_3.png",
               isDirectory: false,
+              children: undefined,
             },
           ],
         },
@@ -92,44 +91,44 @@ describe("directory.ts", () => {
           children: undefined,
         },
         {
-          basePath: "./testdata/image",
-          children: undefined,
           id: 11,
-          isDirectory: false,
+          basePath: "./testdata/image",
           label:
             "stable-diffusion-image_21_contain-empty-row-in-positive-and-contain-empty-row-in-negative.png",
+          isDirectory: false,
+          children: undefined,
         },
         {
-          basePath: "./testdata/image",
-          children: undefined,
           id: 12,
-          isDirectory: false,
+          basePath: "./testdata/image",
           label:
             "stable-diffusion-image_22_has-negative-contain-empty-row-in-positive.png",
+          isDirectory: false,
+          children: undefined,
         },
         {
-          basePath: "./testdata/image",
-          children: undefined,
           id: 13,
-          isDirectory: false,
+          basePath: "./testdata/image",
           label:
             "stable-diffusion-image_23_no-negative-contain-empty-row-in-positive.png",
+          isDirectory: false,
+          children: undefined,
         },
         {
-          basePath: "./testdata/image",
-          children: undefined,
           id: 14,
-          isDirectory: false,
+          basePath: "./testdata/image",
           label:
             "stable-diffusion-image_24_has-positive-contain-empty-row-in-negative.png",
+          isDirectory: false,
+          children: undefined,
         },
         {
           basePath: "./testdata/image",
-          children: undefined,
           id: 15,
-          isDirectory: false,
           label:
             "stable-diffusion-image_25_no-positive-contain-empty-row-in-negative.png",
+          isDirectory: false,
+          children: undefined,
         },
       ]);
     });
@@ -157,19 +156,6 @@ describe("directory.ts", () => {
         fail;
       }
       expect(res.length).toBe(1);
-    });
-  });
-
-  describe("getAllImages", () => {
-    it("正常系：画像が取得できること", async () => {
-      // エラーが起きないことだけ確認
-      let res: ImageDetail[] = [];
-      try {
-        res = await getAllImages("./testdata/image");
-      } catch (error) {
-        fail;
-      }
-      expect(res.length).toBe(13);
     });
   });
 

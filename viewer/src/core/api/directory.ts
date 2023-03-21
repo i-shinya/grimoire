@@ -128,6 +128,7 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail1 = {
       id: 1,
       label: "ai-image_1.png",
+      createdUnitTimeMs: 1676377114354,
       meta: {
         provider: "NovelAI",
         positive:
@@ -145,6 +146,7 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     const imageDetail2 = {
       id: 2,
       label: "ai-image_2.png",
+      createdUnitTimeMs: 1676377114300,
       meta: {
         provider: "NovelAI",
         positive: "masterpiece, best quality, bahamut, final fantasy",
