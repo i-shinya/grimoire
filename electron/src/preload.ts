@@ -2,6 +2,8 @@ import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "./type/directory";
 import { ImageDetail, ImageIndex, ThumbnailSize } from "./type/image";
 import { FavoritePrompt } from "./type/favorite";
+import { Sort } from "./type/sort";
+import { getSortSettings } from "./logic/store";
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector: any, text: any) => {
@@ -59,5 +61,11 @@ contextBridge.exposeInMainWorld("storeAPI", {
   getThumbnailSize: (): Promise<ThumbnailSize | null> => {
     const res = ipcRenderer.invoke("get-thumbnail-size");
     return res as Promise<ThumbnailSize | null>;
+  },
+  saveSortSettings: (sort: Sort) =>
+    ipcRenderer.invoke("save-sort-settings", sort),
+  getSortSettings: (): Promise<Sort | null> => {
+    const res = ipcRenderer.invoke("get-sort-settings");
+    return res as Promise<Sort | null>;
   },
 });

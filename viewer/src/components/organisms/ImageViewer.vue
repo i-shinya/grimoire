@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail, ImageIndex, ThumbnailSize } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -8,6 +8,7 @@ import { divideArray } from "../../core/array";
 import { StoreAPIKey } from "../../core/api/store";
 import Thumbnail from "../atoms/Thumbnail.vue";
 import ImageModal from "../molecules/ImageModal.vue";
+import { OrderType, Sort, SortType } from "../../core/type/listing";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -27,6 +28,7 @@ if (!storeAPI) {
 }
 
 const showModal = ref(false);
+const sortType = ref<SortType>("label");
 
 const selectImage = (image: ImageDetail) => {
   imageStore.selectImage(selectPath.value, image);
@@ -64,16 +66,31 @@ const changeThumbnailSize = (size: ThumbnailSize) => {
   storeAPI.saveThumbnailSize(size);
 };
 
+const changeSortOrder = (order: OrderType) => {
+  const sort: Sort = {
+    type: directoryStore.state.sort?.type ?? "label",
+    order: order,
+  };
+  directoryStore.setSortSettings(sort);
+  storeAPI.saveSortSettings(sort);
+};
+
+const changeSortType = () => {
+  const sort: Sort = {
+    type: sortType.value,
+    order: directoryStore.state.sort?.order ?? "ASC",
+  };
+  directoryStore.setSortSettings(sort);
+  storeAPI.saveSortSettings(sort);
+};
+
 const getImage = (filename: string) =>
   directoryAPI.getImageDataUrl(selectPath.value, filename).then((res) => res);
 
 const selectPath = computed(
   () => directoryStore.state.selectedDirectoryPath ?? ""
 );
-const images = computed(
-  // TODO ここreadonlyでバグるかも
-  () => directoryStore.state.imageDetails?.map((detail) => detail) ?? []
-);
+
 const breads = computed(() => {
   if (!selectPath.value) return [];
   return selectPath.value.split("/").map((val, index) => {
@@ -100,6 +117,10 @@ const getMainImageDetail = computed(() => {
     ) ?? directoryStore.state.imageDetails[0]
   );
 });
+
+onMounted(() => {
+  sortType.value = directoryStore.state.sort?.type ?? "label";
+});
 </script>
 
 <template>
@@ -119,6 +140,35 @@ const getMainImageDetail = computed(() => {
             icon="fa-solid fa-images"
             @click="showModal = true"
           />
+
+          <div class="sort-area">
+            <div class="select-area">
+              <font-awesome-icon class="mr-2 pa-0" icon="fa-solid fa-sort" />
+              <select
+                class="clickable"
+                v-model="sortType"
+                @change="changeSortType"
+              >
+                <option value="label">filename</option>
+                <option value="createTime">create time</option>
+              </select>
+            </div>
+
+            <template v-if="directoryStore.state.sort?.order === 'ASC'">
+              <font-awesome-icon
+                class="clickable"
+                icon="fa-solid fa-arrow-up"
+                @click="changeSortOrder('DESC')"
+              />
+            </template>
+            <template v-else>
+              <font-awesome-icon
+                class="clickable"
+                icon="fa-solid fa-arrow-down"
+                @click="changeSortOrder('ASC')"
+              />
+            </template>
+          </div>
 
           <div class="thumbnail-size-icon">
             <font-awesome-icon
@@ -144,7 +194,10 @@ const getMainImageDetail = computed(() => {
       </div>
     </div>
     <div class="image-viewer">
-      <template v-for="item of images" :key="item.id">
+      <template
+        v-for="item of directoryStore.getViewImageDetail() ?? []"
+        :key="item.id"
+      >
         <Thumbnail
           class="list-thumbnail"
           :class="imageStore.state.thumbnailSize"
@@ -159,7 +212,7 @@ const getMainImageDetail = computed(() => {
     </div>
     <ImageModal
       v-if="showModal"
-      :images="directoryStore.state.imageDetails ?? []"
+      :images="directoryStore.getViewImageDetail() ?? []"
       :show="showModal"
       :getImage="getImage"
       :defaultImage="getMainImageDetail"
@@ -212,6 +265,35 @@ const getMainImageDetail = computed(() => {
 
         .show-modal-icon {
           font-size: 20px;
+        }
+
+        .sort-area {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          //border: 1px solid #b9b9b9;
+          background-color: #333333;
+
+          .select-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px 4px;
+            background-color: inherit;
+
+            select {
+              text-align: center;
+              appearance: none;
+              width: 100%;
+              border-radius: 2px;
+              background-color: inherit;
+              border: none;
+              color: white;
+              font-size: 16px;
+              user-select: none;
+              font-weight: bold;
+            }
+          }
         }
 
         .thumbnail-size-icon {

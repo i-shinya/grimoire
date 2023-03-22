@@ -2,6 +2,7 @@
 import { FavoritePrompt } from "../type/favorite";
 import { InjectionKey } from "vue";
 import { ThumbnailSize } from "../type/image";
+import { Sort } from "../type/listing";
 
 export const StoreAPIKey: InjectionKey<StoreAPI> = Symbol("StoreAPIKey");
 
@@ -10,6 +11,8 @@ export interface StoreAPI {
   getFavoritePrompt(): Promise<FavoritePrompt>;
   saveThumbnailSize(size: ThumbnailSize): Promise<void>;
   getThumbnailSize(): Promise<ThumbnailSize>;
+  saveSortSettings(sort: Sort): Promise<void>;
+  getSortSettings(): Promise<Sort>;
 }
 
 const defaultFavorite = {
@@ -34,6 +37,11 @@ const defaultFavorite = {
   ],
 };
 
+const defaultSort: Sort = {
+  type: "label",
+  order: "ASC",
+};
+
 export class StoreNodeAPI implements StoreAPI {
   async saveFavoritePrompt(favoritePrompt: FavoritePrompt): Promise<void> {
     await window.storeAPI.saveFavoritePrompt(favoritePrompt);
@@ -54,6 +62,16 @@ export class StoreNodeAPI implements StoreAPI {
     // nullの場合はデフォルト値を設定して返却する
     return (res ?? "default") as ThumbnailSize;
   }
+
+  async saveSortSettings(sort: Sort): Promise<void> {
+    await window.storeAPI.saveSortSettings(sort);
+  }
+
+  async getSortSettings(): Promise<Sort> {
+    const res = await window.storeAPI.getSortSettings();
+    // nullの場合はデフォルト値を設定して返却する
+    return (res ?? defaultSort) as Sort;
+  }
 }
 
 export class StoreDemoAPI implements StoreAPI {
@@ -71,5 +89,13 @@ export class StoreDemoAPI implements StoreAPI {
 
   async getThumbnailSize(): Promise<ThumbnailSize> {
     return "default";
+  }
+
+  async saveSortSettings(sort: Sort): Promise<void> {
+    return;
+  }
+
+  async getSortSettings(): Promise<Sort> {
+    return defaultSort;
   }
 }

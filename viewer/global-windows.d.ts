@@ -1,5 +1,6 @@
 import { DirectoryNode } from "./src/core/type/directory";
 import { ImageDetail, ImageIndex } from "./src/core/type/image";
+import { Sort } from "./src/core/type/listing";
 
 interface WindowDirectoryAPI {
   openDialog(): Promise<string>;
@@ -21,6 +22,8 @@ interface WindowStoreAPI {
   getFavoritePrompt(): Promise<FavoritePrompt | null>;
   saveThumbnailSize(size: ThumbnailSize): Promise<void>;
   getThumbnailSize(): Promise<ThumbnailSize | null>;
+  saveSortSettings(sort: Sort): Promise<void>;
+  getSortSettings(): Promise<Sort | null>;
 }
 
 declare global {
