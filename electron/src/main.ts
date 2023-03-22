@@ -18,11 +18,14 @@ import {
 import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import {
   getFavoritePrompt,
+  getSortSettings,
   getThumbnailSize,
   saveFavoritePrompt,
+  saveSortSettings,
   saveThumbnailSize,
 } from "./logic/store";
 import { FavoritePrompt } from "./type/favorite";
+import { Sort } from "./type/sort";
 
 const isDev = process.env.npm_lifecycle_event === "app:dev";
 const isDebug = process.env.npm_lifecycle_event === "app:debug";
@@ -159,6 +162,17 @@ function createWindow() {
     "get-thumbnail-size",
     async (_e: Electron.IpcMainInvokeEvent): Promise<ThumbnailSize | null> =>
       getThumbnailSize()
+  );
+  ipcMain.handle(
+    "save-sort-settings",
+    async (_e: Electron.IpcMainInvokeEvent, sort: Sort): Promise<void> => {
+      saveSortSettings(sort);
+    }
+  );
+  ipcMain.handle(
+    "get-sort-settings",
+    async (_e: Electron.IpcMainInvokeEvent): Promise<Sort | null> =>
+      getSortSettings()
   );
 }
 

@@ -1,10 +1,12 @@
 import { reactive, readonly } from "vue";
 import { ImageDetail } from "../core/type/image";
+import { Sort } from "../core/type/listing";
 
 interface DirectoryState {
   openDirectoryPath: string | null;
   selectedDirectoryPath: string | null;
   imageDetails: ImageDetail[] | null;
+  sort: Sort | null;
 }
 
 export default function directoryStore() {
@@ -12,6 +14,7 @@ export default function directoryStore() {
     openDirectoryPath: null,
     selectedDirectoryPath: null,
     imageDetails: null,
+    sort: null,
   });
 
   const setOpenDirectory = (path: string) => {
@@ -43,6 +46,35 @@ export default function directoryStore() {
     }
   };
 
+  const setSortSettings = (sort: Sort) => {
+    state.sort = sort;
+  };
+
+  const getViewImageDetail = () => {
+    const sort = state.sort;
+    if (!sort) {
+      return state.imageDetails;
+    }
+
+    return state.imageDetails?.sort((a: ImageDetail, b: ImageDetail) => {
+      if (sort.type === "label") {
+        if (sort.order === "ASC") {
+          return a.label.localeCompare(b.label);
+        } else {
+          return b.label.localeCompare(a.label);
+        }
+      } else if (sort.type === "createTime") {
+        if (sort.order === "ASC") {
+          return a.createdUnitTimeMs - b.createdUnitTimeMs;
+        } else {
+          return b.createdUnitTimeMs - a.createdUnitTimeMs;
+        }
+      } else {
+        return 0;
+      }
+    });
+  };
+
   return {
     state: readonly(state), // 読み取りしかできないようにする
     selectDirectory,
@@ -50,6 +82,8 @@ export default function directoryStore() {
     setImageDetails,
     setImageDataUrl,
     pushImageDetails,
+    getViewImageDetail,
+    setSortSettings,
   };
 }
 export type DirectoryStore = ReturnType<typeof directoryStore>;

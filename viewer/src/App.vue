@@ -48,6 +48,9 @@ onMounted(async () => {
   storeAPI.getThumbnailSize().then((res) => {
     imgStore.setThumbnailSize(res);
   });
+  storeAPI.getSortSettings().then((res) => {
+    dirStore.setSortSettings(res);
+  });
 });
 </script>
 
