@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
 import { ImageDetail, ImageIndex, ThumbnailSize } from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
@@ -118,9 +118,13 @@ const getMainImageDetail = computed(() => {
   );
 });
 
-onMounted(() => {
-  sortType.value = directoryStore.state.sort?.type ?? "label";
-});
+watch(
+  () => directoryStore.state.sort,
+  (state) => {
+    sortType.value = state?.type ?? "label";
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
