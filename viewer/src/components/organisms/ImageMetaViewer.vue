@@ -62,6 +62,20 @@ const copyToEditor = () => {
         ></Property>
         <Property
           class="mb-3"
+          label="Sampler"
+          :shortcutText="null"
+          :value="imageDetail.meta.sampler"
+          v-if="imageDetail.meta.sampler"
+        ></Property>
+        <Property
+          class="mb-3"
+          label="Size (Width x Height)"
+          :shortcutText="null"
+          :value="`${imageDetail.meta.width} x ${imageDetail.meta.height}`"
+          v-if="imageDetail.meta.width"
+        ></Property>
+        <Property
+          class="mb-3"
           label="Positive Prompt"
           :shortcutText="null"
           :value="imageDetail.meta.positive ?? ''"
@@ -95,13 +109,6 @@ const copyToEditor = () => {
         ></Property>
         <Property
           class="mb-3"
-          label="Sampler"
-          :shortcutText="null"
-          :value="imageDetail.meta.sampler"
-          v-if="imageDetail.meta.sampler"
-        ></Property>
-        <Property
-          class="mb-3"
           label="Strength"
           :shortcutText="null"
           :value="imageDetail.meta.strength"
@@ -113,6 +120,13 @@ const copyToEditor = () => {
           :shortcutText="null"
           :value="imageDetail.meta.noise"
           v-if="imageDetail.meta.noise"
+        ></Property>
+        <Property
+          class="mb-3"
+          label="Other Properties"
+          :shortcutText="null"
+          :value="imageDetail.meta.other"
+          v-if="imageDetail.meta.other"
         ></Property>
       </div>
       <div class="no-meta-area" v-else>

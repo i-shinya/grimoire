@@ -27,4 +27,5 @@ export class Metadata {
   strength?: string;
   noise?: string;
   model?: string;
+  other?: string; // その他のパラメータ
 }

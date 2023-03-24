@@ -17,7 +17,7 @@ export class Metadata {
   height?: number;
   provider?: string;
   positive?: string; // Description
-  // 以下はNovelAIの場合Commentの値、StableDiffusionの場合はプロンプトも含めてparametersの値
+  // 以下はNovelAIの場合Commentの値、StableDiffusionの場合はpositiveも含めてparametersの値
   negative?: string; // uc
   steps?: string;
   scale?: string;
@@ -26,6 +26,7 @@ export class Metadata {
   strength?: string;
   noise?: string;
   model?: string; // StableDiffusionで選択したモデル
+  other?: string; // その他のパラメータ（上記にないものは全部ここに突っ込みたい）
 
   public static build(metaJson: any): Metadata | null {
     if (!metaJson) {
@@ -49,6 +50,8 @@ export class Metadata {
 
   private static setNovelAiMeta(meta: Metadata, metaJson: any): Metadata {
     meta.provider = metaJson.Software;
+    // TODO モデル名を取得できる気がするのでそのうち実装する（コード値になってるっぽいのでネームマッピングは必要）
+
     // Descriptionがある場合はポジティブプロンプトを設定
     if (metaJson.Description) {
       meta.positive = metaJson.Description;
@@ -91,23 +94,37 @@ export class Metadata {
     // 共通の設定パラメータを設定する
     const setCommonParam = (meta: Metadata, params: string) => {
       const values = params.split(",");
+      const otherProperties = [];
       for (let val of values) {
         const trimed = val.trim();
         if (trimed.startsWith("Steps: ")) {
           meta.steps = val.replace("Steps: ", "").trim();
+          continue;
         }
         if (trimed.startsWith("Sampler: ")) {
           meta.sampler = val.replace("Sampler: ", "").trim();
+          continue;
         }
         if (trimed.startsWith("CFG scale: ")) {
           meta.scale = val.replace("CFG scale: ", "").trim();
+          continue;
         }
         if (trimed.startsWith("Seed: ")) {
           meta.seed = val.replace("Seed: ", "").trim();
+          continue;
         }
         if (trimed.startsWith("Model: ")) {
           meta.model = val.replace("Model: ", "").trim();
+          continue;
         }
+        if (trimed.startsWith("Size: ") || trimed.startsWith("Model hash: ")) {
+          // SizeとModel hashは無視
+          continue;
+        }
+        otherProperties.push(val);
+      }
+      if (otherProperties.length > 0) {
+        meta.other = otherProperties.join(",");
       }
     };
 
