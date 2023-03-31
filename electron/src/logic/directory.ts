@@ -3,8 +3,7 @@
  * ディレクトリ操作を行う処理を定義する
  */
 import fs from "fs";
-import { dialog, BrowserWindow } from "electron";
-import exifr from "exifr";
+import { BrowserWindow, dialog } from "electron";
 
 import { DirectoryNode } from "../type/directory";
 import { ImageDetail, ImageIndex, Metadata } from "../type/image";
@@ -146,5 +145,49 @@ export const readImage = (path: string): Buffer => {
  * @returns
  */
 export const getImageMeta = async (path: string): Promise<Metadata | null> => {
-  return exifr.parse(path).then((metadata: any) => Metadata.build(metadata));
+  let metaJson: any = {};
+
+  const buffer = fs.readFileSync(path);
+  const arrayBuffer = new Uint8Array(buffer).buffer;
+  const view = new DataView(arrayBuffer);
+  // PNGチェック
+  const signaturePart1 = view.getUint32(0);
+  const signaturePart2 = view.getUint32(4);
+  if (signaturePart1 !== 0x89504e47 || signaturePart2 !== 0x0d0a1a0a) {
+    return null;
+  }
+
+  let offset = 8; // Skip the PNG signature
+  while (offset < buffer.byteLength) {
+    const chunkLength = view.getUint32(offset);
+    offset += 4;
+
+    const chunkType = new TextDecoder("ascii").decode(
+      new Uint8Array(arrayBuffer, offset, 4)
+    );
+    offset += 4;
+
+    // console.log(
+    //   `offset: ${
+    //     offset - 4
+    //   }, chunkType: ${chunkType}, chunkLength: ${chunkLength}`
+    // );
+
+    if (chunkType === "IEND") {
+      break;
+    }
+
+    metaJson.ImageWidth = view.getUint32(16, false);
+    metaJson.ImageHeight = view.getUint32(20, false);
+
+    if (chunkType === "tEXt") {
+      const textData = new Uint8Array(arrayBuffer, offset, chunkLength);
+      const keywordValuePair = new TextDecoder("utf-8").decode(textData); // asciiが動かなかったのでutf-8に変更
+      const [keyword, value] = keywordValuePair.split("\x00");
+      metaJson[keyword] = value;
+    }
+
+    offset += chunkLength + 4;
+  }
+  return Metadata.build(metaJson);
 };
