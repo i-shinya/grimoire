@@ -2,6 +2,12 @@
 
 package for electron main process 
 
+## install so file
+
+```shell
+sudo apt-get install -y libgbm-dev libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev
+```
+
 ## test
 
 ```shell
