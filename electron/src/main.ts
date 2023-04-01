@@ -75,8 +75,11 @@ function createWindow() {
   // ディレクトリノードを取得する
   ipcMain.handle(
     "get-directory-nodes",
-    (_e: Electron.IpcMainInvokeEvent, path: string): DirectoryNode[] => {
-      return getDirectoryNodes(path);
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      path: string
+    ): Promise<DirectoryNode[]> => {
+      return await getDirectoryNodes(path);
     }
   );
   // ディレクトリ内のファイルインデックスを取得する
