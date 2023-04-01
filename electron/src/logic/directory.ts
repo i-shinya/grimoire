@@ -3,6 +3,7 @@
  * ディレクトリ操作を行う処理を定義する
  */
 import fs from "fs";
+import * as fsp from "fs/promises";
 import { BrowserWindow, dialog } from "electron";
 
 import { DirectoryNode } from "../type/directory";
@@ -33,37 +34,39 @@ export const openDirectoryDialog = (
  * @param path
  * @returns
  */
-export const getDirectoryNodes = (path: string): DirectoryNode[] => {
+export const getDirectoryNodes = async (
+  path: string
+): Promise<DirectoryNode[]> => {
   const idCounter = new FileIdCounter();
-  return (
-    fs
-      .readdirSync(path, { withFileTypes: true })
-      // ファイル名でソート
-      .sort((a, b) => {
-        if (a.name > b.name) {
-          return 1;
-        } else {
-          return -1;
-        }
-      })
-      .map((dirent: fs.Dirent): DirectoryNode => {
-        if (dirent.isDirectory()) {
-          const nodes = getDirectoryNodes(`${path}/${dirent.name}`).sort(
-            (a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1)
-          );
-          return new DirectoryNode(
-            idCounter.next(),
-            dirent.name,
-            path,
-            true,
-            nodes
-          );
-        } else {
-          return new DirectoryNode(idCounter.next(), dirent.name, path, false);
-        }
-      })
-      .sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1))
+  const dirents = await fsp.readdir(path, { withFileTypes: true });
+  // ファイル名でソート
+  const sorted = dirents.sort((a, b) => {
+    if (a.name > b.name) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  const nodes = await Promise.all(
+    sorted.map(async (dirent: fs.Dirent): Promise<DirectoryNode> => {
+      if (dirent.isDirectory()) {
+        const nodes = await getDirectoryNodes(`${path}/${dirent.name}`);
+        const sorted = nodes.sort((a, b) =>
+          a.hasChildren() > b.hasChildren() ? -1 : 1
+        );
+        return new DirectoryNode(
+          idCounter.next(),
+          dirent.name,
+          path,
+          true,
+          sorted
+        );
+      } else {
+        return new DirectoryNode(idCounter.next(), dirent.name, path, false);
+      }
+    })
   );
+  return nodes.sort((a, b) => (a.hasChildren() > b.hasChildren() ? -1 : 1));
 };
 
 class FileIdCounter {
@@ -76,8 +79,8 @@ class FileIdCounter {
 
 // ディレクトリ配下のファイル一覧を取得する
 export const listImageIndex = async (path: string): Promise<ImageIndex[]> => {
-  return fs
-    .readdirSync(path, { withFileTypes: true })
+  const dirents = await fsp.readdir(path, { withFileTypes: true });
+  return dirents
     .filter((dirent: fs.Dirent) => {
       return dirent.isFile() && isImageExtension(dirent.name);
     })
@@ -104,7 +107,7 @@ export const getImages = async (
   return await Promise.all(
     imageIndex.map(async (image: ImageIndex) => {
       // TODO 性能悪くなったらstatとメタデータ取得も並列で動かすようにしてもいいかも
-      const res = fs.statSync(`${basepath}/${image.label}`);
+      const res = await fsp.stat(`${basepath}/${image.label}`);
       const meta = await getImageMeta(`${basepath}/${image.label}`);
       return {
         id: image.index,
@@ -116,8 +119,8 @@ export const getImages = async (
   );
 };
 
-export const getImageDataUrl = (path: string): string => {
-  const buffer = readImage(path);
+export const getImageDataUrl = async (path: string): Promise<string> => {
+  const buffer = await readImage(path);
   return "data:image/png;base64," + buffer.toString("base64");
 };
 
@@ -135,8 +138,8 @@ export const isImageExtension = (filename: string): boolean => {
  * @param path
  * @returns
  */
-export const readImage = (path: string): Buffer => {
-  return fs.readFileSync(path);
+export const readImage = async (path: string): Promise<Buffer> => {
+  return await fsp.readFile(path);
 };
 
 /**
@@ -147,7 +150,7 @@ export const readImage = (path: string): Buffer => {
 export const getImageMeta = async (path: string): Promise<Metadata | null> => {
   let metaJson: any = {};
 
-  const buffer = fs.readFileSync(path);
+  const buffer = await fsp.readFile(path);
   const arrayBuffer = new Uint8Array(buffer).buffer;
   const view = new DataView(arrayBuffer);
   // PNGチェック
