@@ -5,6 +5,7 @@ import {
   listImageIndex,
   getImages,
   copyFiles,
+  forceCopyFiles,
 } from "./directory";
 import { ImageDetail, ImageIndex } from "../type/image";
 import * as fs from "fs";
@@ -414,7 +415,21 @@ describe("directory.ts", () => {
       const tmpDir = "/tmp";
 
       // copyFilesでtmpディレクトリにファイルをコピーする
-      await copyFiles(
+      const res1 = await copyFiles(
+        [
+          {
+            basePath: "./testdata/image/novel-ai",
+            filename: "novel-ai-image_1.png",
+          },
+        ],
+        tmpDir
+      );
+      expect(res1).toHaveLength(0);
+      // tmpディレクトリにコピーしたファイルがあることを確認する
+      expect(fs.existsSync(`${tmpDir}/novel-ai-image_1.png`)).toBeTruthy();
+
+      // 既存ファイルあり
+      const res2 = await copyFiles(
         [
           {
             basePath: "./testdata/image/novel-ai",
@@ -427,10 +442,37 @@ describe("directory.ts", () => {
         ],
         tmpDir
       );
-
+      expect(res2).toMatchObject([
+        {
+          basePath: "./testdata/image/novel-ai",
+          filename: "novel-ai-image_1.png",
+        },
+      ]);
       // tmpディレクトリにコピーしたファイルがあることを確認する
       expect(fs.existsSync(`${tmpDir}/novel-ai-image_1.png`)).toBeTruthy();
       expect(fs.existsSync(`${tmpDir}/novel-ai-image_2.png`)).toBeTruthy();
+
+      // forcecopy
+      const res3 = await forceCopyFiles(
+        [
+          {
+            basePath: "./testdata/image/novel-ai",
+            filename: "novel-ai-image_1.png",
+          },
+          {
+            basePath: "./testdata/image/novel-ai",
+            filename: "novel-ai-image_2.png",
+          },
+        ],
+        tmpDir
+      );
+      // tmpディレクトリにコピーしたファイルがあることを確認する
+      expect(fs.existsSync(`${tmpDir}/novel-ai-image_1.png`)).toBeTruthy();
+      expect(fs.existsSync(`${tmpDir}/novel-ai-image_2.png`)).toBeTruthy();
+
+      // tmpに作成した2つのファイルを削除する
+      fs.unlinkSync(`${tmpDir}/novel-ai-image_1.png`);
+      fs.unlinkSync(`${tmpDir}/novel-ai-image_2.png`);
     });
   });
 });
