@@ -1,6 +1,11 @@
 import { ipcRenderer, contextBridge } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail, ImageIndex, ThumbnailSize } from "./type/image";
+import {
+  ImageDetail,
+  ImageIndex,
+  ImageLocation,
+  ThumbnailSize,
+} from "./type/image";
 import { FavoritePrompt } from "./type/favorite";
 import { Sort } from "./type/sort";
 import { getSortSettings } from "./logic/store";
@@ -38,6 +43,24 @@ contextBridge.exposeInMainWorld("directoryAPI", {
   getImageDataUrl: (path: string): Promise<string> => {
     const res = ipcRenderer.invoke("get-image-dataurl", path);
     return res as Promise<string>;
+  },
+  copyImages: (
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<ImageLocation[]> => {
+    const res = ipcRenderer.invoke("copy-images", files, destinationFolderPath);
+    return res as Promise<ImageLocation[]>;
+  },
+  forceCopyImages: (
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<void> => {
+    const res = ipcRenderer.invoke(
+      "force-copy-images",
+      files,
+      destinationFolderPath
+    );
+    return res as Promise<void>;
   },
 });
 

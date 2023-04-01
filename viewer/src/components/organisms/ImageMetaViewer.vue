@@ -128,6 +128,13 @@ const copyToEditor = () => {
           :value="imageDetail.meta.other"
           v-if="imageDetail.meta.other"
         ></Property>
+        <Property
+          class="mb-3"
+          label="create unixtime"
+          :shortcutText="null"
+          :value="imageDetail.createdUnitTimeMs"
+          v-if="imageDetail.createdUnitTimeMs"
+        ></Property>
       </div>
       <div class="no-meta-area" v-else>
         <font-awesome-icon class="no-meta-icon mr-3" icon="fa-solid fa-ban" />

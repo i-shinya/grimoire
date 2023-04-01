@@ -43,6 +43,7 @@ import {
   faWindowMinimize,
   faCircleUp,
   faImage,
+  faSquareCheck,
 } from "@fortawesome/free-regular-svg-icons";
 import {
   DirectoryAPI,
@@ -95,7 +96,8 @@ library.add(
   faImages,
   faArrowUp,
   faArrowDown,
-  faSort
+  faSort,
+  faSquareCheck
 );
 
 let directoryAPI: DirectoryAPI;

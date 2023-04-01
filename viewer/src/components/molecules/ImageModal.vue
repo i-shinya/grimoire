@@ -5,17 +5,19 @@ import Thumbnail from "../atoms/Thumbnail.vue";
 import { useToast } from "vuestic-ui";
 
 const props = defineProps<{
-  defaultImage: ImageDetail;
+  defaultImage: ImageDetail | null;
   images: ImageDetail[];
   show: boolean;
   getImage: (filename: string) => Promise<string>;
+  checkedImages: { id: number; isChecked: boolean; filename: string }[];
 }>();
 
 const emits = defineEmits<{
   (e: "hide-modal"): void;
+  (e: "send-checked-change", id: number, isChecked: boolean): void;
 }>();
 
-const mainImage = ref<ImageDetail>();
+const mainImage = ref<ImageDetail | null>(null);
 const showModal = ref(false);
 
 const showNextImage = () => {
@@ -96,7 +98,8 @@ watch(showModal, (val) => {
   <va-modal
     ref="modal"
     v-model="showModal"
-    max-width="84vw"
+    max-width="94vw"
+    background-color="#dcdcdc"
     :hide-default-actions="true"
   >
     <div class="modal-content">
@@ -111,8 +114,14 @@ watch(showModal, (val) => {
             class="main-image"
             :image="mainImage"
             :isSelect="false"
+            :isChecked="
+              checkedImages.find((v) => v.id === mainImage?.id)?.isChecked
+            "
             :getImage="getImage"
-            @click="copyImageToClipboard"
+            @sendClick="copyImageToClipboard"
+            @sendCheckedChange="(isChecked: boolean) =>
+              emits('send-checked-change', mainImage!!.id, isChecked)
+            "
           ></Thumbnail>
         </div>
         <font-awesome-icon

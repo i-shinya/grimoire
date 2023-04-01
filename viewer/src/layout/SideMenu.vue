@@ -31,11 +31,12 @@ const showImageViewer = () => {
         icon-type="fa-solid fa-terminal"
         @click="showMetaEditor"
       ></SideMenuIcon>
-      <SideMenuIcon
-        :is-show="areaVisibilityStore.state.showImageArea"
-        icon-type="fa-solid fa-list"
-        @click="showImageViewer"
-      ></SideMenuIcon>
+      <!-- 画像一覧を非表示する意味あんまないかもしれないから一旦常に表示している-->
+      <!--      <SideMenuIcon-->
+      <!--        :is-show="areaVisibilityStore.state.showImageArea"-->
+      <!--        icon-type="fa-solid fa-list"-->
+      <!--        @click="showImageViewer"-->
+      <!--      ></SideMenuIcon>-->
       <!-- 検索機能が欲しくなったら実装してください -->
       <!-- <SideMenuIcon
         icon-type="fa-solid fa-magnifying-glass"

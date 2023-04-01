@@ -17,7 +17,7 @@
     "@types/splitpanes": "^2.2.1",
     "splitpanes": "^3.1.5",
     "vue": "^3.2.25",
-    "vuestic-ui": "^1.5.3"
+    "vuestic-ui": "^1.6.3"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

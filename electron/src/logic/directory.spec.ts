@@ -4,8 +4,10 @@ import {
   readImage,
   listImageIndex,
   getImages,
+  copyFiles,
 } from "./directory";
 import { ImageDetail, ImageIndex } from "../type/image";
+import * as fs from "fs";
 
 describe("directory.ts", () => {
   describe("getDirectoryNodes", () => {
@@ -404,6 +406,31 @@ describe("directory.ts", () => {
         const res = await getImageMeta("./testdata/image/no-meta.png");
         expect(res).toBeNull();
       });
+    });
+  });
+
+  describe("copyImage", () => {
+    it("正常系：画像をコピーできること", async () => {
+      const tmpDir = "/tmp";
+
+      // copyFilesでtmpディレクトリにファイルをコピーする
+      await copyFiles(
+        [
+          {
+            basePath: "./testdata/image/novel-ai",
+            filename: "novel-ai-image_1.png",
+          },
+          {
+            basePath: "./testdata/image/novel-ai",
+            filename: "novel-ai-image_2.png",
+          },
+        ],
+        tmpDir
+      );
+
+      // tmpディレクトリにコピーしたファイルがあることを確認する
+      expect(fs.existsSync(`${tmpDir}/novel-ai-image_1.png`)).toBeTruthy();
+      expect(fs.existsSync(`${tmpDir}/novel-ai-image_2.png`)).toBeTruthy();
     });
   });
 });
