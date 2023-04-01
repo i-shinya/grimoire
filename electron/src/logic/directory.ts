@@ -7,7 +7,12 @@ import * as fsp from "fs/promises";
 import { BrowserWindow, dialog } from "electron";
 
 import { DirectoryNode } from "../type/directory";
-import { ImageDetail, ImageIndex, Metadata } from "../type/image";
+import {
+  ImageDetail,
+  ImageIndex,
+  ImageLocation,
+  Metadata,
+} from "../type/image";
 
 export const openDirectoryDialog = (
   mainWindow: BrowserWindow
@@ -193,4 +198,39 @@ export const getImageMeta = async (path: string): Promise<Metadata | null> => {
     offset += chunkLength + 4;
   }
   return Metadata.build(metaJson);
+};
+
+export const copyFiles = async (
+  files: ImageLocation[],
+  destinationFolderPath: string
+): Promise<ImageLocation[]> => {
+  const skippedFiles: ImageLocation[] = [];
+  // ファイルが存在する場合は存在するファイルを返却、存在しない場合そのままコピー
+  await Promise.all(
+    files.map(async (file) => {
+      const destinationPath = `${destinationFolderPath}/${file.filename}`;
+      try {
+        await fsp.access(destinationPath);
+        skippedFiles.push(file);
+      } catch (err) {
+        await fsp.copyFile(
+          `${file.basePath}/${file.filename}`,
+          destinationPath
+        );
+      }
+    })
+  );
+  return skippedFiles;
+};
+
+export const forceCopyFiles = async (
+  files: ImageLocation[],
+  destinationFolderPath: string
+): Promise<void> => {
+  await Promise.all(
+    files.map(async (file) => {
+      const destinationPath = `${destinationFolderPath}/${file.filename}`;
+      await fsp.copyFile(`${file.basePath}/${file.filename}`, destinationPath);
+    })
+  );
 };

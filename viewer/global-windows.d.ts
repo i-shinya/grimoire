@@ -8,6 +8,14 @@ interface WindowDirectoryAPI {
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
   getImageDataUrl(path: string): Promise<string>;
+  copyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<ImageLocation[]>;
+  forceCopyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<void>;
 }
 
 interface WindowAccessAPI {

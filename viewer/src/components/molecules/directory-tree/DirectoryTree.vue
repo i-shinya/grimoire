@@ -79,7 +79,7 @@ const selectImage = async (node: DirectoryNode) => {
 
       // 選択画像を抽出してストアに格納
       directoryStore.selectDirectory(node.basePath);
-      const imageDetails = directoryStore.state.imageDetails?.filter(
+      const imageDetails = directoryStore.state.imageDetails.filter(
         (detail) => detail.label === node.label
       );
       if (!imageDetails || imageDetails.length === 0) {

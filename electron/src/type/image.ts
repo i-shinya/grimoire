@@ -1,5 +1,10 @@
 export type ThumbnailSize = "small" | "default" | "large";
 
+export interface ImageLocation {
+  basePath: string;
+  filename: string;
+}
+
 export interface ImageIndex {
   index: number;
   label: string;

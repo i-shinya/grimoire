@@ -1,13 +1,20 @@
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { DirectoryNode } from "./type/directory";
-import { ImageDetail, ImageIndex, ThumbnailSize } from "./type/image";
+import {
+  ImageDetail,
+  ImageIndex,
+  ImageLocation,
+  ThumbnailSize,
+} from "./type/image";
 import {
   getDirectoryNodes,
   openDirectoryDialog,
   listImageIndex,
   getImages,
   getImageDataUrl,
+  copyFiles,
+  forceCopyFiles,
 } from "./logic/directory";
 import {
   closeWindow,
@@ -15,7 +22,7 @@ import {
   maximizeWindow,
   minimizeWindow,
 } from "./logic/window";
-import install, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
+import install, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import {
   getFavoritePrompt,
   getSortSettings,
@@ -52,9 +59,9 @@ function createWindow() {
     // devの場合はローカルサーバーからページを取得
     mainWindow.loadURL("http://localhost:3000");
     if (isDebug) {
-      install(VUEJS3_DEVTOOLS).catch((err) => {
+      install(VUEJS_DEVTOOLS).catch((err) => {
         console.log(err);
-        throw new Error("failed to install VUEJS3_DEVTOOLS");
+        throw new Error("failed to install VUEJS_DEVTOOLS");
       });
       mainWindow.webContents.openDevTools();
     }
@@ -108,6 +115,28 @@ function createWindow() {
     "get-image-dataurl",
     async (_e: Electron.IpcMainInvokeEvent, path: string): Promise<string> => {
       return getImageDataUrl(path);
+    }
+  );
+  // ファイルを指定ディレクトリにコピーする
+  ipcMain.handle(
+    "copy-images",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      files: ImageLocation[],
+      destinationFolderPath: string
+    ): Promise<ImageLocation[]> => {
+      return await copyFiles(files, destinationFolderPath);
+    }
+  );
+  // ファイルを指定ディレクトリにコピーする
+  ipcMain.handle(
+    "force-copy-images",
+    async (
+      _e: Electron.IpcMainInvokeEvent,
+      files: ImageLocation[],
+      destinationFolderPath: string
+    ): Promise<void> => {
+      return await forceCopyFiles(files, destinationFolderPath);
     }
   );
 

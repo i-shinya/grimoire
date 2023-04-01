@@ -1,5 +1,5 @@
 import { DirectoryNode } from "../type/directory";
-import { ImageDetail, ImageIndex } from "../type/image";
+import { ImageDetail, ImageIndex, ImageLocation } from "../type/image";
 import aiImage1 from "../../../assets/ai-image_1.png";
 import aiImage2 from "../../../assets/ai-image_2.png";
 import { InjectionKey } from "vue";
@@ -17,7 +17,16 @@ export interface DirectoryAPI {
   listImageIndex(path: string): Promise<ImageIndex[]>;
   getImages(basePath: string, imageIndex: ImageIndex[]): Promise<ImageDetail[]>;
   getImageDataUrl(basePath: string, filename: string): Promise<string>;
+  copyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<{ imageDetails: ImageDetail[]; isFailed: boolean }>;
+  forceCopyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<void>;
 }
+
 export class DirectoryNodeAPI implements DirectoryAPI {
   async openDialog(loadingStore: any): Promise<string> {
     loadingStore.showLoading();
@@ -69,6 +78,35 @@ export class DirectoryNodeAPI implements DirectoryAPI {
 
   async getImageDataUrl(basePath: string, filename: string): Promise<string> {
     return await window.directoryAPI.getImageDataUrl(`${basePath}/${filename}`);
+  }
+
+  async copyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<{ imageDetails: ImageDetail[]; isFailed: boolean }> {
+    return await window.directoryAPI
+      .copyImages(files, destinationFolderPath)
+      .then((imageDetails) => {
+        return { imageDetails, isFailed: false };
+      })
+      .catch((err) => {
+        // 雑にalert表示
+        alert(err.message);
+        return { imageDetails: [], isFailed: true };
+      });
+  }
+
+  async forceCopyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<void> {
+    return await window.directoryAPI
+      .forceCopyImages(files, destinationFolderPath)
+      .catch((err) => {
+        // 雑にalert表示
+        alert(err.message);
+        return;
+      });
   }
 }
 
@@ -176,5 +214,19 @@ export class DirectoryDemoAPI implements DirectoryAPI {
     } else {
       return aiImage2;
     }
+  }
+
+  async copyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<{ imageDetails: ImageDetail[]; isFailed: boolean }> {
+    return { imageDetails: [], isFailed: false };
+  }
+
+  async forceCopyImages(
+    files: ImageLocation[],
+    destinationFolderPath: string
+  ): Promise<void> {
+    return;
   }
 }

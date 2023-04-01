@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from "vue";
 import { AreaVisibilityKey, DirectoryKey, ImageKey } from "../../store/key";
-import { ImageDetail, ImageIndex, ThumbnailSize } from "../../core/type/image";
+import {
+  ImageDetail,
+  ImageIndex,
+  ImageLocation,
+  ThumbnailSize,
+} from "../../core/type/image";
 import BreadCrumbs, { Bread } from "../molecules/BreadCrumbs.vue";
 import { DirectoryAPI, DirectoryAPIKey } from "../../core/api/directory";
 import { divideArray } from "../../core/array";
@@ -9,6 +14,7 @@ import { StoreAPIKey } from "../../core/api/store";
 import Thumbnail from "../atoms/Thumbnail.vue";
 import ImageModal from "../molecules/ImageModal.vue";
 import { OrderType, Sort, SortType } from "../../core/type/listing";
+import { useModal, useToast } from "vuestic-ui";
 
 const directoryStore = inject(DirectoryKey);
 if (!directoryStore)
@@ -29,6 +35,9 @@ if (!storeAPI) {
 
 const showModal = ref(false);
 const sortType = ref<SortType>("label");
+const checkedImages = ref<
+  { id: number; isChecked: boolean; filename: string }[]
+>([]);
 
 const selectImage = (image: ImageDetail) => {
   imageStore.selectImage(selectPath.value, image);
@@ -36,6 +45,13 @@ const selectImage = (image: ImageDetail) => {
 };
 const receiveDataUrl = (id: number, dataUrl: string) => {
   directoryStore.setImageDataUrl(id, dataUrl);
+};
+const receiveCheckedChange = (id: number, isChecked: boolean) => {
+  // checkedImagesから一致するidを探してisCheckedを更新
+  const index = checkedImages.value.findIndex((image) => image.id === id);
+  if (index >= 0) {
+    checkedImages.value[index].isChecked = isChecked;
+  }
 };
 
 // 画像一覧の更新
@@ -109,8 +125,9 @@ const getMainImageDetail = computed(() => {
   if (
     !directoryStore.state.imageDetails ||
     directoryStore.state.imageDetails.length === 0
-  )
+  ) {
     return null;
+  }
   return (
     directoryStore.state.imageDetails.find(
       (image) => image.id === imageStore.state.imageDetail?.id
@@ -118,10 +135,122 @@ const getMainImageDetail = computed(() => {
   );
 });
 
+// ファイルコピー
+const { confirm } = useModal(); // vuesticのモーダルを使用
+const { init } = useToast();
+const clickCopyFile = async () => {
+  // チェックされている画像がないなら何もしない
+  if (checkedImages.value.filter((image) => image.isChecked).length === 0) {
+    return;
+  }
+
+  // 選択先のディレクトリを選択する
+  const path: string = await directoryAPI.openDialog(areaVisibilityStore);
+  if (!path) {
+    return;
+  }
+
+  const targetImages: ImageLocation[] = checkedImages.value
+    .filter((image) => image.isChecked)
+    .map((image) => {
+      return {
+        id: image.id,
+        basePath: selectPath.value,
+        filename: image.filename,
+      };
+    });
+  if (targetImages.length === 0) return;
+  const res = await directoryAPI.copyImages(targetImages, path);
+  if (res.isFailed) {
+    return;
+  }
+  if (res.imageDetails.length === 0) {
+    // 全てのチェックを外す
+    checkedImages.value = checkedImages.value.map((image) => {
+      return { ...image, isChecked: false };
+    });
+    init({
+      closeable: false,
+      color: "#FFFFFF",
+      message: "All files have been successfully copied.",
+      offsetX: 20,
+      offsetY: 30,
+      duration: 2000,
+    });
+    return;
+  }
+
+  // TODO 一旦雑にconfirmにしているけどそのうちちゃんとしたUIにする
+  const ok = await confirm({
+    title: "file already exist",
+    message:
+      "Some file have been successfully copied. But, Some file already exist. Overwrite?",
+    okText: "OK",
+    cancelText: "cancel",
+  });
+  // resに含まれる画像以外のチェックを外す。forceCopyでエラーが出た用にここで更新
+  checkedImages.value = checkedImages.value.map((image) => {
+    return {
+      ...image,
+      isChecked: !!res.imageDetails.find((v) => v.id === image.id),
+    };
+  });
+  if (ok) {
+    await directoryAPI.forceCopyImages(targetImages, path);
+    // 全てのチェックを外す
+    checkedImages.value = checkedImages.value.map((image) => {
+      return { ...image, isChecked: false };
+    });
+    init({
+      closeable: false,
+      color: "#FFFFFF",
+      message: "All files have been successfully copied.",
+      offsetX: 20,
+      offsetY: 30,
+      duration: 2000,
+    });
+  } else {
+    init({
+      closeable: false,
+      color: "#FFFFFF",
+      message: "Some files have been successfully copied.",
+      offsetX: 20,
+      offsetY: 30,
+      duration: 2000,
+    });
+  }
+};
+
 watch(
   () => directoryStore.state.sort,
   (state) => {
     sortType.value = state?.type ?? "label";
+  },
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => directoryStore.state.imageDetails,
+  (state, before) => {
+    if (!state) return;
+    // stateとbeforeが一致していたら何もしない
+    if (before && state.length === before.length) {
+      let isSame = true;
+      for (let i = 0; i < state.length; i++) {
+        if (
+          state[i].id !== before[i].id ||
+          state[i].label !== before[i].label
+        ) {
+          isSame = false;
+          break;
+        }
+      }
+      if (isSame) return;
+    }
+    console.log("hogehoge");
+    checkedImages.value = state.map((image) => {
+      return { id: image.id, isChecked: false, filename: image.label };
+    });
   },
   { immediate: true, deep: true }
 );
@@ -139,11 +268,13 @@ watch(
             @click="reloadDirectoryTree"
           />
 
-          <font-awesome-icon
-            class="show-modal-icon clickable"
-            icon="fa-solid fa-images"
-            @click="showModal = true"
-          />
+          <div class="file-copy-button clickable" @click="clickCopyFile">
+            <font-awesome-icon
+              class="check-icon mr-2"
+              icon="fa-regular fa-square-check"
+            />
+            <p>file copy</p>
+          </div>
 
           <div class="sort-area">
             <div class="select-area">
@@ -199,7 +330,7 @@ watch(
     </div>
     <div class="image-viewer">
       <template
-        v-for="item of directoryStore.getViewImageDetail() ?? []"
+        v-for="item of directoryStore.getViewImageDetail()"
         :key="item.id"
       >
         <Thumbnail
@@ -207,20 +338,24 @@ watch(
           :class="imageStore.state.thumbnailSize"
           :image="item"
           :isSelect="isSelected(item)"
+          :isChecked="checkedImages.find((v) => v.id === item.id)?.isChecked"
           :getImage="getImage"
-          @click="selectImage(item)"
-          @dblclick="showModal = true"
+          @sendClick="selectImage(item)"
+          @sendDblclick="showModal = true"
           @sendDataUrl="(v: string) => receiveDataUrl(item.id, v)"
+          @sendCheckedChange="(v: boolean) => receiveCheckedChange(item.id, v)"
         ></Thumbnail>
       </template>
     </div>
     <ImageModal
       v-if="showModal"
-      :images="directoryStore.getViewImageDetail() ?? []"
+      :images="directoryStore.getViewImageDetail()"
       :show="showModal"
       :getImage="getImage"
       :defaultImage="getMainImageDetail"
+      :checkedImages="checkedImages"
       @hideModal="showModal = false"
+      @sendCheckedChange="(id:number, isChecked: boolean) => receiveCheckedChange(id, isChecked)"
     ></ImageModal>
   </div>
 </template>
@@ -267,8 +402,17 @@ watch(
         align-items: center;
         justify-content: space-between;
 
-        .show-modal-icon {
-          font-size: 20px;
+        .file-copy-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2px 12px;
+          border: 1px solid rgb(255, 255, 255);
+          color: rgb(255, 255, 255);
+          background-color: rgba(1, 9, 47, 0.89);
+          font-size: 16px;
+          user-select: none;
+          font-weight: bold;
         }
 
         .sort-area {

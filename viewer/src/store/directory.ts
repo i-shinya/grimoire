@@ -5,7 +5,7 @@ import { Sort } from "../core/type/listing";
 interface DirectoryState {
   openDirectoryPath: string | null;
   selectedDirectoryPath: string | null;
-  imageDetails: ImageDetail[] | null;
+  imageDetails: ImageDetail[];
   sort: Sort | null;
 }
 
@@ -13,7 +13,7 @@ export default function directoryStore() {
   const state: DirectoryState = reactive({
     openDirectoryPath: null,
     selectedDirectoryPath: null,
-    imageDetails: null,
+    imageDetails: [],
     sort: null,
   });
 
@@ -50,13 +50,13 @@ export default function directoryStore() {
     state.sort = sort;
   };
 
-  const getViewImageDetail = () => {
+  const getViewImageDetail = (): ImageDetail[] => {
     const sort = state.sort;
     if (!sort) {
       return state.imageDetails;
     }
 
-    return state.imageDetails?.sort((a: ImageDetail, b: ImageDetail) => {
+    return state.imageDetails.sort((a: ImageDetail, b: ImageDetail) => {
       if (sort.type === "label") {
         if (sort.order === "ASC") {
           return a.label.localeCompare(b.label);
